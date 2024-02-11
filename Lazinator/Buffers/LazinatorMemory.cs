@@ -94,7 +94,7 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(IEnumerable<MemoryBlock> moreMemoryBlocks, int memoryRangeIndex, int startPosition, long length) : this(null, startPosition, length)
         {
-            MultipleMemoryBlocks = new MemoryBlockCollection(moreMemoryBlocks);
+            MultipleMemoryBlocks = new MemoryBlockCollection(moreMemoryBlocks.ToList());
             MemoryRangeIndex = memoryRangeIndex;
         }
 

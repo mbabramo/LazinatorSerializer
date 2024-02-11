@@ -17,7 +17,7 @@ namespace Lazinator.Buffers
     public partial class MemoryBlockCollection : IMemoryBlockCollection, IEnumerable<MemoryRange>
     {
         public IBlobManager BlobManager { get; set; }
-        protected List<MemoryBlock> MemoryBlocks = new List<MemoryBlock>();
+        protected Dictionary<MemoryBlockID, MemoryBlock> MemoryBlocksStoredByID = new();
         protected Dictionary<MemoryBlockID, int> MemoryBlocksIndexFromBlockID = null;
         public MemoryBlockID GetNextMemoryBlockID() => HighestMemoryBlockID.Next();
         protected int NumMemoryBlocks => MemoryBlocksLoadingInfo?.Count ?? 0;
@@ -35,20 +35,73 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryBlockCollection(IEnumerable<MemoryBlock> memoryBlocks)
+        public MemoryBlockCollection(List<MemoryBlock> memoryBlocks)
         {
-            MemoryBlocks = memoryBlocks?.ToList();
-            InitializeMemoryBlocksInformationFromMemoryBlocks();
-            if (MemoryBlocksLoadingInfo != null && MemoryBlocksLoadingInfo.Any())
+            InitializeFromMemoryBlocks(memoryBlocks);
+        }
+
+        protected void InitializeFromMemoryBlocks(List<MemoryBlock> memoryBlocks)
+        {
+            MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
+            for (int i = 0; i < memoryBlocks.Count; i++)
             {
-                HighestMemoryBlockID = new MemoryBlockID(MemoryBlocksLoadingInfo.Max(x => x.MemoryBlockID.AsInt));
-                LengthOfMemoryBlocks = MemoryBlocksLoadingInfo.Sum(x => (long)x.MemoryBlockLength);
+                MemoryBlock memoryBlock = memoryBlocks[i];
+                MemoryBlockID blockID = memoryBlock.MemoryBlockID;
+                MemoryBlocksStoredByID[blockID] = memoryBlock;
+                MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
             }
-            else
+            SetHighestMemoryBlockIDAndLength();
+            InitializeUnpersistedDictionariesIfNecessary();
+        }
+
+        protected void InitializeUnpersistedDictionariesIfNecessary()
+        {
+            if (MemoryBlocksIndexFromBlockID == null)
             {
-                HighestMemoryBlockID = new MemoryBlockID(-1);
+                InitializeUnpersistedDictionaries();
+            }
+        }
+
+        protected void InitializeUnpersistedDictionaries()
+        {
+            if (MemoryBlocksStoredByID == null)
+                MemoryBlocksStoredByID = new Dictionary<MemoryBlockID, MemoryBlock>();
+            MemoryBlocksIndexFromBlockID = new Dictionary<MemoryBlockID, int>();
+            for (int i = 0; i < MemoryBlocksLoadingInfo.Count; i++)
+            {
+                MemoryBlockID blockID = MemoryBlocksLoadingInfo[i].MemoryBlockID;
+                if (!MemoryBlocksIndexFromBlockID.ContainsKey(blockID))
+                {
+                    MemoryBlocksIndexFromBlockID[blockID] = i;
+                }
+            }
+        }
+
+        private void SetHighestMemoryBlockIDAndLength()
+        {
+            if (MemoryBlocksLoadingInfo == null || !MemoryBlocksLoadingInfo.Any())
+            {
+                HighestMemoryBlockID = new MemoryBlockID(0);
                 LengthOfMemoryBlocks = 0;
+                return;
             }
+            HighestMemoryBlockID = new MemoryBlockID(MemoryBlocksLoadingInfo.Max(x => x.MemoryBlockID.AsInt));
+            LengthOfMemoryBlocks = MemoryBlocksLoadingInfo.Sum(x => (long)x.MemoryBlockLength);
+        }
+
+        public virtual void AppendMemoryBlock(MemoryBlock memoryBlock)
+        {
+            if (MemoryBlocksLoadingInfo == null)
+                MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
+            if (MemoryBlocksIndexFromBlockID == null)
+                MemoryBlocksIndexFromBlockID = new Dictionary<MemoryBlockID, int>();
+            MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
+            MemoryBlocksStoredByID[memoryBlock.MemoryBlockID] = memoryBlock;
+            int memoryBlockIndex = MemoryBlocksLoadingInfo.Count() - 1;
+            MemoryBlocksIndexFromBlockID[memoryBlock.MemoryBlockID] = memoryBlockIndex;
+            if (memoryBlock.MemoryBlockID > HighestMemoryBlockID)
+                HighestMemoryBlockID = memoryBlock.MemoryBlockID;
+            LengthOfMemoryBlocks += (long)memoryBlock.Length;
         }
 
         public LazinatorMemory ToLazinatorMemory()
@@ -65,39 +118,9 @@ namespace Lazinator.Buffers
 
         protected void CopyNonPersistedPropertiesTo(MemoryBlockCollection copy)
         {
-            copy.MemoryBlocks = MemoryBlocks?.ToList();
             copy.BlobManager = BlobManager;
+            copy.MemoryBlocksStoredByID = MemoryBlocksStoredByID?.ToDictionary();
             copy.MemoryBlocksIndexFromBlockID = MemoryBlocksIndexFromBlockID.ToDictionary();
-        }
-
-        public virtual void AppendMemoryBlock(MemoryBlock memoryBlock)
-        {
-            if (MemoryBlocksLoadingInfo == null)
-                MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
-            if (MemoryBlocksIndexFromBlockID == null)
-                MemoryBlocksIndexFromBlockID = new Dictionary<MemoryBlockID, int>();
-            MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
-            MemoryBlocksIndexFromBlockID[memoryBlock.MemoryBlockID] = MemoryBlocksLoadingInfo.Count() - 1;
-            MemoryBlocks.Add(memoryBlock);
-            if (memoryBlock.MemoryBlockID > HighestMemoryBlockID)
-                HighestMemoryBlockID = memoryBlock.MemoryBlockID;
-            LengthOfMemoryBlocks += (long)memoryBlock.Length;
-        }
-
-        public void SetBlocks(IEnumerable<MemoryBlock> blocks)
-        {
-            MemoryBlocks = new List<MemoryBlock>();
-            MemoryBlocksIndexFromBlockID = new Dictionary<MemoryBlockID, int>();
-            LengthOfMemoryBlocks = 0;
-            if (blocks == null)
-            {
-                HighestMemoryBlockID = new MemoryBlockID(-1);
-                return;
-            }
-            foreach (var block in blocks)
-            {
-                AppendMemoryBlock(block);
-            }
         }
 
         #endregion
@@ -132,17 +155,17 @@ namespace Lazinator.Buffers
 
         public IEnumerable<MemoryBlock> EnumerateMemoryBlocks()
         {
-            InitializeMemoryBlocksInformationIfNecessary();
-            if (MemoryBlocks != null)
-                for (int i = 0; i < MemoryBlocks.Count; i++)
+            InitializeUnpersistedDictionariesIfNecessary();
+            if (MemoryBlocksStoredByID != null)
+                for (int i = 0; i < MemoryBlocksStoredByID.Count; i++)
                     yield return MemoryBlockAtIndex(i);
         }
 
         public async IAsyncEnumerable<MemoryBlock> EnumerateMemoryBlocksAsync()
         {
-            InitializeMemoryBlocksInformationIfNecessary();
-            if (MemoryBlocks != null)
-                for (int i = 0; i < MemoryBlocks.Count; i++)
+            InitializeUnpersistedDictionariesIfNecessary();
+            if (MemoryBlocksStoredByID != null)
+                for (int i = 0; i < MemoryBlocksStoredByID.Count; i++)
                     yield return await MemoryBlockAtIndexAsync(i);
         }
 
@@ -192,104 +215,39 @@ namespace Lazinator.Buffers
 
         #region Memory blocks index and loading information
 
-        protected void InitializeMemoryBlocksInformationIfNecessary()
+        protected int? GetMemoryBlockIndexFromBlockID(MemoryBlockID memoryBlockID)
         {
-            if ((MemoryBlocksLoadingInfo != null && MemoryBlocksLoadingInfo.Count > 0) && (MemoryBlocks == null || MemoryBlocks.Count == 0))
-                InitializeMemoryBlocksFromLoadingInformation();
-            else if (MemoryBlocksLoadingInfo == null || !MemoryBlocksLoadingInfo.Any())
-                InitializeMemoryBlocksInformationFromMemoryBlocks();
-            if (MemoryBlocksIndexFromBlockID == null)
-                InitializeUnpersistedData();
-        }
-
-        private void InitializeMemoryBlocksFromLoadingInformation()
-        {
-            if ((MemoryBlocksLoadingInfo != null && MemoryBlocksLoadingInfo.Count > 0) && (MemoryBlocks == null || MemoryBlocks.Count == 0))
+            if (MemoryBlocksIndexFromBlockID.ContainsKey(memoryBlockID))
+                return MemoryBlocksIndexFromBlockID[memoryBlockID];
+            // Search MemoryBlocksLoadingInfo, which is ordered by memoryBlockID, for the memoryBlockID. If it is not found, return null.
+            // Note that we can't just use a MemoryBlockLoadingInfo and BinarySearch, because we don't know the MemoryBlockLength.
+            IComparer<MemoryBlockLoadingInfo> comparer = Comparer<MemoryBlockLoadingInfo>.Create((x, y) => x.MemoryBlockID.AsInt.CompareTo(y.MemoryBlockID.AsInt));
+            int index = MemoryBlocksLoadingInfo.BinarySearch(new MemoryBlockLoadingInfo { MemoryBlockID = memoryBlockID }, comparer);
+            bool found = index >= 0;
+            if (found)
             {
-                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
-                InitializeUnpersistedData();
+                MemoryBlocksIndexFromBlockID[memoryBlockID] = index;
             }
-        }
-
-        protected void InitializeUnpersistedData()
-        {
-            if (MemoryBlocksIndexFromBlockID == null)
-            {
-                CreateMemoryBlocksIndexFromBlockID();
-                SetHighestMemoryBlockIDAndLength();
-            }
-        }
-
-        private void SetHighestMemoryBlockIDAndLength()
-        {
-            if (MemoryBlocksLoadingInfo == null || !MemoryBlocksLoadingInfo.Any())
-            {
-                HighestMemoryBlockID = new MemoryBlockID(0);
-                LengthOfMemoryBlocks = 0;
-                return;
-            }
-            HighestMemoryBlockID = new MemoryBlockID(MemoryBlocksLoadingInfo.Max(x => x.MemoryBlockID.AsInt));
-            LengthOfMemoryBlocks = MemoryBlocksLoadingInfo.Sum(x => (long)x.MemoryBlockLength);
-        }
-
-        private void CreateMemoryBlocksIndexFromBlockID()
-        {
-            Dictionary<MemoryBlockID, int> d = new Dictionary<MemoryBlockID, int>();
-            for (int i = 0; i < MemoryBlocksLoadingInfo.Count; i++)
-            {
-                MemoryBlockID blockID = MemoryBlocksLoadingInfo[i].MemoryBlockID;
-                if (!d.ContainsKey(blockID))
-                    d[blockID] = i;
-            }
-            MemoryBlocksIndexFromBlockID = d;
-        }
-
-        private void InitializeMemoryBlocksInformationFromMemoryBlocks()
-        {
-            MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
-            for (int i = 0; i < MemoryBlocks.Count; i++)
-            {
-                MemoryBlock memoryBlock = MemoryBlocks[i];
-                MemoryBlockID blockID = memoryBlock.MemoryBlockID;
-                MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
-            }
-            InitializeUnpersistedData();
-        }
-
-        private void UpdateLoadingOffset(MemoryBlockID memoryBlockID, long offset)
-        {
-            int i = GetMemoryBlockIndicesFromIDs()[memoryBlockID];
-            MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
-        }
-        protected Dictionary<MemoryBlockID, int> GetMemoryBlockIndicesFromIDs()
-        {
-            if (MemoryBlocksIndexFromBlockID == null)
-            {
-                InitializeMemoryBlocksInformationIfNecessary();
-                if (MemoryBlocksIndexFromBlockID == null)
-                    InitializeUnpersistedData();
-            }
-            return MemoryBlocksIndexFromBlockID;
-        }
-
-        public int GetMemoryBlockIndexFromBlockID(MemoryBlockID memoryBlockID)
-        {
-            var d = GetMemoryBlockIndicesFromIDs();
-            return d.ContainsKey(memoryBlockID) ? d[memoryBlockID] : -1;
+            return found ? index : (int?)null;
         }
 
         public bool ContainsMemoryBlockID(MemoryBlockID memoryBlockID)
         {
-            var d = GetMemoryBlockIndicesFromIDs();
-            return d.ContainsKey(memoryBlockID);
+            return GetMemoryBlockIndexFromBlockID(memoryBlockID) != null;
         }
 
-        public MemoryBlock GetMemoryBlockByBlockID(MemoryBlockID memoryBlockID)
+        private (MemoryBlockLoadingInfo loadingInfo, int? index) GetMemoryBlockLoadingInfoAndIndexFromID(MemoryBlockID memoryBlockID)
         {
-            var d = GetMemoryBlockIndicesFromIDs();
-            if (!d.ContainsKey(memoryBlockID))
-                return null;
-            return MemoryBlockAtIndex(d[memoryBlockID]);
+            int? index = GetMemoryBlockIndexFromBlockID(memoryBlockID);
+            if (index == null)
+                return (null, null);
+            return (MemoryBlocksLoadingInfo[(int)index], index);
+        }
+
+        private void UpdateLoadingOffset(MemoryBlockID memoryBlockID, long offset)
+        {
+            var result = GetMemoryBlockLoadingInfoAndIndexFromID(memoryBlockID);
+            MemoryBlocksLoadingInfo[(int) result.index] = result.loadingInfo.WithLoadingOffset(offset);
         }
 
         #endregion
@@ -298,24 +256,47 @@ namespace Lazinator.Buffers
 
         public MemoryBlock MemoryBlockAtIndex(int i)
         {
-            if (MemoryBlocks == null)
-                InitializeMemoryBlocksFromLoadingInformation(); 
-            if (i >= MemoryBlocks.Count)
+            InitializeUnpersistedDictionariesIfNecessary();
+            if (i >= MemoryBlocksLoadingInfo.Count)
                 return null;
-            if (MemoryBlocks[i] == null)
-                MemoryBlocks[i] = LoadMemoryBlockForIndex(i);
-            var block = MemoryBlocks[i];
+            MemoryBlockID memoryBlockID = MemoryBlocksLoadingInfo[i].MemoryBlockID;
+            if (!MemoryBlocksStoredByID.ContainsKey(memoryBlockID))
+                MemoryBlocksStoredByID[memoryBlockID] = LoadMemoryBlockForIndex(i);
+            var block = MemoryBlocksStoredByID[memoryBlockID];
             return block;
         }
 
         public async ValueTask<MemoryBlock> MemoryBlockAtIndexAsync(int i)
         {
-            if (MemoryBlocks == null)
-                InitializeMemoryBlocksFromLoadingInformation();
-            if (MemoryBlocks[i] == null)
-                MemoryBlocks[i] = await LoadMemoryBlockForIndexAsync(i);
-            var block = MemoryBlocks[i];
+            InitializeUnpersistedDictionariesIfNecessary();
+            if (i >= MemoryBlocksLoadingInfo.Count)
+                return null;
+            MemoryBlockID memoryBlockID = MemoryBlocksLoadingInfo[i].MemoryBlockID;
+            if (!MemoryBlocksStoredByID.ContainsKey(memoryBlockID))
+                MemoryBlocksStoredByID[memoryBlockID] = await LoadMemoryBlockForIndexAsync(i);
+            var block = MemoryBlocksStoredByID[memoryBlockID];
             return block;
+        }
+
+
+        public MemoryBlock GetMemoryBlockByBlockID(MemoryBlockID memoryBlockID)
+        {
+            var i = GetMemoryBlockIndexFromBlockID(memoryBlockID);
+            if (i == null)
+            {
+                return null;
+            }
+            return MemoryBlockAtIndex((int)i);
+        }
+
+        public async ValueTask<MemoryBlock> GetMemoryBlockByBlockIDAsync(MemoryBlockID memoryBlockID)
+        {
+            var i = GetMemoryBlockIndexFromBlockID(memoryBlockID);
+            if (i == null)
+            {
+                return null;
+            }
+            return await MemoryBlockAtIndexAsync((int)i);
         }
 
         private MemoryBlock LoadMemoryBlockForIndex(int i)
@@ -404,10 +385,11 @@ namespace Lazinator.Buffers
         {
             List<MemoryBlock> memoryBlocks = new List<MemoryBlock>();
             HashSet<MemoryBlockID> memoryBlockIDs = new HashSet<MemoryBlockID>();
-            foreach (MemoryBlock memoryBlock in MemoryBlocks)
+            foreach (MemoryBlockLoadingInfo loadingInfo in MemoryBlocksLoadingInfo)
             {
-                if (memoryBlock == null)
+                if (!MemoryBlocksStoredByID.ContainsKey(loadingInfo.MemoryBlockID))
                     continue; // not loaded
+                MemoryBlock memoryBlock = GetMemoryBlockByBlockID(loadingInfo.MemoryBlockID);
                 if (memoryBlock.IsPersisted)
                     continue;
                 MemoryBlockID memoryBlockID = memoryBlock.MemoryBlockID;

@@ -40,7 +40,7 @@ namespace Lazinator.Buffers
 
         public void SetFromLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
-            SetBlocks(lazinatorMemory.EnumerateMemoryBlocks());
+            InitializeFromMemoryBlocks(lazinatorMemory.EnumerateMemoryBlocks().ToList());
             SetRanges(lazinatorMemory.EnumerateMemoryRangesByID().ToList());
         }
 
@@ -187,7 +187,7 @@ namespace Lazinator.Buffers
                 return base.MemoryRangeAtIndex(i);
             if (i >= Ranges.Count)
                 return default;
-            InitializeMemoryBlocksInformationIfNecessary();
+            InitializeUnpersistedDictionariesIfNecessary();
             int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(i);
             var range = Ranges[i];
             if (memoryBlockIndex == -1)
@@ -210,7 +210,7 @@ namespace Lazinator.Buffers
                 return await base.MemoryRangeAtIndexAsync(i);
             if (i >= Ranges.Count)
                 return default;
-            InitializeMemoryBlocksInformationIfNecessary();
+            InitializeUnpersistedDictionariesIfNecessary();
             int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(i);
             var range = Ranges[i];
             if (memoryBlockIndex == -1)
@@ -232,7 +232,8 @@ namespace Lazinator.Buffers
             if (Ranges.Count < i + 1)
                 return -1;
             var range = Ranges[i];
-            int index = GetMemoryBlockIndexFromBlockID(GetMemoryBlockIndexFromMemoryRange(range));
+            var memoryBlockID = range.MemoryBlockID;
+            int index = (int) GetMemoryBlockIndexFromBlockID(memoryBlockID);
             return index;
         }
 
@@ -246,14 +247,9 @@ namespace Lazinator.Buffers
             return range.MemoryBlockID;
         }
 
-        private static MemoryBlockID GetMemoryBlockIndexFromMemoryRange(MemoryRangeByBlockID range)
-        {
-            return range.MemoryBlockID;
-        }
-
         public override string ToString()
         {
-            return $"Blocks: {String.Join(",", MemoryBlocks.Select(x => x.MemoryBlockID.AsInt))} Ranges: {String.Join("; ", Ranges)}";
+            return $"Blocks: {String.Join(",", _MemoryBlocksLoadingInfo.Select(x => x.MemoryBlockID.AsInt))} Ranges: {String.Join("; ", Ranges)}";
         }
     }
 }

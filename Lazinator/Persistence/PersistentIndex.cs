@@ -43,6 +43,8 @@ namespace Lazinator.Persistence
             IsPersisted = false;
             IndexVersion = previousPersistentIndex.IndexVersion + 1;
             InitializeMemoryBlockStatusFromPrevious();
+            // Note that we do not copy the actual MemoryBlocksLoadingInfo or other information. That will be set when PersistLazinatorMemory is called,
+            // and it will not include any memory blocks that are newly omitted.
             if (additionalFork is int forkToAdd)
             {
                 ForkInformation = previousPersistentIndex.ForkInformation?.ToList() ?? new List<(int lastMemoryBlockIDBeforeFork, int forkNumber)>();
@@ -69,7 +71,7 @@ namespace Lazinator.Persistence
         {
             var index = new PersistentIndex(new LazinatorMemory(bytes));
             index.BlobManager = blobManager;
-            index.InitializeUnpersistedData();
+            index.InitializeUnpersistedDictionariesIfNecessary();
             return index;
         }
 
@@ -150,7 +152,7 @@ namespace Lazinator.Persistence
 
         public LazinatorMemory GetLazinatorMemory()
         {
-            InitializeMemoryBlocksInformationIfNecessary();
+            InitializeUnpersistedDictionariesIfNecessary();
             LazinatorMemory lazinatorMemory = new LazinatorMemory(this);
             lazinatorMemory.LoadInitialReadOnlyMemory();
             return lazinatorMemory;
@@ -166,25 +168,28 @@ namespace Lazinator.Persistence
         public void Delete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
         {
             List<int> indices = new List<int>();
-            foreach ((string path, int index) result in GetPathsAndIndicesOfMemoryBlocksToDelete(statusToDelete, includeBlocksFromEarlierForks))
+            foreach ((string path, int? index) result in GetPathsAndIndicesOfMemoryBlocksToDelete(statusToDelete, includeBlocksFromEarlierForks))
             {
                 BlobManager.Delete(result.path);
-                indices.Add(result.index);
+                if (result.index.HasValue)
+                    indices.Add(result.index.Value);
             }
             if (indices.Any())
             {
                 indices = indices.Where(x => x != -1).OrderByDescending(x => x).ToList();
                 foreach (int index in indices)
                 {
+                    var loadingInfoToRemove = MemoryBlocksLoadingInfo[index];
                     MemoryBlocksLoadingInfo.RemoveAt(index);
-                    MemoryBlocks.RemoveAt(index);
+                    if (MemoryBlocksStoredByID.ContainsKey(loadingInfoToRemove.MemoryBlockID))
+                        MemoryBlocksStoredByID.Remove(loadingInfoToRemove.MemoryBlockID);
                 }
                 MemoryBlocksIndexFromBlockID = null;
-                InitializeMemoryBlocksInformationIfNecessary();
+                InitializeUnpersistedDictionaries();
             }
         }
 
-        private IEnumerable<(string path, int index)> GetPathsAndIndicesOfMemoryBlocksToDelete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
+        private IEnumerable<(string path, int? index)> GetPathsAndIndicesOfMemoryBlocksToDelete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
         {
             int numIDs = MemoryBlockStatus.Length;
             for (int memoryBlockIDAsInt = 0; memoryBlockIDAsInt < numIDs; memoryBlockIDAsInt++)
@@ -196,7 +201,7 @@ namespace Lazinator.Persistence
                     if (includeBlocksFromEarlierForks || MemoryBlockIsOnSameFork(memoryBlockID))
                     {
                         string fullPath = GetPathForMemoryBlock(memoryBlockID);
-                        int index = GetMemoryBlockIndexFromBlockID(memoryBlockID);
+                        int? index = GetMemoryBlockIndexFromBlockID(memoryBlockID);
                         yield return (fullPath, index);
                     }
                 }
