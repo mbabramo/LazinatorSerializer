@@ -19,14 +19,8 @@ namespace Lazinator.Buffers
         public IBlobManager BlobManager { get; set; }
         protected List<MemoryBlock> MemoryBlocks = new List<MemoryBlock>();
         protected Dictionary<MemoryBlockID, int> MemoryBlocksIndexFromBlockID = null;
-        public long LengthOfMemoryBlocks { get; private set; }
-        public MemoryBlockID HighestMemoryBlockID 
-        { 
-            get; 
-            private set; 
-        }
         public MemoryBlockID GetNextMemoryBlockID() => HighestMemoryBlockID.Next();
-        protected int NumMemoryBlocks => MemoryBlocks?.Count ?? 0;
+        protected int NumMemoryBlocks => MemoryBlocksLoadingInfo?.Count ?? 0;
         public virtual int NumMemoryRanges => NumMemoryBlocks;
         public virtual long LengthReferenced => LengthOfMemoryBlocks;
 
@@ -52,7 +46,7 @@ namespace Lazinator.Buffers
             }
             else
             {
-                HighestMemoryBlockID = new MemoryBlockID(0);
+                HighestMemoryBlockID = new MemoryBlockID(-1);
                 LengthOfMemoryBlocks = 0;
             }
         }
@@ -74,8 +68,6 @@ namespace Lazinator.Buffers
             copy.MemoryBlocks = MemoryBlocks?.ToList();
             copy.BlobManager = BlobManager;
             copy.MemoryBlocksIndexFromBlockID = MemoryBlocksIndexFromBlockID.ToDictionary();
-            copy.LengthOfMemoryBlocks = LengthOfMemoryBlocks;
-            copy.HighestMemoryBlockID = HighestMemoryBlockID;
         }
 
         public virtual void AppendMemoryBlock(MemoryBlock memoryBlock)
@@ -204,7 +196,7 @@ namespace Lazinator.Buffers
         {
             if ((MemoryBlocksLoadingInfo != null && MemoryBlocksLoadingInfo.Count > 0) && (MemoryBlocks == null || MemoryBlocks.Count == 0))
                 InitializeMemoryBlocksFromLoadingInformation();
-            else if (MemoryBlocksLoadingInfo == null)
+            else if (MemoryBlocksLoadingInfo == null || !MemoryBlocksLoadingInfo.Any())
                 InitializeMemoryBlocksInformationFromMemoryBlocks();
             if (MemoryBlocksIndexFromBlockID == null)
                 InitializeUnpersistedData();
@@ -230,6 +222,12 @@ namespace Lazinator.Buffers
 
         private void SetHighestMemoryBlockIDAndLength()
         {
+            if (MemoryBlocksLoadingInfo == null || !MemoryBlocksLoadingInfo.Any())
+            {
+                HighestMemoryBlockID = new MemoryBlockID(0);
+                LengthOfMemoryBlocks = 0;
+                return;
+            }
             HighestMemoryBlockID = new MemoryBlockID(MemoryBlocksLoadingInfo.Max(x => x.MemoryBlockID.AsInt));
             LengthOfMemoryBlocks = MemoryBlocksLoadingInfo.Sum(x => (long)x.MemoryBlockLength);
         }

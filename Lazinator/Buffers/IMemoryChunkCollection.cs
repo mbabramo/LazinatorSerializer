@@ -11,5 +11,8 @@ namespace Lazinator.Buffers
         bool ContainedInSingleBlob { get; set; }
         bool IsPersisted { get; set; }
         List<MemoryBlockLoadingInfo> MemoryBlocksLoadingInfo { get; set; }
+
+        long LengthOfMemoryBlocks { get; set; }
+        MemoryBlockID HighestMemoryBlockID { get; set; }
     }
 }

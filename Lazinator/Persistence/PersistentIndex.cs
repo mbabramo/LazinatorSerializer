@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Buffers;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Lazinator.Persistence
 {
@@ -164,24 +165,39 @@ namespace Lazinator.Persistence
 
         public void Delete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
         {
-            foreach (string path in GetPathsOfMemoryBlocksToDelete(statusToDelete, includeBlocksFromEarlierForks))
+            List<int> indices = new List<int>();
+            foreach ((string path, int index) result in GetPathsAndIndicesOfMemoryBlocksToDelete(statusToDelete, includeBlocksFromEarlierForks))
             {
-                BlobManager.Delete(path);
+                BlobManager.Delete(result.path);
+                indices.Add(result.index);
+            }
+            if (indices.Any())
+            {
+                indices = indices.Where(x => x != -1).OrderByDescending(x => x).ToList();
+                foreach (int index in indices)
+                {
+                    MemoryBlocksLoadingInfo.RemoveAt(index);
+                    MemoryBlocks.RemoveAt(index);
+                }
+                MemoryBlocksIndexFromBlockID = null;
+                InitializeMemoryBlocksInformationIfNecessary();
             }
         }
 
-        private IEnumerable<string> GetPathsOfMemoryBlocksToDelete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
+        private IEnumerable<(string path, int index)> GetPathsAndIndicesOfMemoryBlocksToDelete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
         {
             int numIDs = MemoryBlockStatus.Length;
-            for (int memoryBlockID = 0; memoryBlockID < numIDs; memoryBlockID++)
+            for (int memoryBlockIDAsInt = 0; memoryBlockIDAsInt < numIDs; memoryBlockIDAsInt++)
             {
-                PersistentIndexMemoryBlockStatus status = GetMemoryBlockStatus(memoryBlockID);
+                PersistentIndexMemoryBlockStatus status = GetMemoryBlockStatus(memoryBlockIDAsInt);
                 if (status == statusToDelete)
                 {
-                    if (includeBlocksFromEarlierForks || MemoryBlockIsOnSameFork(new MemoryBlockID(memoryBlockID)))
+                    MemoryBlockID memoryBlockID = new MemoryBlockID(memoryBlockIDAsInt);
+                    if (includeBlocksFromEarlierForks || MemoryBlockIsOnSameFork(memoryBlockID))
                     {
-                        string fullPath = GetPathForMemoryBlock(new MemoryBlockID(memoryBlockID));
-                        yield return fullPath;
+                        string fullPath = GetPathForMemoryBlock(memoryBlockID);
+                        int index = GetMemoryBlockIndexFromBlockID(memoryBlockID);
+                        yield return (fullPath, index);
                     }
                 }
             }
