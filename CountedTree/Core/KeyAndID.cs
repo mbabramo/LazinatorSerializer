@@ -43,6 +43,8 @@ namespace CountedTree.Core
         public int CompareTo(object obj)
         {
             KeyAndID<TKey> other = (KeyAndID<TKey>) obj;
+            if (other == null)
+                return 1;
             int keyCompare = Key.CompareTo(other.Key);
             if (keyCompare != 0)
                 return keyCompare;
@@ -52,6 +54,14 @@ namespace CountedTree.Core
 
         public static int Compare(KeyAndID<TKey> left, KeyAndID<TKey> right)
         {
+            if (object.ReferenceEquals(left, right))
+            {
+                return 0;
+            }
+            if (object.ReferenceEquals(left, null))
+            {
+                return -1;
+            }
             return left.CompareTo(right);
         }
 
@@ -67,6 +77,10 @@ namespace CountedTree.Core
 
         public static bool operator ==(KeyAndID<TKey> left, KeyAndID<TKey> right)
         {
+            if (object.ReferenceEquals(left, null))
+            {
+                return object.ReferenceEquals(right, null);
+            }
             return left.Equals(right);
         }
         public static bool operator !=(KeyAndID<TKey> left, KeyAndID<TKey> right)
