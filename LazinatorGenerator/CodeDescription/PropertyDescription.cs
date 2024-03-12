@@ -2431,9 +2431,13 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
-                Debug;
                 // the outer type is a dictionary
-                collectionAddItem = "collection.Add(item.Key, item.Value);";
+                string keyWord = "item.Key", valueWord = "item.Value";
+                if (NullableModeEnabled && outerProperty.InnerProperties[0].Nullable == false)
+                    keyWord += "!";
+                if (NullableModeEnabled && outerProperty.InnerProperties[0].Nullable == false)
+                    valueWord += "!";
+                collectionAddItem = $"collection.Add({keyWord}, {valueWord});";
                 collectionAddNull = ""; // no null entries in dictionary
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Queue)
