@@ -51,6 +51,10 @@ namespace LazinatorGenerator.Generator
         }
         public void GenerateSource(SourceProductionContext spc, IDateTimeNow dateTimeNowProvider)
         {
+            if (AlreadyGeneratedCode.GeneratedCode.Contains("collection.Add(item!)") && AlreadyGeneratedCode.GeneratedCode.Contains("CloneOrChange_List_GT_g"))
+            {
+                var DEBUG = 0;
+            }
             if (AlreadyGeneratedCode.GeneratedCode != null)
             {
                 spc.AddSource(AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.

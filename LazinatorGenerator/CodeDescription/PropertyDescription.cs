@@ -2021,7 +2021,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                             {{
                                 if ({innerProperty.GetNonNullCheck(false, "itemToClone[itemIndex]")})
                                 {{
-                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) (cloneOrChangeFunc(itemToClone[itemIndex]){innerProperty.PossibleUnsetExceptionWithForgivenessWithinNotNull});
+                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) ((cloneOrChangeFunc(itemToClone[itemIndex]){innerProperty.PossibleUnsetExceptionWithForgivenessWithinNotNull}){IIF(NullableModeEnabled && innerProperty.Nullable == false, "!")});
                                 }}
                                 continue;
                             }}
@@ -2331,10 +2331,6 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
 
         private string GetSupportedCollectionReadCommands(PropertyDescription outerProperty)
         {
-            if (AppropriatelyQualifiedTypeName.StartsWith("TKey"))
-            {
-                var DEBUG = 0;
-            }
             string collectionAddItem, collectionAddNull;
             GetSupportedCollectionAddCommands(outerProperty, "item", out collectionAddItem, out collectionAddNull);
 
