@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>CountedTree</AssemblyName>
     <PackageId>CountedTree</PackageId>
+	<Nullable>disable</Nullable>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

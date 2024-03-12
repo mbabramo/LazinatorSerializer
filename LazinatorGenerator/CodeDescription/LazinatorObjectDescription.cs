@@ -35,7 +35,7 @@ namespace Lazinator.CodeDescription
         public string NullableModeSettingString => NullableModeEnabled ? $@"
             #nullable enable" : $@"
             #nullable disable";
-        public string NullableModeRestoreString => NullableModeEnabled ? "" : $@"
+        public string NullableModeRestoreString => $@"
             #nullable restore";
 
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";

@@ -17,6 +17,8 @@ namespace CountedTree.Core
         {
             Key = key;
             ID = id;
+            string x = null; // DEBUG
+            x = x ?? "hello";
         }
 
         public KeyAndID<TKey> WithKey(TKey key)
