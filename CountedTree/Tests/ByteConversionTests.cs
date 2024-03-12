@@ -17,9 +17,7 @@ namespace CountedTree.Tests
         public void KeyAndIDConversionsWork_float()
         {
             KeyAndID<WFloat> f = new KeyAndID<WFloat>(3.5F, 3);
-            byte[] b = f.SerializeToArray();
-            KeyAndID<WFloat> d = default(KeyAndID<WFloat>);
-            d.DeserializeLazinator(new LazinatorMemory(b));
+            var d = f.CloneLazinatorTyped();
             f.Equals(d).Should().BeTrue();
         }
 
@@ -27,9 +25,7 @@ namespace CountedTree.Tests
         public void KeyAndIDConversionsWork_ulong()
         {
             KeyAndID<WUInt64> f = new KeyAndID<WUInt64>(17, 3);
-            byte[] b = f.SerializeToArray();
-            KeyAndID<WUInt64> d = default(KeyAndID<WUInt64>);
-            d.DeserializeLazinator(new LazinatorMemory(b));
+            var d = f.CloneLazinatorTyped();
             f.Equals(d).Should().BeTrue();
         }
 
@@ -37,9 +33,7 @@ namespace CountedTree.Tests
         public void KeyAndIDConversionsWork_uint()
         {
             KeyAndID<WUInt32> f = new KeyAndID<WUInt32>(17, 3);
-            byte[] b = f.SerializeToArray();
-            KeyAndID<WUInt32> d = default(KeyAndID<WUInt32>);
-            d.DeserializeLazinator(new LazinatorMemory(b));
+            var d = f.CloneLazinatorTyped();
             f.Equals(d).Should().BeTrue();
         }
 
@@ -47,9 +41,7 @@ namespace CountedTree.Tests
         public void KeyAndIDConversionsWork_decimal()
         {
             KeyAndID<WDecimal> f = new KeyAndID<WDecimal>(17, 3);
-            byte[] b = f.SerializeToArray();
-            KeyAndID<WDecimal> d = default(KeyAndID<WDecimal>);
-            d.DeserializeLazinator(new LazinatorMemory(b));
+            var d = f.CloneLazinatorTyped();
             f.Equals(d).Should().BeTrue();
         }
 

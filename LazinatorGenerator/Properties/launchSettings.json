@@ -7,6 +7,10 @@
     "CountedTree": {
       "commandName": "DebugRoslynComponent",
       "targetProject": "..\\CountedTree\\CountedTree.csproj"
+    },
+    "ProjectForDebuggingGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\ProjectForDebuggingGenerator\\ProjectForDebuggingGenerator.csproj"
     }
   }
 }
