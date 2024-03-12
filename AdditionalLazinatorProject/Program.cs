@@ -13,8 +13,6 @@ namespace ProjectForDebuggingGenerator
             MyLazinator myLazinator = new MyLazinator();
             //myLazinator.MyInt = 5;
             myLazinator.MyLazinatorList = new LazinatorList<WInt32>() { 1, 2, 3 };
-            myLazinator.MyList = new List<int>() { 4, 5 };
-            Console.WriteLine(myLazinator.MyList[0]);
             var ml2 = myLazinator.CloneLazinatorTyped();
 
             return Task.CompletedTask;

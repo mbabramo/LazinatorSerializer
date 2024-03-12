@@ -8,9 +8,9 @@
       "commandName": "DebugRoslynComponent",
       "targetProject": "..\\CountedTree\\CountedTree.csproj"
     },
-    "ProjectForDebuggingGenerator": {
+    "AdditionalLazinatorProject": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "..\\ProjectForDebuggingGenerator\\ProjectForDebuggingGenerator.csproj"
+      "targetProject": "..\\AdditionalLazinatorProject\\AdditionalLazinatorProject.csproj"
     }
   }
 }

@@ -490,7 +490,10 @@ namespace Lazinator.CodeDescription
 
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
-                Nullable = !GenericConstrainedToStruct;
+                if (GenericConstrainedToStruct || (NullableModeEnabled && typeSymbol.NullableAnnotation == NullableAnnotation.NotAnnotated))
+                    Nullable = false;
+                else
+                    Nullable = true;
                 PropertyType = LazinatorPropertyType.OpenGenericParameter;
                 DerivationKeyword = "virtual ";
                 SizeOfLength = 4;
@@ -2329,6 +2332,10 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
 
         private string GetSupportedCollectionReadCommands(PropertyDescription outerProperty)
         {
+            if (AppropriatelyQualifiedTypeName.StartsWith("TKey"))
+            {
+                var DEBUG = 0;
+            }
             string collectionAddItem, collectionAddNull;
             GetSupportedCollectionAddCommands(outerProperty, out collectionAddItem, out collectionAddNull);
 
@@ -2367,6 +2374,14 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                                 var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
                                 {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
+                    else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                        return (
+                            $@"
+                            {lengthCollectionMemberString}
+                            LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                            var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
+                            {collectionAddItem}
+                            bytesSoFar += lengthCollectionMember;");
                     else
                         return (
                             $@"
@@ -2391,50 +2406,54 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
 
         private void GetSupportedCollectionAddCommands(PropertyDescription outerProperty, out string collectionAddItem, out string collectionAddNull)
         {
+            string itemWord = "item";
+            if (NullableModeEnabled && outerProperty.InnerProperties[0].Nullable == false)
+                itemWord += "!";
             if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Array)
             {
                 if (outerProperty.ArrayRank == 1)
                 {
-                    collectionAddItem = "collection[itemIndex] = item;";
+                    collectionAddItem = $"collection[itemIndex] = {itemWord};";
                     collectionAddNull = $"collection[itemIndex] = {DefaultExpression};";
                 }
                 else
                 {
 
                     string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)outerProperty.ArrayRank).Select(j => $"itemIndex{j}")));
-                    collectionAddItem = $"collection[{innerArrayText}] = item;";
+                    collectionAddItem = $"collection[{innerArrayText}] = {itemWord};";
                     collectionAddNull = $"collection[{innerArrayText}] = {DefaultExpression};";
                 }
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
             {
-                collectionAddItem = "collectionAsSpan[itemIndex] = item;";
+                collectionAddItem = $"collectionAsSpan[itemIndex] = {itemWord};";
                 collectionAddNull = $"collectionAsSpan[itemIndex] = {DefaultExpression};";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
+                Debug;
                 // the outer type is a dictionary
                 collectionAddItem = "collection.Add(item.Key, item.Value);";
                 collectionAddNull = ""; // no null entries in dictionary
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Queue)
             {
-                collectionAddItem = "collection.Enqueue(item);";
+                collectionAddItem = $"collection.Enqueue({itemWord});";
                 collectionAddNull = $"collection.Enqueue({DefaultExpression});";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
-                collectionAddItem = "collection.Push(item);";
+                collectionAddItem = $"collection.Push({itemWord});";
                 collectionAddNull = $"collection.Push({DefaultExpression});";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {
-                collectionAddItem = "collection.AddLast(item);";
+                collectionAddItem = $"collection.AddLast({itemWord});";
                 collectionAddNull = $"collection.AddLast({DefaultExpression});";
             }
             else
             {
-                collectionAddItem = "collection.Add(item);";
+                collectionAddItem = $"collection.Add({itemWord});";
                 collectionAddNull = $"collection.Add({DefaultExpression});";
             }
         }
