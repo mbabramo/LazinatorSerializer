@@ -172,7 +172,7 @@ namespace CountedTree.Node
         {
             if (TreeStructure.SplitRangeEvenly)
             {
-                bool canDivideEvenly = TypeDividesEvenly() && !itemsWithPendingChanges.First().Key.Equals(itemsWithPendingChanges.Last().Key) && firstExclusive != null && lastInclusive != null;
+                bool canDivideEvenly = TypeDividesEvenly() && !itemsWithPendingChanges.First().Key.Equals(itemsWithPendingChanges.Last().Key);
                 if (!canDivideEvenly)
                     return false;
             }
