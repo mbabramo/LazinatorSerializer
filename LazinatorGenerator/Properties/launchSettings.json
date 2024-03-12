@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "Profile 1": {
+    "LazinatorAvlCollectionsConsoleProject": {
       "commandName": "DebugRoslynComponent",
       "targetProject": "..\\LazinatorAvlCollectionsConsoleProject\\LazinatorAvlCollectionsConsoleProject.csproj"
+    },
+    "CountedTree": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\CountedTree\\CountedTree.csproj"
     }
   }
 }

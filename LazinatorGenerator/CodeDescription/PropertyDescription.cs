@@ -1052,6 +1052,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
         {
+            if (SetterAccessibilityString == "private ")
+                throw new LazinatorCodeGenException($"Property {PropertyName} is in abstract class {ContainingObjectDescription.FullyQualifiedObjectName} and so cannot have a private setter.");
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"
                     {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString}{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct && !ContainingObjectDescription.GeneratingRefStruct, " = false")};")}
@@ -1151,7 +1153,6 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
                 return {BackingFieldAccessWithPossibleException};";
-
             sb.Append($@"
                 {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} {BackingFieldString};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
@@ -1159,7 +1160,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             get
             {{{propertyGetContents(false)}
             }}{StepThroughPropertiesString}
-            set
+            {SetterAccessibilityString}set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
                 IsDirty = true;
                 DescendantIsDirty = true;

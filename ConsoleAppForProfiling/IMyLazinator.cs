@@ -10,7 +10,7 @@ namespace ProjectForDebuggingGenerator
     {
         int MyInt { get; set; }
         string MyString { get; set; } 
-        LazinatorList<WInt32> MyLazinatorList { get; set; }
-        List<int> MyList { get; set; }
+        LazinatorList<WInt32>? MyLazinatorList { get; set; }
+        List<int>? MyList { get; set; }
     }
 }
