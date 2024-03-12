@@ -1998,8 +1998,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
         {
             PropertyDescription innerProperty = InnerProperties[0];
             string collectionAddItem, collectionAddNull;
-            innerProperty.GetSupportedCollectionAddCommands(this, out collectionAddItem, out collectionAddNull);
-            collectionAddItem = collectionAddItem.Replace("item ", "itemCopied ").Replace("item;", "itemCopied;").Replace("item)", "itemCopied)").Replace("item.", "itemCopied.");
+            innerProperty.GetSupportedCollectionAddCommands(this, "itemCopied", out collectionAddItem, out collectionAddNull);
             bool avoidCloningIfPossibleOption = IsSimpleListOrArray && innerProperty.IsLazinator;
             string creationText = GetCreationText(avoidCloningIfPossibleOption);
 
@@ -2337,7 +2336,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                 var DEBUG = 0;
             }
             string collectionAddItem, collectionAddNull;
-            GetSupportedCollectionAddCommands(outerProperty, out collectionAddItem, out collectionAddNull);
+            GetSupportedCollectionAddCommands(outerProperty, "item", out collectionAddItem, out collectionAddNull);
 
             if (IsPrimitive)
                 return ($@"
@@ -2404,9 +2403,8 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                 return "span.ToInt32(ref bytesSoFar)";
         }
 
-        private void GetSupportedCollectionAddCommands(PropertyDescription outerProperty, out string collectionAddItem, out string collectionAddNull)
+        private void GetSupportedCollectionAddCommands(PropertyDescription outerProperty, string itemWord, out string collectionAddItem, out string collectionAddNull)
         {
-            string itemWord = "item";
             if (NullableModeEnabled && outerProperty.InnerProperties[0].Nullable == false)
                 itemWord += "!";
             if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Array)
