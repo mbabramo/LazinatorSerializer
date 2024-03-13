@@ -198,7 +198,7 @@ namespace Lazinator.Core
         private static bool AnyGarbageCollected(LinkedList<(WeakReference<ILazinator> parent, int count)> includedParents)
         {
             foreach (var node in includedParents)
-                if (node.parent.TryGetTarget(out _) == false)
+                if (node.parent is not WeakReference<ILazinator> w || w.TryGetTarget(out _) == false)
                     return true;
             return false;
         }
