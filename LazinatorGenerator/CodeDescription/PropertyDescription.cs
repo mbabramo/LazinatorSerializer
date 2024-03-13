@@ -2750,11 +2750,6 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             string innerPropertyAssignments = GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, innerCloneStrings);
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? innerPropertyAssignments : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}{innerPropertyAssignments}";
 
-            if (AppropriatelyQualifiedTypeNameEncodable == "RecordLikeStruct")
-            {
-                var DEBUG = 0;
-            }
-
             // because we have a single cloneOrChangeFunc for the ILazinator, we don't make the nullability item specific
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorString}, {ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
