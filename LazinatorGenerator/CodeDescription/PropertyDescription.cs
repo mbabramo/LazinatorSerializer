@@ -2160,7 +2160,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             string cloneString;
             if (IsLazinator)
             {
-                cloneString = $"(cloneOrChangeFunc({itemString}){PossibleUnsetException})";
+                cloneString = $"(cloneOrChangeFunc({itemString}))";
                 //if (IsLazinatorStruct)
                 //    cloneString = $"cloneOrChangeFunc({itemString}).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
                 //else
@@ -2172,8 +2172,6 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                 cloneString = itemString;
             else
                 throw new NotImplementedException();
-            if (NullableModeEnabled && !Nullable)
-                cloneString = $"({cloneString}!)";
             return $"({typeName}) " + cloneString;
         }
 
