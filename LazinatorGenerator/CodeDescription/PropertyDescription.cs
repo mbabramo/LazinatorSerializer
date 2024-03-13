@@ -2011,13 +2011,6 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                 lengthWord = $"Value.{lengthWord}";
             if (ArrayRank > 1)
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
-            if (ContainingObjectDescription.NameIncludingGenerics.Contains("NullableEn"))
-            {
-                if (AppropriatelyQualifiedTypeNameEncodable.Contains("Example_B_b_n"))
-                {
-                    var DEBUGasdf = 0;
-                }
-            }
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorString}, {innerProperty.ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
@@ -2180,10 +2173,6 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                 cloneString = itemString;
             else
                 throw new NotImplementedException();
-            if (ContainingObjectDescription.NameIncludingGenerics.Contains("NullableEnabled"))
-            {
-                var DEBUG = 0;
-            }
             return $"({typeName}) " + cloneString;
         }
 
@@ -2755,11 +2744,16 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             List<string> innerCloneStrings = InnerProperties
                                 .Zip(
                                     itemStrings,
-                                    (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
+                                    (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + ((NullableModeEnabled && !x.Nullable) ? "!" : "") + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
                                 .Select(z => (InitializeRecordLikeTypePropertiesDirectly ? z.InnerProperty.PropertyName + " = " : "") + z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString, GetTypeNameOfInnerProperty(z.InnerProperty)))
                                 .ToList();
             string innerPropertyAssignments = GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, innerCloneStrings);
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? innerPropertyAssignments : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}{innerPropertyAssignments}";
+
+            if (AppropriatelyQualifiedTypeNameEncodable == "RecordLikeStruct")
+            {
+                var DEBUG = 0;
+            }
 
             // because we have a single cloneOrChangeFunc for the ILazinator, we don't make the nullability item specific
             sb.Append($@"
