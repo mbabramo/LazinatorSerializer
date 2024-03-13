@@ -2744,7 +2744,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             List<string> innerCloneStrings = InnerProperties
                                 .Zip(
                                     itemStrings,
-                                    (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + ((NullableModeEnabled && !x.Nullable) ? "!" : "") + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
+                                    (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + ((NullableModeEnabled && !x.Nullable) ? "!" : "") + (Nullable && !x.Nullable && !NullableModeEnabled ? " ?? default" : "") + ")" })
                                 .Select(z => (InitializeRecordLikeTypePropertiesDirectly ? z.InnerProperty.PropertyName + " = " : "") + z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString, GetTypeNameOfInnerProperty(z.InnerProperty)))
                                 .ToList();
             string innerPropertyAssignments = GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, innerCloneStrings);
