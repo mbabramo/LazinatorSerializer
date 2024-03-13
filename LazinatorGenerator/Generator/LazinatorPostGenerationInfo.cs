@@ -51,7 +51,7 @@ namespace LazinatorGenerator.Generator
         }
         public void GenerateSource(SourceProductionContext spc, IDateTimeNow dateTimeNowProvider)
         {
-            if (AlreadyGeneratedCode.GeneratedCode.Contains("collection.Add(itemCopied!);"))
+            if (AlreadyGeneratedCode.GeneratedCode.Contains("CloneOrChange_List_GT_g(List<T> itemToClone"))
             {
                 var DEBUG = 0;
             }

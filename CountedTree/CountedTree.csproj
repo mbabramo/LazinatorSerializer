@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
-	  <!--PackageReference Include="Lazinator" Version="0.1.0.425-alpha" /-->
-	  <!--PackageReference Include="Lazinator.Collections" Version="0.1.0.425-alpha" /-->
+	  <!--PackageReference Include="Lazinator" Version="0.1.0.426-alpha" /-->
+	  <!--PackageReference Include="Lazinator.Collections" Version="0.1.0.426-alpha" /-->
 	  <ProjectReference Include="..\Lazinator.Collections\Lazinator.Collections.csproj" />
 	  <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
 	  <ProjectReference Include="..\LazinatorGenerator\LazinatorGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
