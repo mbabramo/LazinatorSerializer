@@ -1793,7 +1793,26 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
-        
+        private static Example[] DEBUGCloneOrChange_Example_B_b(Example[] itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            int collectionLength = itemToClone.Length;
+            Example[] collection = avoidCloningIfPossible ? itemToClone : new Example[collectionLength];
+            int itemToCloneCount = itemToClone.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                if (avoidCloningIfPossible)
+                {
+                    if (itemToClone[itemIndex] != null)
+                    {
+                        itemToClone[itemIndex] = (Example)((cloneOrChangeFunc(itemToClone[itemIndex]))!);
+                    }
+                    continue;
+                }
+                var itemCopied = (Example)(cloneOrChangeFunc(itemToClone[itemIndex])!);
+                collection[itemIndex] = itemCopied!;
+            }
+            return collection;
+        }
         public NullableEnabledContext(LazinatorMemory serializedBytes, ILazinator? parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
             if (lazinatorObjectVersion != null)
