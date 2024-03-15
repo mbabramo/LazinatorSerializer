@@ -9,18 +9,24 @@ namespace LazinatorFuzzTestGenerator
 {
     public class LazinatorClassType : LazinatorObjectType, ISupportedType
     {
+        public override int ObjectDepth { get; }
         public override string DefinitionWord => "class";
         public bool IsAbstract { get; init; }
         public bool IsSealed { get; init; }
         public LazinatorClassType? InheritsFrom { get; init; }
         public override bool Inherits => InheritsFrom != null;
-        public override bool CanInheritFrom => !IsSealed;
+        public override bool Instantiable => !IsAbstract;
+        public override bool Inheritable => !IsSealed;
 
-        public LazinatorClassType(int uniqueID, string name, bool isAbstract, bool isSealed, LazinatorClassType inheritsFrom, List<LazinatorObjectProperty> properties) : base(uniqueID, name, properties)
+        public LazinatorClassType(int uniqueID, string name, bool isAbstract, bool isSealed, LazinatorClassType? inheritsFrom, List<LazinatorObjectProperty> properties) : base(uniqueID, name, properties)
         {
             IsAbstract = isAbstract;
             IsSealed = isSealed;
             InheritsFrom = inheritsFrom;
+            if (InheritsFrom == null)
+                ObjectDepth = 1;
+            else
+                ObjectDepth = InheritsFrom.ObjectDepth + 1;
         }
 
         public override string TypeDeclaration(bool nullable, bool nullableEnabledContext)
@@ -57,7 +63,7 @@ namespace FuzzTests
 $@"
 namespace FuzzTests
 {{
-    public partial class {Name} : I{Name}
+    public partial {(IsSealed ? "sealed " : "")}{(IsAbstract ? "abstract " : "")}class {Name} : {(InheritsFrom != null ? InheritsFrom.Name + "," : "")} I{Name}
     {{
     }}
 }}

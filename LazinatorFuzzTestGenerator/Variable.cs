@@ -1,6 +1,5 @@
 ﻿namespace LazinatorFuzzTestGenerator
 {
-    debug; // think about separating types from values, so we can represent values as types. This would be true for classes, subclasses, etc. We want to have something to represent the state of each of these. 
     public class Variable
     {
         public IObjectContents Contents { get; set; }

@@ -8,11 +8,12 @@ namespace LazinatorFuzzTestGenerator
 {
     public class LazinatorStructType : LazinatorObjectType, ISupportedType
     {
+        public override int ObjectDepth => 1;
         public override string DefinitionWord => "struct";
-
         public override bool Inherits => false;
+        public override bool Instantiable => true;
 
-        public override bool CanInheritFrom => false;
+        public override bool Inheritable => false;
 
         public LazinatorStructType(int uniqueID, string name, List<LazinatorObjectProperty> properties) : base(uniqueID, name, properties)
         { 

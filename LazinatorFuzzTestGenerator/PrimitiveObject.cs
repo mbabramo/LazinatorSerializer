@@ -9,24 +9,19 @@ namespace LazinatorFuzzTestGenerator
         public PrimitiveType ThePrimitiveType { get; set; }
         public object? Value { get; set; }
 
-        public PrimitiveObject(PrimitiveEnum primitiveType, object? value)
+        public PrimitiveObject(PrimitiveEnum primitiveEnum, object? value)
         {
-            ThePrimitiveType = new PrimitiveType() { PrimitiveEnum = primitiveType };
+            ThePrimitiveType = new PrimitiveType(primitiveEnum);
             Value = value;
         }
 
-        public PrimitiveObject(PrimitiveEnum primitiveEnum, bool nullable, Random r)
+        public PrimitiveObject(PrimitiveEnum primitiveEnum, Random r)
         {
-            ThePrimitiveType = new PrimitiveType() { PrimitiveEnum = primitiveEnum };
-            Value = GetRandomNonNullableValue(r);
-        }
-
-        public PrimitiveObject(Random r)
-        {
-            PrimitiveEnum primitiveEnum = (PrimitiveEnum)r.Next(0, (int) PrimitiveEnum.Decimal);
-            bool nullable = r.Next(2) == 0;
-            ThePrimitiveType = new PrimitiveType() { PrimitiveEnum = primitiveEnum };
-            Value = GetRandomNonNullableValue(r);
+            ThePrimitiveType = new PrimitiveType(primitiveEnum);
+            if (r.Next(0, 5) == 0)
+                Value = null;
+            else
+                Value = GetRandomNonNullableValue(r);
         }
 
         public string CodeToGetValue => GetValidCSharpRepresentationOfValue(Value);
