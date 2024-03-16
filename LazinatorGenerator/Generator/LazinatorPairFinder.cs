@@ -59,7 +59,7 @@ namespace LazinatorGenerator.Generator
 
         #region Analyzing type
 
-        internal LazinatorPairInformation GetLazinatorPairInfo(Compilation compilation, INamedTypeSymbol namedType)
+        public LazinatorPairInformation GetLazinatorPairInfo(Compilation compilation, INamedTypeSymbol namedType)
         {
             INamedTypeSymbol lazinatorObjectType;
             INamedTypeSymbol namedInterfaceType;

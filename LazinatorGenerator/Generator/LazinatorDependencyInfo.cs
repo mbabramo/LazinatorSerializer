@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LazinatorGenerator.Generator
 {
-    internal readonly struct LazinatorDependencyInfo
+    public readonly struct LazinatorDependencyInfo
     {
         internal readonly ImmutableArray<string> Dependencies;
         internal readonly ImmutableArray<(string dependency, int hashCode)> DependenciesWithHashCodes;

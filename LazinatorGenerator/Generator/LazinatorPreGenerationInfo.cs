@@ -15,15 +15,15 @@ using System.Text;
 
 namespace LazinatorGenerator.Generator
 {
-    internal struct LazinatorPreGenerationInfo
+    public struct LazinatorPreGenerationInfo
     {
-        internal GeneratorAttributeSyntaxContext SyntaxContext;
-        internal string LazinatorObjectDeclaration;
-        internal LazinatorConfig Config;
-        internal SemanticModel SemanticModel => SyntaxContext.SemanticModel;
-        internal CSharpCompilation Compilation => (CSharpCompilation) SemanticModel.Compilation;
-        internal INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
-        internal LazinatorPreGenerationInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config)
+        public GeneratorAttributeSyntaxContext SyntaxContext;
+        public string LazinatorObjectDeclaration;
+        public LazinatorConfig Config;
+        public SemanticModel SemanticModel => SyntaxContext.SemanticModel;
+        public CSharpCompilation Compilation => (CSharpCompilation) SemanticModel.Compilation;
+        public INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
+        public LazinatorPreGenerationInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config)
         {
             SyntaxContext = syntaxContext;
             Config = config;
@@ -153,7 +153,7 @@ namespace LazinatorGenerator.Generator
         }
 
 
-        internal LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider)
+        public LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation(); 
             if (pairInfo == null)

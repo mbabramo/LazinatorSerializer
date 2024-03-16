@@ -26,19 +26,20 @@ namespace LazinatorFuzzTestGenerator
 
         public override string UnannotatedTypeDeclaration() => Name;
 
-        public override string ILazinatorDeclaration(bool nullableEnabledContext)
+        public override string ILazinatorDeclaration(string namespaceString, bool nullableEnabledContext)
         {
             return
 $@"
 using Lazinator.Attributes;
+using Lazinator.Core;
 using Lazinator.Wrappers;
 
-namespace FuzzTests
+namespace FuzzTests.{namespaceString}
 {{
     [Lazinator((int){UniqueID})]
     public interface I{Name}
     {{
-        {PropertyDeclarations(nullableEnabledContext)}
+{PropertyDeclarations(nullableEnabledContext)}
     }}
 }}
 ";

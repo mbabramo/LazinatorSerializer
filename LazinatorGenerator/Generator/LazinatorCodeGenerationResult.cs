@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LazinatorGenerator.Generator
 {
-    internal readonly struct LazinatorCodeGenerationResult
+    public readonly struct LazinatorCodeGenerationResult
     {
         internal readonly string GeneratedType;
         internal readonly string Path;

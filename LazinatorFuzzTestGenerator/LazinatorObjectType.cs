@@ -30,12 +30,13 @@ namespace LazinatorFuzzTestGenerator
             StringBuilder sb = new StringBuilder();
             foreach (var property in Properties)
             {
+                sb.Append("        ");
                 sb.AppendLine(property.Declaration(nullableEnabledContext));
             }
             return sb.ToString();
         }
 
-        public abstract string ILazinatorDeclaration(bool nullableEnabledContext);
+        public abstract string ILazinatorDeclaration(string namespaceString, bool nullableEnabledContext);
 
         public abstract string UnannotatedTypeDeclaration();
 
