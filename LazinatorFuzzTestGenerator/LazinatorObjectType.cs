@@ -16,6 +16,7 @@ namespace LazinatorFuzzTestGenerator
         public abstract bool Inheritable { get; }
         public abstract bool Instantiable { get; }
         public abstract int ObjectDepth { get; }
+        public abstract bool UnannotatedIsNullable(bool nullableEnabledContext);
 
         public LazinatorObjectType(int uniqueID, string name, List<LazinatorObjectProperty> properties)
         {

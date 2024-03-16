@@ -42,7 +42,7 @@ namespace LazinatorFuzzTestGenerator
                     }
                     else
                     {
-                        LazinatorClassType parent = InheritableClassTypes.ToList()[r.Next(0, InheritableClassTypes.Count())];
+                        LazinatorClassType parent = InheritableClassTypes.Where(x => x.ObjectDepth < maximumDepth).ToList()[r.Next(0, InheritableClassTypes.Count())];
                         LazinatorClassType classType = new LazinatorClassType(uniqueID, "C" + uniqueID, isAbstract, isSealed, parent, properties);
                         ObjectTypes.Add(classType);
                     }
@@ -50,23 +50,37 @@ namespace LazinatorFuzzTestGenerator
             }
         }
 
-        public LazinatorObjectProperty GenerateObjectProperty(Random r)
+
+        public List<(string filename, string code)> GenerateSources()
         {
-            bool nullable = r.Next(0,2) == 1;
+            List<(string filename, string code)> result = new List<(string filename, string code)>();
+            foreach (LazinatorObjectType objectType in ObjectTypes)
+            {
+                result.Add((objectType.Name + ".cs", objectType.ObjectDeclaration(NullableEnabledContext)));
+                result.Add(("I" + objectType.Name + ".cs", objectType.ILazinatorDeclaration(NullableEnabledContext)));
+            }
+            return result;
+        }
+
+        private LazinatorObjectProperty GenerateObjectProperty(Random r)
+        {
+            bool nullableIfPossible = r.Next(0,2) == 1;
 
             if (r.Next(0, 2) == 0 || !InstantiableObjectTypes.Any())
             {
                 var primitiveType = new PrimitiveType(r);
-                if (!NullableEnabledContext && primitiveType.PrimitiveEnum == PrimitiveEnum.String)
-                    nullable = true; // can't have non-nullable string outside nullable enabled context
-                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", primitiveType, nullable);
+                if (primitiveType.UnannotatedIsNullable(NullableEnabledContext))
+                    nullableIfPossible = true; // can't have non-nullable string outside nullable enabled context
+                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", primitiveType, nullableIfPossible);
                 return property;
             }
             else
             {
                 var instantiableChoices = InstantiableObjectTypes.ToList();
                 LazinatorObjectType instantiableObject = instantiableChoices[r.Next(0, instantiableChoices.Count)];
-                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", instantiableObject, nullable);
+                if (instantiableObject.UnannotatedIsNullable(NullableEnabledContext))
+                    nullableIfPossible = true; // can't have non-nullable class outside nullable enabled context
+                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", instantiableObject, nullableIfPossible);
                 return property;
             }   
         }

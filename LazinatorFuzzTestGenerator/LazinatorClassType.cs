@@ -29,6 +29,14 @@ namespace LazinatorFuzzTestGenerator
                 ObjectDepth = InheritsFrom.ObjectDepth + 1;
         }
 
+        public override bool UnannotatedIsNullable(bool nullableEnabledContext)
+        {
+            if (nullableEnabledContext)
+                return false;
+            else
+                return true;
+        }
+
         public override string TypeDeclaration(bool nullable, bool nullableEnabledContext)
         {
             string declaration = Name;

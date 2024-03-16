@@ -16,6 +16,17 @@ namespace LazinatorFuzzTestGenerator
             PrimitiveEnum = GetRandomPrimitiveEnumType(r);
         }
 
+
+        public bool UnannotatedIsNullable(bool nullableEnabledContext)
+        {
+            if (nullableEnabledContext)
+                return false;
+            if (PrimitiveEnum == PrimitiveEnum.String)
+                return true;
+            else
+                return false;
+        }
+
         private static PrimitiveEnum GetRandomPrimitiveEnumType(Random r)
         {
             return (PrimitiveEnum)r.Next(0, (int)PrimitiveEnum.Decimal);

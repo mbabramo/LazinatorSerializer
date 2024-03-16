@@ -15,6 +15,11 @@ namespace LazinatorFuzzTestGenerator
 
         public override bool Inheritable => false;
 
+        public override bool UnannotatedIsNullable(bool nullableEnabledContext)
+        {
+            return false;
+        }
+
         public LazinatorStructType(int uniqueID, string name, List<LazinatorObjectProperty> properties) : base(uniqueID, name, properties)
         { 
         }
