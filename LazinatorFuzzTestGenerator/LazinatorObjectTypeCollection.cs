@@ -64,14 +64,14 @@ namespace LazinatorFuzzTestGenerator
 
         private LazinatorObjectProperty GenerateObjectProperty(Random r)
         {
-            bool nullableIfPossible = r.Next(0,2) == 1;
+            bool nullable = r.Next(0,2) == 1;
 
             if (r.Next(0, 2) == 0 || !InstantiableObjectTypes.Any())
             {
                 var primitiveType = new PrimitiveType(r);
                 if (primitiveType.UnannotatedIsNullable(NullableEnabledContext))
-                    nullableIfPossible = true; // can't have non-nullable string outside nullable enabled context
-                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", primitiveType, nullableIfPossible);
+                    nullable = true; // can't have non-nullable string outside nullable enabled context
+                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", primitiveType, nullable);
                 return property;
             }
             else
@@ -79,8 +79,8 @@ namespace LazinatorFuzzTestGenerator
                 var instantiableChoices = InstantiableObjectTypes.ToList();
                 LazinatorObjectType instantiableObject = instantiableChoices[r.Next(0, instantiableChoices.Count)];
                 if (instantiableObject.UnannotatedIsNullable(NullableEnabledContext))
-                    nullableIfPossible = true; // can't have non-nullable class outside nullable enabled context
-                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", instantiableObject, nullableIfPossible);
+                    nullable = true; // can't have non-nullable class outside nullable enabled context
+                LazinatorObjectProperty property = new LazinatorObjectProperty($"p{Counter++}", instantiableObject, nullable);
                 return property;
             }   
         }

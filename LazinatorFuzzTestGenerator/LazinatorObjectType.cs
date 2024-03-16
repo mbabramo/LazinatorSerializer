@@ -37,7 +37,7 @@ namespace LazinatorFuzzTestGenerator
 
         public abstract string ILazinatorDeclaration(bool nullableEnabledContext);
 
-        public abstract string TypeDeclaration(bool nullable, bool nullableEnabledContext);
+        public abstract string UnannotatedTypeDeclaration();
 
         public abstract string ObjectDeclaration(bool nullableEnabledContext);
     }

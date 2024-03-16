@@ -24,13 +24,7 @@ namespace LazinatorFuzzTestGenerator
         { 
         }
 
-        public override string TypeDeclaration(bool nullable, bool nullableEnabledContext)
-        {
-            string declaration = Name;
-            if (nullable && nullableEnabledContext)
-                declaration += "?";
-            return declaration;
-        }
+        public override string UnannotatedTypeDeclaration() => Name;
 
         public override string ILazinatorDeclaration(bool nullableEnabledContext)
         {
