@@ -18,6 +18,7 @@
                 File.WriteAllText("C:\\Users\\Admin\\Documents\\GitHub\\LazinatorSerializer\\AdditionalLazinatorProject\\Temp\\" + source.filename, source.code);
             }
             var compilation = CodeGeneration.CreateCompilation(sources);
+            var diagnostics = compilation.GetDiagnostics();
             var types = CodeGeneration.FindTypesWithLazinatorAttribute(compilation);
         }
     }

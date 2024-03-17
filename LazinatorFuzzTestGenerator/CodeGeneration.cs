@@ -10,6 +10,11 @@ using LazinatorGenerator.Settings;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Reflection;
 using CodeGenHelper;
+using Lazinator.CodeDescription;
+using LazinatorGenerator.CodeDescription;
+using LazinatorGenerator.Support;
+using LazinatorCodeGen.Roslyn;
+using System.Diagnostics;
 
 namespace LazinatorFuzzTestGenerator
 {
@@ -77,7 +82,7 @@ namespace LazinatorFuzzTestGenerator
 
         public static List<AttributeSyntax> FindLazinatorAttributes(Compilation compilation)
         {
-            var lazinatorAttributeType = "Lazinator";
+            var lazinatorAttributeType = "Lazinator.Attributes.LazinatorAttribute";
             var lazinatorAttributes = new List<AttributeSyntax>();
 
             foreach (var tree in compilation.SyntaxTrees)
@@ -100,7 +105,7 @@ namespace LazinatorFuzzTestGenerator
 
         public static List<INamedTypeSymbol> FindTypesWithLazinatorAttribute(Compilation compilation)
         {
-            var lazinatorAttributeTypeString = "Lazinator";
+            var lazinatorAttributeTypeString = "Lazinator.Attributes.LazinatorAttribute";
             var typesWithLazinatorAttribute = new List<INamedTypeSymbol>();
 
             var lazinatorAttributes = FindLazinatorAttributes(compilation);
@@ -115,13 +120,15 @@ namespace LazinatorFuzzTestGenerator
                 if (typeDeclaration != null)
                 {
                     var typeSymbol = semanticModel.GetDeclaredSymbol(typeDeclaration);
-                    if (typeSymbol is INamedTypeSymbol namedTypeSymbol &&
-                        namedTypeSymbol.GetAttributes().Any(attr => SymbolEqualityComparer.Default.Equals(attr.AttributeClass, attributeSymbolInfo.Symbol?.ContainingType) &&
-                        attr.AttributeClass?.ToDisplayString() == lazinatorAttributeTypeString))
+                    if (typeSymbol is INamedTypeSymbol namedTypeSymbol)
                     {
-                        if (!typesWithLazinatorAttribute.Any(ts => SymbolEqualityComparer.Default.Equals(ts, namedTypeSymbol)))
+                        if (namedTypeSymbol.GetAttributes().Any(attr => SymbolEqualityComparer.Default.Equals(attr.AttributeClass, attributeSymbolInfo.Symbol?.ContainingType) &&
+                        attr.AttributeClass?.ToDisplayString() == lazinatorAttributeTypeString))
                         {
-                            typesWithLazinatorAttribute.Add(namedTypeSymbol);
+                            if (!typesWithLazinatorAttribute.Any(ts => SymbolEqualityComparer.Default.Equals(ts, namedTypeSymbol)))
+                            {
+                                typesWithLazinatorAttribute.Add(namedTypeSymbol);
+                            }
                         }
                     }
                 }
@@ -137,6 +144,35 @@ namespace LazinatorFuzzTestGenerator
             LazinatorPairFinder analyzer = new LazinatorPairFinder(compilation, config); // we're not running the analyzer, but the analyzer code can help us get the LazinatorPairInfo.
             LazinatorPairInformation pairInfo = analyzer.GetLazinatorPairInfo(compilation, interfaceSymbol);
             return pairInfo;
+        }
+
+        Debug; 
+        public LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider, Compilation compilation, LazinatorConfig config, INamedTypeSymbol interfaceSymbol, INamedTypeSymbol implementingTypeSymbol)
+        {
+            LazinatorPairInformation pairInfo = GetLazinatorPairInformation(compilation, config, interfaceSymbol);
+            if (pairInfo == null)
+                return new LazinatorCodeGenerationResult(null, null, null, default, default);
+            LazinatorImplementingTypeInfo implementingTypeInfo = new LazinatorImplementingTypeInfo(compilation, implementingTypeSymbol, config);
+
+            try
+            {
+                var objectDescription = new LazinatorObjectDescription(implementingTypeSymbol, implementingTypeInfo, config, dateTimeNowProvider, false);
+                var generatedCode = objectDescription.GetCodeBehind();
+                string path = objectDescription.ObjectNameEncodable + config.GeneratedCodeFileExtension;
+                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, implementingTypeInfo.GetDependencyInfo(), null);
+            }
+            catch (LazinatorCodeGenException e)
+            {
+                var descriptor = new DiagnosticDescriptor(
+                    id: "LAZIN",
+                    title: "Lazinator code generation error",
+                    messageFormat: e.Message,
+                    category: "tests",
+                    defaultSeverity: DiagnosticSeverity.Error,
+                    isEnabledByDefault: true);
+                Diagnostic diagnostic = Diagnostic.Create(descriptor, pairInfo.PrimaryLocation);
+                return new LazinatorCodeGenerationResult(implementingTypeInfo.ImplementingTypeSymbol.GetFullyQualifiedNameWithoutGlobal(true), null, null, implementingTypeInfo.GetDependencyInfo(), diagnostic);
+            }
         }
 
 

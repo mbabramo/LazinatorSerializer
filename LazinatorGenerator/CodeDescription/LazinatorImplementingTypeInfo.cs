@@ -123,7 +123,7 @@ namespace LazinatorGenerator.CodeDescription
             return ImmutableArray.Create(h.OrderBy(x => x).ToArray());
         }
 
-        internal LazinatorDependencyInfo GetDependencyInfo()
+        public LazinatorDependencyInfo GetDependencyInfo()
         {
             return new LazinatorDependencyInfo(GetInterfaceSymbolNames());
         }
