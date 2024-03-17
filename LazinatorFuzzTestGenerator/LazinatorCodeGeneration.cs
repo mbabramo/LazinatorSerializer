@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace LazinatorFuzzTestGenerator
 {
-    internal class CodeGeneration
+    public static class LazinatorCodeGeneration
     {
         public static string GetCodeBasePath(string project = "")
         {
@@ -52,7 +52,7 @@ namespace LazinatorFuzzTestGenerator
 
             bool useProjectReferences = false;
             List<MetadataReference> references = new List<MetadataReference>();
-            if ( useProjectReferences)
+            if (useProjectReferences)
             {
                 // DEBUG references = AdhocWorkspaceManager.GetProjectReferences();
             }
@@ -80,7 +80,22 @@ namespace LazinatorFuzzTestGenerator
             return compilation;
         }
 
-        public static List<AttributeSyntax> FindLazinatorAttributes(Compilation compilation)
+
+        public static List<LazinatorCodeGenerationResult> GenerateLazinatorCodeBehindFiles(Compilation compilation)
+        {
+            List<(INamedTypeSymbol theInterface, INamedTypeSymbol theImplementation)> interfacesAndImplementations = FindTypesImplementingILazinator(compilation);
+            List<LazinatorCodeGenerationResult> results = interfacesAndImplementations.Select(x => ExecuteSourceGeneration(new FakeDateTimeNow(), compilation, new LazinatorConfig(), x.theInterface, x.theImplementation)).ToList();
+            return results;
+        }
+
+        private static List<(INamedTypeSymbol theInterface, INamedTypeSymbol theImplementation)> FindTypesImplementingILazinator(Compilation compilation)
+        {
+            var theInterfaces = LazinatorCodeGeneration.FindTypesWithLazinatorAttribute(compilation);
+            List<(INamedTypeSymbol theInterface, INamedTypeSymbol theImplementation)> interfacesAndImplementations = MatchInterfacesToImplementations(compilation, theInterfaces);
+            return interfacesAndImplementations;
+        }
+
+        private static List<AttributeSyntax> FindLazinatorAttributes(Compilation compilation)
         {
             var lazinatorAttributeType = "Lazinator.Attributes.LazinatorAttribute";
             var lazinatorAttributes = new List<AttributeSyntax>();
@@ -103,7 +118,7 @@ namespace LazinatorFuzzTestGenerator
             return lazinatorAttributes;
         }
 
-        public static List<INamedTypeSymbol> FindTypesWithLazinatorAttribute(Compilation compilation)
+        private static List<INamedTypeSymbol> FindTypesWithLazinatorAttribute(Compilation compilation)
         {
             var lazinatorAttributeTypeString = "Lazinator.Attributes.LazinatorAttribute";
             var typesWithLazinatorAttribute = new List<INamedTypeSymbol>();
@@ -138,16 +153,63 @@ namespace LazinatorFuzzTestGenerator
         }
 
 
+        private static List<(INamedTypeSymbol theInterface, INamedTypeSymbol theImplementation)> MatchInterfacesToImplementations(Compilation compilation, List<INamedTypeSymbol> theInterfaces)
+        {
+            var result = new List<(INamedTypeSymbol theInterface, INamedTypeSymbol theImplementation)>();
 
-        private LazinatorPairInformation GetLazinatorPairInformation(Compilation compilation, LazinatorConfig config, INamedTypeSymbol interfaceSymbol)
+            // Convert the list to a HashSet for faster lookups, using SymbolEqualityComparer to handle symbol equivalency correctly
+            var interfaceSet = new HashSet<INamedTypeSymbol>(theInterfaces, SymbolEqualityComparer.Default);
+
+            // Iterate through all symbols defined in the compilation
+            foreach (var tree in compilation.SyntaxTrees)
+            {
+                var semanticModel = compilation.GetSemanticModel(tree);
+                var allNodes = tree.GetRoot().DescendantNodes();
+                foreach (var node in allNodes)
+                {
+                    var potentialImplementation = semanticModel.GetDeclaredSymbol(node) as INamedTypeSymbol;
+                    if (potentialImplementation == null) continue;
+
+                    // Only consider classes and structs
+                    if (potentialImplementation.TypeKind != TypeKind.Class && potentialImplementation.TypeKind != TypeKind.Struct)
+                        continue;
+
+                    // Check if this type implements any of the interfaces
+                    var interfaceImplemented = InterfaceImplemented(potentialImplementation, interfaceSet);
+                    if (interfaceImplemented != null)
+                    {
+                        if (!result.Any(ts => SymbolEqualityComparer.Default.Equals(ts.theImplementation, potentialImplementation)))
+                        {
+                            result.Add((interfaceImplemented, potentialImplementation));
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static INamedTypeSymbol? InterfaceImplemented(INamedTypeSymbol typeSymbol, HashSet<INamedTypeSymbol> interfaceSet)
+        {
+            foreach (var implementedInterface in typeSymbol.AllInterfaces)
+            {
+                if (interfaceSet.Contains(implementedInterface, SymbolEqualityComparer.Default))
+                {
+                    return implementedInterface;
+                }
+            }
+
+            return null;
+        }
+
+        private static LazinatorPairInformation GetLazinatorPairInformation(Compilation compilation, LazinatorConfig config, INamedTypeSymbol interfaceSymbol)
         {
             LazinatorPairFinder analyzer = new LazinatorPairFinder(compilation, config); // we're not running the analyzer, but the analyzer code can help us get the LazinatorPairInfo.
             LazinatorPairInformation pairInfo = analyzer.GetLazinatorPairInfo(compilation, interfaceSymbol);
             return pairInfo;
         }
 
-        Debug; 
-        public LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider, Compilation compilation, LazinatorConfig config, INamedTypeSymbol interfaceSymbol, INamedTypeSymbol implementingTypeSymbol)
+        private static LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider, Compilation compilation, LazinatorConfig config, INamedTypeSymbol interfaceSymbol, INamedTypeSymbol implementingTypeSymbol)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation(compilation, config, interfaceSymbol);
             if (pairInfo == null)

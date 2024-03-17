@@ -8,11 +8,11 @@ namespace LazinatorGenerator.Generator
 {
     public readonly struct LazinatorCodeGenerationResult
     {
-        internal readonly string GeneratedType;
-        internal readonly string Path;
-        internal readonly string GeneratedCode;
+        public readonly string GeneratedType;
+        public readonly string Path;
+        public readonly string GeneratedCode;
         internal readonly LazinatorDependencyInfo DependencyInfo;
-        internal readonly Diagnostic Diagnostic;
+        public readonly Diagnostic Diagnostic;
         internal readonly int HashCode;
 
         internal readonly bool IsEmpty => GeneratedType == null && Path == null;

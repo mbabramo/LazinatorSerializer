@@ -1,4 +1,6 @@
-﻿namespace LazinatorFuzzTestGenerator
+﻿using Microsoft.CodeAnalysis;
+
+namespace LazinatorFuzzTestGenerator
 {
     internal class Program
     {
@@ -8,18 +10,27 @@
             string namespaceString = "n1";
             bool nullableEnabledContext = true;
             LazinatorObjectTypeCollection c = new LazinatorObjectTypeCollection(namespaceString, nullableEnabledContext);
-            int numObjectTypes = 2;
-            int maxClassDepth = 1;
+            int numObjectTypes = 50;
+            int maxClassDepth = 5;
             int maxProperties = 10;
             c.GenerateObjectTypes(numObjectTypes, maxClassDepth, maxProperties, r);
-            var sources = c.GenerateSources();
+            List<(string folder, string filename, string code)> sources = c.GenerateSources();
             foreach (var source in sources)
             {
                 File.WriteAllText("C:\\Users\\Admin\\Documents\\GitHub\\LazinatorSerializer\\AdditionalLazinatorProject\\Temp\\" + source.filename, source.code);
             }
-            var compilation = CodeGeneration.CreateCompilation(sources);
-            var diagnostics = compilation.GetDiagnostics();
-            var types = CodeGeneration.FindTypesWithLazinatorAttribute(compilation);
+            var compilation = LazinatorCodeGeneration.CreateCompilation(sources);
+            List<LazinatorGenerator.Generator.LazinatorCodeGenerationResult> results = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilation);
+            foreach (var result in results)
+            {
+                File.WriteAllText("C:\\Users\\Admin\\Documents\\GitHub\\LazinatorSerializer\\AdditionalLazinatorProject\\Temp\\" + result.Path, result.GeneratedCode);
+                var diagostic = result.Diagnostic;
+                if (diagostic != null)
+                {
+                    Console.WriteLine($"{result.Path}: {diagostic}");
+                }
+            }
+
         }
     }
 }
