@@ -32,7 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdditionalLazinatorProject"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorFuzzTestGenerator", "LazinatorFuzzTestGenerator\LazinatorFuzzTestGenerator.csproj", "{4E4BD299-FF92-40A9-9877-9AADC01C0471}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenHelper", "CodeGenHelper\CodeGenHelper.csproj", "{7F54E0D1-D5E7-4FFD-A878-E85EBCC3FF53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenHelper", "CodeGenHelper\CodeGenHelper.csproj", "{7F54E0D1-D5E7-4FFD-A878-E85EBCC3FF53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazinatorFuzzGeneratedTests", "LazinatorFuzzGeneratedTests\LazinatorFuzzGeneratedTests.csproj", "{9ED661DF-E956-4F57-989D-24D6B197967A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,12 +74,16 @@ Global
 		{7F54E0D1-D5E7-4FFD-A878-E85EBCC3FF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F54E0D1-D5E7-4FFD-A878-E85EBCC3FF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F54E0D1-D5E7-4FFD-A878-E85EBCC3FF53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ED661DF-E956-4F57-989D-24D6B197967A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ED661DF-E956-4F57-989D-24D6B197967A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ED661DF-E956-4F57-989D-24D6B197967A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ED661DF-E956-4F57-989D-24D6B197967A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 		SolutionGuid = {58D89D99-DE35-4C68-AE67-A62D4D9FEC7D}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 	EndGlobalSection
 EndGlobal
