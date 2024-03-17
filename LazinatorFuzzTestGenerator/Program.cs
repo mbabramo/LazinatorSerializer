@@ -29,7 +29,7 @@ namespace LazinatorFuzzTestGenerator
                 }
                 compilation = LazinatorCodeGeneration.CreateCompilation(mainSources);
                 results = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilation);
-                success = !results.Any(x => x.Diagnostic != null);
+                success = !results.Any(x => x.Diagnostic != null) && !compilation.GetDiagnostics().Any();
             }
 
             if (success)
@@ -44,6 +44,10 @@ namespace LazinatorFuzzTestGenerator
             }
             else
             {
+                foreach (var diagnostic in compilation.GetDiagnostics())
+                {
+                    Console.WriteLine(diagnostic);
+                }
                 bool writeEvenIfFailed = false;
                 string folder = Path.Combine(ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests"), c.namespaceString);
                 if (writeEvenIfFailed && !Path.Exists(folder))
