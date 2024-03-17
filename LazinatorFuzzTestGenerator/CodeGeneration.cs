@@ -9,6 +9,7 @@ using LazinatorGenerator.Generator;
 using LazinatorGenerator.Settings;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Reflection;
+using CodeGenHelper;
 
 namespace LazinatorFuzzTestGenerator
 {
@@ -40,28 +41,28 @@ namespace LazinatorFuzzTestGenerator
             // Assuming .NET 8.0 libraries are available in the standard .NET installation path or nuget cache,
             // and assuming the projects build their outputs to a standard location relative to the solution folder.
             var netStandardPath = typeof(object).Assembly.Location;
-            string netCorePath = Path.GetDirectoryName(typeof(object).GetTypeInfo().Assembly.Location);
+            string netCorePath = Path.GetDirectoryName(typeof(object).GetTypeInfo().Assembly.Location)!;
             var lazinatorDllPath = Path.Combine(solutionFolder, "Lazinator", "bin", "Debug", "net8.0", "Lazinator.dll");
             var lazinatorCollectionsDllPath = Path.Combine(solutionFolder, "Lazinator.Collections", "bin", "Debug", "net8.0", "Lazinator.Collections.dll");
 
-            bool useProjectReferences = true;
-            List<MetadataReference> references;
+            bool useProjectReferences = false;
+            List<MetadataReference> references = new List<MetadataReference>();
             if ( useProjectReferences)
             {
-                references = AdhocWorkspaceManager.GetProjectReferences()
+                // DEBUG references = AdhocWorkspaceManager.GetProjectReferences();
             }
             else
                 references = new List<MetadataReference>
-            {
-                MetadataReference.CreateFromFile(lazinatorDllPath),
-                MetadataReference.CreateFromFile(lazinatorCollectionsDllPath),
-                MetadataReference.CreateFromFile(netStandardPath),
-                MetadataReference.CreateFromFile(Path.Combine(netCorePath!, "System.Runtime.dll")), // System.Runtime.dll
-                MetadataReference.CreateFromFile(Path.Combine(netCorePath!, "System.Collections.dll")), // System.Collections.dll
-                MetadataReference.CreateFromFile(typeof(Queryable).Assembly.Location), // System.Linq.Queryable.dll
-                MetadataReference.CreateFromFile(typeof(int).Assembly.Location), // System.Private.CoreLib.dll
-                // Add other necessary references here
-            };
+                {
+                    MetadataReference.CreateFromFile(lazinatorDllPath),
+                    MetadataReference.CreateFromFile(lazinatorCollectionsDllPath),
+                    MetadataReference.CreateFromFile(netStandardPath),
+                    MetadataReference.CreateFromFile(Path.Combine(netCorePath!, "System.Runtime.dll")), // System.Runtime.dll
+                    MetadataReference.CreateFromFile(Path.Combine(netCorePath!, "System.Collections.dll")), // System.Collections.dll
+                    MetadataReference.CreateFromFile(typeof(Queryable).Assembly.Location), // System.Linq.Queryable.dll
+                    MetadataReference.CreateFromFile(typeof(int).Assembly.Location), // System.Private.CoreLib.dll
+                    // Add other necessary references here
+                };
 
 
 

@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LazinatorTests.Support
+namespace CodeGenHelper
 {
     public static class AdhocWorkspaceManager
     {
@@ -14,7 +14,7 @@ namespace LazinatorTests.Support
         {
             var project = ws.CurrentSolution.Projects.First();
             var compilation = await project.GetCompilationAsync();
-            return compilation;
+            return compilation!;
         }
 
         public static AdhocWorkspace CreateAdHocWorkspaceWithAllFilesInProjects(List<string> projects)
@@ -26,7 +26,7 @@ namespace LazinatorTests.Support
                 foreach (string fullPathName in fullPathNames)
                     if (fullPathName.EndsWith(".cs"))
                     {
-                        string code = null;
+                        string code = "";
                         using (TextReader textReader = File.OpenText(fullPathName))
                             code = textReader.ReadToEnd();
                         filesWithCode.Add((fullPathName, code));
@@ -66,6 +66,20 @@ namespace LazinatorTests.Support
             return adhocWorkspace;
         }
 
+        public static AdhocWorkspace CreateAdHocWorkspaceFromSource(List<string> sources)
+        {
+            var adhocWorkspace = new AdhocWorkspace();
+            ProjectInfo project = ProjectInfo.Create(ProjectId.CreateNewId("FakeProject"), VersionStamp.Create(DateTime.Now), "FakeProject", "FakeProject.dll", LanguageNames.CSharp);
+            project = AddProjectReferences(project);
+
+            DocumentInfo[] documents = sources.Select(source => DocumentInfo.Create(DocumentId.CreateNewId(project.Id, "source.cs"), "source.cs", loader: TextLoader.From(TextAndVersion.Create(SourceText.From(source), VersionStamp.Create())))).ToArray();
+            project = project.WithDocuments(documents);
+
+            adhocWorkspace.AddProject(project);
+
+            return adhocWorkspace;
+        }
+
         public static AdhocWorkspace CreateAdHocWorkspaceFromSource(string source)
         {
             var adhocWorkspace = new AdhocWorkspace();
@@ -89,7 +103,7 @@ namespace LazinatorTests.Support
 
         public static List<PortableExecutableReference> GetProjectReferences()
         {
-            var trustedAssembliesPaths = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(Path.PathSeparator);
+            var trustedAssembliesPaths = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!).Split(Path.PathSeparator);
             //var neededAssemblies = new[]
             //{
             //    "Build",

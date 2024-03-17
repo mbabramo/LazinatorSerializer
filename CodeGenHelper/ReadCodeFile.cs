@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace LazinatorTests.Support
+namespace CodeGenHelper
 {
     public static class ReadCodeFile
     {
@@ -25,7 +25,7 @@ namespace LazinatorTests.Support
                     code = textReader.ReadToEnd();
             }
             else
-                code = null;
+                code = "";
 
         }
 

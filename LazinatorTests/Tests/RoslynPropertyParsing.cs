@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using LazinatorCodeGen.Roslyn;
 using System.Collections.Immutable;
 using System.IO;
-using LazinatorTests.Support;
+using CodeGenHelper;
 using LazinatorGenerator.CodeDescription;
 
 namespace LazinatorTests.Tests

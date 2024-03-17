@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CodeGenHelper\CodeGenHelper.csproj" />
     <ProjectReference Include="..\LazinatorGenerator\LazinatorGenerator.csproj" />
   </ItemGroup>
 

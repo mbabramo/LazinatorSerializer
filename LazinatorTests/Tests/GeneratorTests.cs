@@ -7,7 +7,6 @@ using LazinatorGenerator.Generator;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using Lazinator.Attributes;
-using LazinatorTests.Support;
 using System.Linq;
 using FluentAssertions;
 using System.IO;
@@ -20,6 +19,7 @@ using System.Reflection.Emit;
 using LazinatorGenerator.Support;
 using LazinatorTests.Utilities;
 using Lazinator.Core;
+using CodeGenHelper;
 using System.Diagnostics;
 using System.Reflection;
 

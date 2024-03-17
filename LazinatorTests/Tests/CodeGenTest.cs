@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using Lazinator.Collections.Dictionary;
 using LazinatorGenerator.Settings;
 using LazinatorTests.Examples.NonAbstractGenerics;
-using LazinatorTests.Support;
+using CodeGenHelper;
 using Newtonsoft.Json;
 using LazinatorListContainer = LazinatorTests.Examples.Collections.LazinatorListContainer;
 using LazinatorTests.Examples.Abstract;
