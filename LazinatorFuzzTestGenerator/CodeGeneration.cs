@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using LazinatorGenerator.Generator;
 using LazinatorGenerator.Settings;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Reflection;
 
 namespace LazinatorFuzzTestGenerator
 {
@@ -38,17 +39,31 @@ namespace LazinatorFuzzTestGenerator
 
             // Assuming .NET 8.0 libraries are available in the standard .NET installation path or nuget cache,
             // and assuming the projects build their outputs to a standard location relative to the solution folder.
-            var netStandardLibraryPath = typeof(object).Assembly.Location;
+            var netStandardPath = typeof(object).Assembly.Location;
+            string netCorePath = Path.GetDirectoryName(typeof(object).GetTypeInfo().Assembly.Location);
             var lazinatorDllPath = Path.Combine(solutionFolder, "Lazinator", "bin", "Debug", "net8.0", "Lazinator.dll");
             var lazinatorCollectionsDllPath = Path.Combine(solutionFolder, "Lazinator.Collections", "bin", "Debug", "net8.0", "Lazinator.Collections.dll");
 
-            var references = new List<MetadataReference>
+            bool useProjectReferences = true;
+            List<MetadataReference> references;
+            if ( useProjectReferences)
             {
-                MetadataReference.CreateFromFile(netStandardLibraryPath),
+                references = AdhocWorkspaceManager.GetProjectReferences()
+            }
+            else
+                references = new List<MetadataReference>
+            {
                 MetadataReference.CreateFromFile(lazinatorDllPath),
-                MetadataReference.CreateFromFile(lazinatorCollectionsDllPath)
+                MetadataReference.CreateFromFile(lazinatorCollectionsDllPath),
+                MetadataReference.CreateFromFile(netStandardPath),
+                MetadataReference.CreateFromFile(Path.Combine(netCorePath!, "System.Runtime.dll")), // System.Runtime.dll
+                MetadataReference.CreateFromFile(Path.Combine(netCorePath!, "System.Collections.dll")), // System.Collections.dll
+                MetadataReference.CreateFromFile(typeof(Queryable).Assembly.Location), // System.Linq.Queryable.dll
+                MetadataReference.CreateFromFile(typeof(int).Assembly.Location), // System.Private.CoreLib.dll
                 // Add other necessary references here
             };
+
+
 
             var compilation = CSharpCompilation.Create(
                 "DynamicCompilation",

@@ -40,6 +40,6 @@ namespace LazinatorFuzzTestGenerator
 
         public abstract string UnannotatedTypeDeclaration();
 
-        public abstract string ObjectDeclaration(bool nullableEnabledContext);
+        public abstract string ObjectDeclaration(string namespaceString, bool nullableEnabledContext);
     }
 }

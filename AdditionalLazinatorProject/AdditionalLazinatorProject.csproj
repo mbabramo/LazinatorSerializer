@@ -17,4 +17,8 @@
 		<ProjectReference Include="..\LazinatorGenerator\LazinatorGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Temp\" />
+	</ItemGroup>
+
 </Project>

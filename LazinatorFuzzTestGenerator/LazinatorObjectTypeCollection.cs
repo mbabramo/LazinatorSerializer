@@ -20,7 +20,7 @@ namespace LazinatorFuzzTestGenerator
             for (int i = 0; i < numObjectTypes; i++)
             {
                 int uniqueID = UniqueIDCounter++;
-                int numProperties = r.Next(0, maxProperties);
+                int numProperties = r.Next(0, maxProperties + 1);
                 List<LazinatorObjectProperty> properties = new List<LazinatorObjectProperty>();
                 for (int j = 0; j < numProperties; j++)
                 {
@@ -35,14 +35,15 @@ namespace LazinatorFuzzTestGenerator
                 {
                     bool isAbstract = r.Next(0, 4) == 0;
                     bool isSealed = !isAbstract && r.Next(0, 3) == 0;
-                    if (r.Next(0, 2) == 0 || !InheritableClassTypes.Any())
+                    var inheritable = InheritableClassTypes.Where(x => x.ObjectDepth < maximumDepth).ToList();
+                    if (r.Next(0, 2) == 0 || !inheritable.Any())
                     {
                         LazinatorClassType classType = new LazinatorClassType(uniqueID, "C" + uniqueID, isAbstract, isSealed, null, properties);
                         ObjectTypes.Add(classType);
                     }
                     else
                     {
-                        LazinatorClassType parent = InheritableClassTypes.Where(x => x.ObjectDepth < maximumDepth).ToList()[r.Next(0, InheritableClassTypes.Count())];
+                        LazinatorClassType parent = inheritable[r.Next(0, inheritable.Count())];
                         LazinatorClassType classType = new LazinatorClassType(uniqueID, "C" + uniqueID, isAbstract, isSealed, parent, properties);
                         ObjectTypes.Add(classType);
                     }
@@ -56,7 +57,7 @@ namespace LazinatorFuzzTestGenerator
             List<(string folder, string filename, string code)> result = new List<(string folder, string filename, string code)>();
             foreach (LazinatorObjectType objectType in ObjectTypes)
             {
-                result.Add((namespaceString, objectType.Name + ".cs", objectType.ObjectDeclaration(nullableEnabledContext)));
+                result.Add((namespaceString, objectType.Name + ".cs", objectType.ObjectDeclaration(namespaceString, nullableEnabledContext)));
                 result.Add((namespaceString, "I" + objectType.Name + ".cs", objectType.ILazinatorDeclaration(namespaceString, nullableEnabledContext)));
             }
             return result;

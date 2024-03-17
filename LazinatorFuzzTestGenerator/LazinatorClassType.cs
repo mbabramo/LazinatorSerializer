@@ -51,20 +51,20 @@ using Lazinator.Wrappers;
 namespace FuzzTests.{namespaceString}
 {{
     [Lazinator((int){UniqueID})]
-    public interface I{Name}
+    public interface I{Name}{(InheritsFrom == null ? "" : $" : I{InheritsFrom.Name}")}
     {{
 {PropertyDeclarations(nullableEnabledContext)}
     }}
 }}
 ";
         }
-        public override string ObjectDeclaration(bool nullableEnabledContext)
+        public override string ObjectDeclaration(string namespaceString, bool nullableEnabledContext)
         {
             return
 $@"
-namespace FuzzTests
+namespace FuzzTests.{namespaceString}
 {{
-    public partial {(IsSealed ? "sealed " : "")}{(IsAbstract ? "abstract " : "")}class {Name} : {(InheritsFrom != null ? InheritsFrom.Name + "," : "")} I{Name}
+    public {(IsSealed ? "sealed " : "")}{(IsAbstract ? "abstract " : "")}partial class {Name} : {(InheritsFrom != null ? InheritsFrom.Name + "," : "")} I{Name}
     {{
     }}
 }}

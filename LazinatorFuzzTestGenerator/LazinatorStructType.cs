@@ -45,11 +45,11 @@ namespace FuzzTests.{namespaceString}
 ";
         }
 
-        public override string ObjectDeclaration(bool nullableEnabledContext)
+        public override string ObjectDeclaration(string namespaceString, bool nullableEnabledContext)
         {
             return
 $@"
-namespace FuzzTests
+namespace FuzzTests.{namespaceString}
 {{
     public partial struct {Name} : I{Name}
     {{
