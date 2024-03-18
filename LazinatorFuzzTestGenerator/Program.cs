@@ -32,26 +32,29 @@ namespace LazinatorFuzzTestGenerator
                 success = !results.Any(x => x.Diagnostic != null) && !compilation.GetDiagnostics().Any();
             }
 
-            if (success)
+            string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests") + "\\" + c.namespaceString + "\\";
+            void WriteMainSources()
             {
-                string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests") + "\\" + c.namespaceString + "\\"; 
-                if (!Path.Exists(folder))
-                    Directory.CreateDirectory(folder);
                 foreach (var source in mainSources)
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
             }
-            else
+
+            bool writeEvenIfFailed = true;
+            bool write = success || writeEvenIfFailed;
+            if (write)
+            {
+                if (!Path.Exists(folder))
+                    Directory.CreateDirectory(folder);
+                WriteMainSources();
+            }
+            if (!success || write)
             {
                 foreach (var diagnostic in compilation.GetDiagnostics())
                 {
                     Console.WriteLine(diagnostic);
                 }
-                bool writeEvenIfFailed = false;
-                string folder = Path.Combine(ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests"), c.namespaceString);
-                if (writeEvenIfFailed && !Path.Exists(folder))
-                    Directory.CreateDirectory(folder);
                 foreach (var result in results)
                 {
                     if (writeEvenIfFailed)

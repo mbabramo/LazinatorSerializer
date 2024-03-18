@@ -1077,8 +1077,14 @@ namespace Lazinator.CodeDescription
 
         private string GetModifiedDerivationKeyword()
         {
-            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.IsSealed || ContainingObjectDescription.GeneratingRefStruct)
+            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ||  ContainingObjectDescription.GeneratingRefStruct)
                 return "";
+            if (ContainingObjectDescription.IsSealed)
+            {
+                if (DerivationKeyword == "override ")
+                    return DerivationKeyword;
+                return "";
+            }
             string modifiedDerivationKeyword = DerivationKeyword;
             if (modifiedDerivationKeyword == null)
             {

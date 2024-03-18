@@ -30,6 +30,7 @@ namespace LazinatorFuzzTestGenerator
         {
             return
 $@"
+using System;
 using Lazinator.Attributes;
 using Lazinator.Core;
 using Lazinator.Wrappers;

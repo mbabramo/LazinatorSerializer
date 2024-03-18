@@ -44,6 +44,7 @@ namespace LazinatorFuzzTestGenerator
             string inheritString = InheritsFrom == null ? "" : $" : I{InheritsFrom.Name}";
             return
 $@"
+using System;
 using Lazinator.Attributes;
 using Lazinator.Core;
 using Lazinator.Wrappers;
