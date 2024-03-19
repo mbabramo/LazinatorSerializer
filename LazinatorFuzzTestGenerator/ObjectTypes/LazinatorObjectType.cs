@@ -67,13 +67,13 @@ namespace FuzzTests.{namespaceString}
             if (obj.GetType() != GetType())
                 return false;
             var other = ({Name}) obj;
-            return {PropertiesAsTupleString("other.")}.Equals({PropertiesAsTupleString("")});
+            return {(Properties.Count == 0 ? "true" : $"{PropertiesAsTupleString("other.")}.Equals({PropertiesAsTupleString("")}")});
         }}
 
         public override int GetHashCode()
         {{
-            return {PropertiesAsTupleString("")}.GetHashCode();
-        }}";
+            return {(Properties.Count == 0 ? "0" : $"{PropertiesAsTupleString("")}.GetHashCode();")
+        }";
                }
     
         public string PropertiesAsTupleString(string prefix)

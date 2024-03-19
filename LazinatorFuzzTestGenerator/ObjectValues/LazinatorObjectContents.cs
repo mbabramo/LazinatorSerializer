@@ -73,12 +73,16 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             else
             {
                 int numProperties = PropertyValues.Count;
-                int propertyToMutate = r.Next(numProperties);
-                var property = TheLazinatorObjectType.Properties[propertyToMutate];
-                var originalValue = PropertyValues[propertyToMutate];
-                var value = property.supportedType.GetRandomObjectContents(r, property.nullable ? 4 : null);
-                PropertyValues[propertyToMutate] = value;
-                return $@"{containerName}.{property.propertyName} = {value.CodeToGetValue};";
+                if (numProperties > 0)
+                {
+                    int propertyToMutate = r.Next(numProperties);
+                    var property = TheLazinatorObjectType.Properties[propertyToMutate];
+                    var originalValue = PropertyValues[propertyToMutate];
+                    var value = property.supportedType.GetRandomObjectContents(r, property.nullable ? 4 : null);
+                    PropertyValues[propertyToMutate] = value;
+                    return $@"{containerName}.{property.propertyName} = {value.CodeToGetValue};";
+                }
+                return "";
                 // DEBUG -- we'd like to be able to change just one field of nested objects. With structs, that will be tricky, because we have to back out of the innermost property using temporary variables. (Fields could be set directly.)
                 // DEBUG2 -- with classes, we'd like to be able to copy from one object hierarchy to another. 
             }

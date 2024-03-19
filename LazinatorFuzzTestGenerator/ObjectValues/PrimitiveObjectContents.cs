@@ -94,7 +94,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 
         private object GetRandomNonNullableValue(Random r)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(),./;'[]\\|é";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(),./;[]|é";
             switch (ThePrimitiveType.PrimitiveEnum)
             {
                 case PrimitiveEnum.Bool:

@@ -27,7 +27,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             this.NullableEnabledContext = nullableEnabledContext;
         }
 
-        public LazinatorObjectTypeCollection(Random r, string namespaceString, bool nullableEnabledContext, int numObjectTypes, int maxClassDepth, int maxProperties) : this(namespaceString, nullableEnabledContext)
+        public LazinatorObjectTypeCollection(Random r, string namespaceString, bool nullableEnabledContext, int numObjectTypes, int maxClassDepth, int maxProperties, int numTests, int numMutationSteps) : this(namespaceString, nullableEnabledContext)
         {
             GenerateObjectTypes(numObjectTypes, maxClassDepth, maxProperties, r);
             List<(string folder, string filename, string code)> mainSources = GenerateSources();
@@ -53,7 +53,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
-                File.WriteAllText(folder + "Tests.cs", GenerateTestsFile(r));
+                File.WriteAllText(folder + "Tests.cs", GenerateTestsFile(r, numTests, numMutationSteps));
             }
 
             bool writeEvenIfFailed = true;
@@ -154,7 +154,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             }
         }
 
-        public string GenerateTestsFile(Random r)
+        public string GenerateTestsFile(Random r, int numTests, int numMutationSteps)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(@$"
@@ -177,13 +177,12 @@ namespace FuzzTests.{NamespaceString}
     {{
 
 ");
-            int numTests = 1;
             for (int i = 0; i < numTests; i++)
             {
                 sb.AppendLine("[Fact]");
                 sb.AppendLine($"public void Test{i}()");
                 sb.AppendLine("{");
-                sb.AppendLine(GetAndTestSequenceOfMutations(r, 5, true, i));
+                sb.AppendLine(GetAndTestSequenceOfMutations(r, numMutations: numMutationSteps, true, i));
                 sb.AppendLine("}");
             }
             sb.AppendLine(@$"
