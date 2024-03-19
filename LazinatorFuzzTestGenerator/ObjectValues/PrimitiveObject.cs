@@ -1,5 +1,6 @@
 ﻿using LazinatorFuzzTestGenerator.Interfaces;
 using LazinatorFuzzTestGenerator.ObjectTypes;
+using System;
 
 namespace LazinatorFuzzTestGenerator.ObjectValues
 {
@@ -8,7 +9,8 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
     {
         public ISupportedType TheType => ThePrimitiveType;
         public PrimitiveType ThePrimitiveType { get; set; }
-        public object? Value { get; set; }
+        private object? Value { get; set; }
+        public bool IsNull => Value == null;
 
         public PrimitiveObject(PrimitiveEnum primitiveEnum, object? value)
         {
@@ -16,13 +18,10 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             Value = value;
         }
 
-        public PrimitiveObject(PrimitiveEnum primitiveEnum, Random r)
+        public PrimitiveObject(PrimitiveEnum primitiveEnum, Random r, int? inverseProbabilityOfNull)
         {
             ThePrimitiveType = new PrimitiveType(primitiveEnum);
-            if (r.Next(0, 5) == 0)
-                Value = null;
-            else
-                Value = GetRandomNonNullableValue(r);
+            SetToRandom(r, inverseProbabilityOfNull);
         }
 
         public string CodeToGetValue => GetValidCSharpRepresentationOfValue(Value);
@@ -73,7 +72,20 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             }
         }
 
-        public object GetRandomNonNullableValue(Random r)
+        private void SetToRandom(Random r, int? inverseProbabilityOfNull)
+        {
+            if (inverseProbabilityOfNull == null || r.Next((int)inverseProbabilityOfNull) != 0)
+                SetToRandom(r);
+            else
+                Value = null;
+        }
+
+        public void SetToRandom(Random r)
+        {
+            Value = GetRandomNonNullableValue(r);
+        }
+
+        private object GetRandomNonNullableValue(Random r)
         {
             switch (ThePrimitiveType.PrimitiveEnum)
             {

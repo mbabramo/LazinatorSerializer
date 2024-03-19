@@ -5,13 +5,12 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
     public class Variable
     {
         public IObjectContents Contents { get; set; }
-        public int VariableNumber { get; set; }
-        public string VariableName => "v" + VariableNumber;
+        public string VariableName { get; set; }
 
-        public Variable(IObjectContents contents, int variableNumber)
+        public Variable(IObjectContents contents, string variableName)
         {
             Contents = contents;
-            VariableNumber = variableNumber;
+            VariableName = variableName;
         }
 
         public string GetAssignmentStatement()

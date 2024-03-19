@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LazinatorFuzzTestGenerator.Interfaces;
+using LazinatorFuzzTestGenerator.ObjectValues;
 
 namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
@@ -42,5 +43,10 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         public abstract string UnannotatedTypeDeclaration();
 
         public abstract string ObjectDeclaration(string namespaceString, bool nullableEnabledContext);
+
+        public IObjectContents GetRandomObjectContents(Random r, int? inverseProbabilityOfNull)
+        {
+            return new LazinatorObjectContents(this, r, inverseProbabilityOfNull);
+        }
     }
 }

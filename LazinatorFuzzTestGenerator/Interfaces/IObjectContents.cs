@@ -2,9 +2,10 @@
 {
     public interface IObjectContents
     {
-        public ISupportedType TheType { get; }
-        public object? Value { get; set; }
-        public string CodeToGetValue { get; }
-        public string CodeToTestValue { get; }
+        ISupportedType TheType { get; }
+        string CodeToGetValue { get; }
+        string CodeToTestValue { get; }
+        bool IsNull { get; }
+        void SetToRandom(Random r);
     }
 }

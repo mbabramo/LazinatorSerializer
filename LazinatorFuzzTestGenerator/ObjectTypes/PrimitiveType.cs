@@ -1,4 +1,5 @@
 ﻿using LazinatorFuzzTestGenerator.Interfaces;
+using LazinatorFuzzTestGenerator.ObjectValues;
 using static EnumFastToStringGenerated.PrimitiveEnumEnumExtensions;
 
 namespace LazinatorFuzzTestGenerator.ObjectTypes
@@ -33,5 +34,10 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             return (PrimitiveEnum)r.Next(0, (int)PrimitiveEnum.Decimal);
         }
         public string UnannotatedTypeDeclaration() => PrimitiveEnum.ToDisplayFast();
+
+        public IObjectContents GetRandomObjectContents(Random r, int? inverseProbabilityOfNull)
+        {
+            return new PrimitiveObject(PrimitiveEnum, r, inverseProbabilityOfNull);
+        }
     }
 }
