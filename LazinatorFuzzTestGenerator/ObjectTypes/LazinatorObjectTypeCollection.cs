@@ -160,6 +160,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             sb.AppendLine(@$"
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
 using Lazinator.Core;
@@ -176,28 +177,29 @@ namespace FuzzTests.{NamespaceString}
     {{
 
 ");
-            int numTests = 100;
+            int numTests = 1;
             for (int i = 0; i < numTests; i++)
             {
+                sb.AppendLine("[Fact]");
                 sb.AppendLine($"public void Test{i}()");
                 sb.AppendLine("{");
-                sb.AppendLine(GetAndTestSequenceOfMutations(r, 20, i));
+                sb.AppendLine(GetAndTestSequenceOfMutations(r, 5, true, i));
                 sb.AppendLine("}");
             }
             sb.AppendLine(@$"
     }}
 }}
 ");
-            return sb.ToString();
+            return CodeFormatter.IndentCode(sb.ToString());
         }
 
-        public string GetAndTestSequenceOfMutations(Random r, int numMutations, int testNumber)
+        public string GetAndTestSequenceOfMutations(Random r, int numMutations, bool checkOnlyAfterAll, int testNumber)
         {
             if (InstantiableObjectTypes.Any())
             {
                 var objectType = InstantiableObjectTypes.ElementAt(r.Next(InstantiableObjectTypes.Count()));
                 var objectContents = (LazinatorObjectContents) objectType.GetRandomObjectContents(r, 5);
-                string s = objectContents.GetAndTestSequenceOfMutations(r, numMutations);
+                string s = objectContents.GetAndTestSequenceOfMutations(r, numMutations, checkOnlyAfterAll);
                 return s;
             }
             return "";

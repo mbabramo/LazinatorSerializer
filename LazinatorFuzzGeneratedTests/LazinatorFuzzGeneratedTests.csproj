@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="xunit" Version="2.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Lazinator.Collections\Lazinator.Collections.csproj" />
     <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
   </ItemGroup>

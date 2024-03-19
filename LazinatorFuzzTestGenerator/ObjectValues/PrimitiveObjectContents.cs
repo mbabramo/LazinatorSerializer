@@ -40,7 +40,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 case PrimitiveEnum.SByte:
                     return ((sbyte)value).ToString();
                 case PrimitiveEnum.Char:
-                    return ((char)value).ToString();
+                    return "'" + ((char)value).ToString() + "'";
                 case PrimitiveEnum.Short:
                     return ((short)value).ToString();
                 case PrimitiveEnum.UShort:
@@ -94,6 +94,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 
         private object GetRandomNonNullableValue(Random r)
         {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(),./;'[]\\|é";
             switch (ThePrimitiveType.PrimitiveEnum)
             {
                 case PrimitiveEnum.Bool:
@@ -103,7 +104,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 case PrimitiveEnum.SByte:
                     return (sbyte)r.Next(256);
                 case PrimitiveEnum.Char:
-                    return (char)r.Next(256);
+                    return (char)chars[r.Next(chars.Length)];
                 case PrimitiveEnum.Short:
                     if (r.Next(2) == 0)
                         return (short)r.Next(-300, 300);
@@ -140,7 +141,6 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     }
                 case PrimitiveEnum.String:
                     int stringLength = r.Next(10);
-                    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(),./;'[]\\|é";
                     return new string(Enumerable.Repeat(chars, stringLength)
                       .Select(s => s[r.Next(s.Length)]).ToArray());
                 case PrimitiveEnum.DateTime:

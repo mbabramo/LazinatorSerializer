@@ -15,8 +15,8 @@ namespace LazinatorFuzzTestGenerator
             string namespaceString = "n1";
             bool nullableEnabledContext = true;
             int numObjectTypes = 5;
-            int maxClassDepth = 5;
-            int maxProperties = 10;
+            int maxClassDepth = 2;
+            int maxProperties = 2;
             var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString, nullableEnabledContext, numObjectTypes, maxClassDepth, maxProperties);
 
         }

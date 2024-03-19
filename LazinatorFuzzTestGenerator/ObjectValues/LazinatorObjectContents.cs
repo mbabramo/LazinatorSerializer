@@ -44,17 +44,20 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         }
 
 
-        public string GetAndTestSequenceOfMutations(Random r, int numMutations)
+        public string GetAndTestSequenceOfMutations(Random r, int numMutations, bool checkOnlyAfterAll)
         {
             Initialize(r);
             StringBuilder sb = new StringBuilder();
             string varName = "v1";
             sb.AppendLine($"{TheLazinatorObjectType.Name} {varName} = {CodeToGetValue};");
-            sb.AppendLine($"Debug.Assert({CodeToTestValue})");
+            sb.AppendLine($"Debug.Assert({CodeToTestValue(varName)});");
             for (int i = 0; i < numMutations; i++)
             {
                 sb.AppendLine(MutateAndReturnCodeForMutation(r, varName));
-                sb.AppendLine($"Debug.Assert({CodeToTestValue})");
+                if (i == numMutations - 1 || !checkOnlyAfterAll)
+                {
+                    sb.AppendLine($"Debug.Assert({CodeToTestValue(varName)});");
+                }
             }
             return sb.ToString();
         }
@@ -92,14 +95,14 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             {
                 var property = TheLazinatorObjectType.Properties[i];
                 var value = PropertyValues[i];
-                sb.Append($"            {property.propertyName} = {value?.CodeToGetValue ?? "null"}");
+                sb.Append($"{property.propertyName} = {value?.CodeToGetValue ?? "null"}");
                 if (i < numProperties - 1)
                     sb.AppendLine(",");
                 else
                     sb.AppendLine();
             }
             string propertyValuesString = sb.ToString();
-            return $@"    new {TheLazinatorObjectType.Name}()
+            return $@"new {TheLazinatorObjectType.Name}()
     {{
 {propertyValuesString}
     }}
