@@ -8,7 +8,7 @@ using LazinatorFuzzTestGenerator.ObjectValues;
 
 namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
-    public abstract class LazinatorObjectType : ISupportedType
+    public abstract class LazinatorObjectType : ILazinatorObjectType, ISupportedType
     {
         public int UniqueID { get; init; }
         public abstract string DefinitionWord { get; }

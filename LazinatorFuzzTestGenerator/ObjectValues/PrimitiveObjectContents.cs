@@ -144,9 +144,9 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     return new string(Enumerable.Repeat(chars, stringLength)
                       .Select(s => s[r.Next(s.Length)]).ToArray());
                 case PrimitiveEnum.DateTime:
-                    return new DateTime(r.NextInt64(long.MinValue, long.MaxValue));
+                    return new DateTime(r.NextInt64((DateTime.MinValue).Ticks, (DateTime.MaxValue).Ticks));
                 case PrimitiveEnum.TimeSpan:
-                    return new TimeSpan(r.NextInt64(long.MinValue, long.MaxValue));
+                    return new TimeSpan(r.NextInt64((TimeSpan.MinValue).Ticks, (TimeSpan.MaxValue).Ticks));
                 case PrimitiveEnum.Guid:
                     return Guid.NewGuid();
                 case PrimitiveEnum.Float:
