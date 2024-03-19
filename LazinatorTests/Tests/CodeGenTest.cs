@@ -418,12 +418,12 @@ public class MyOtherClass
         private static LazinatorConfig? FindConfigFileStartingFromSubfolder(string mainFolder, string subfolder, string projectPath)
         {
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, "LazinatorConfig", ".json", out string configPath, out string configText);
-            if (configText == null)
+            if (configText == null || configText == "")
                 ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "/", "LazinatorConfig", ".json", out configPath, out configText);
-            if (configText == null)
+            if (configText == null || configText == "")
                 ReadCodeFile.GetCodeInFile(projectPath, "/", "", "LazinatorConfig", ".json", out configPath, out configText);
             LazinatorConfig? config = null;
-            if (configText != null)
+            if (configText != null && configText != "")
                 config = new LazinatorConfig(projectPath, configText);
             return config;
         }

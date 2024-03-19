@@ -50,7 +50,8 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             StringBuilder sb = new StringBuilder();
             string varName = "v1";
             sb.AppendLine($"{TheLazinatorObjectType.Name} {varName} = {CodeToGetValue};");
-            sb.AppendLine($"Debug.Assert({CodeToTestValue(varName)});");
+            if (!checkOnlyAfterAll)
+                sb.AppendLine($"Debug.Assert({CodeToTestValue(varName)});");
             for (int i = 0; i < numMutations; i++)
             {
                 sb.AppendLine(MutateAndReturnCodeForMutation(r, varName));
