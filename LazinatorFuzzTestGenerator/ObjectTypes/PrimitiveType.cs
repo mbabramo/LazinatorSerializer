@@ -37,7 +37,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 
         public IObjectContents GetRandomObjectContents(Random r, int? inverseProbabilityOfNull)
         {
-            return new PrimitiveObject(PrimitiveEnum, r, inverseProbabilityOfNull);
+            return new PrimitiveObjectContents(PrimitiveEnum, r, inverseProbabilityOfNull);
         }
     }
 }

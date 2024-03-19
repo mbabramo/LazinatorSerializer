@@ -60,17 +60,9 @@ namespace FuzzTests.{namespaceString}
 }}
 ";
         }
-        public override string ObjectDeclaration(string namespaceString, bool nullableEnabledContext)
-        {
-            return
-$@"
-namespace FuzzTests.{namespaceString}
-{{
-    public {(IsSealed ? "sealed " : "")}{(IsAbstract ? "abstract " : "")}partial class {Name} : {(InheritsFrom != null ? InheritsFrom.Name + "," : "")} I{Name}
-    {{
-    }}
-}}
-";
-        }
+
+
+        public override string GetObjectDeclaration_Top(bool nullableEnabledContext) => $"public {(IsSealed ? "sealed " : "")}{(IsAbstract ? "abstract " : "")}partial class {Name} : {(InheritsFrom != null ? InheritsFrom.Name + "," : "")} I{Name}";
+
     }
 }

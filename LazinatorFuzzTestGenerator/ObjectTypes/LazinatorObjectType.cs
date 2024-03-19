@@ -13,7 +13,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         public int UniqueID { get; init; }
         public abstract string DefinitionWord { get; }
         public string Name { get; init; }
-        public List<LazinatorObjectProperty> Properties { get; init; }
+        public List<LazinatorObjectProperty> Properties { get; init; } = new List<LazinatorObjectProperty>();
         public abstract bool Inherits { get; }
         public abstract bool Inheritable { get; }
         public abstract bool Instantiable { get; }
@@ -41,8 +41,55 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         public abstract string ILazinatorDeclaration(string namespaceString, bool nullableEnabledContext);
 
         public abstract string UnannotatedTypeDeclaration();
+        public virtual string ObjectDeclaration(string namespaceString, bool nullableEnabledContext)
+        {
+            return
+$@"{(nullableEnabledContext ? "using System.Diagnostics.CodeAnalysis;" : "")}
+namespace FuzzTests.{namespaceString}
+{{
+    {GetObjectDeclaration_Top(nullableEnabledContext)}
+    {{
+{EqualsAndGetHashCodeString(nullableEnabledContext)}
+    }}
+}}
+";
+        }
 
-        public abstract string ObjectDeclaration(string namespaceString, bool nullableEnabledContext);
+        public abstract string GetObjectDeclaration_Top(bool nullableEnabledContext);
+
+        public string EqualsAndGetHashCodeString(bool nullableContextEnabled)
+        {
+            return $@"
+       public override bool Equals({(nullableContextEnabled ? "[NotNullWhen(true)] " : "")}object{(nullableContextEnabled ? "?" : "")} obj)
+        {{
+            if (obj == null)
+                return false;
+            if (obj.GetType() != GetType())
+                return false;
+            var other = ({Name}) obj;
+            return {PropertiesAsTupleString("other.")}.Equals({PropertiesAsTupleString("")});
+        }}
+
+        public override int GetHashCode()
+        {{
+            return {PropertiesAsTupleString("")}.GetHashCode();
+        }}";
+               }
+    
+        public string PropertiesAsTupleString(string prefix)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("(");
+            for (int i = 0; i < Properties.Count; i++)
+            {
+                LazinatorObjectProperty property = Properties[i];
+                sb.Append($"{prefix}{property.propertyName}");
+                if (i < Properties.Count - 1)
+                    sb.Append(", ");
+            }
+            sb.Append(")");
+            return sb.ToString();
+        }
 
         public IObjectContents GetRandomObjectContents(Random r, int? inverseProbabilityOfNull)
         {

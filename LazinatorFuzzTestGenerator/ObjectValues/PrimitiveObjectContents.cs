@@ -5,27 +5,27 @@ using System;
 namespace LazinatorFuzzTestGenerator.ObjectValues
 {
 
-    public class PrimitiveObject : IObjectContents
+    public class PrimitiveObjectContents : IObjectContents
     {
         public ISupportedType TheType => ThePrimitiveType;
         public PrimitiveType ThePrimitiveType { get; set; }
         private object? Value { get; set; }
         public bool IsNull => Value == null;
 
-        public PrimitiveObject(PrimitiveEnum primitiveEnum, object? value)
+        public PrimitiveObjectContents(PrimitiveEnum primitiveEnum, object? value)
         {
             ThePrimitiveType = new PrimitiveType(primitiveEnum);
             Value = value;
         }
 
-        public PrimitiveObject(PrimitiveEnum primitiveEnum, Random r, int? inverseProbabilityOfNull)
+        public PrimitiveObjectContents(PrimitiveEnum primitiveEnum, Random r, int? inverseProbabilityOfNull)
         {
             ThePrimitiveType = new PrimitiveType(primitiveEnum);
             SetToRandom(r, inverseProbabilityOfNull);
         }
 
         public string CodeToGetValue => GetValidCSharpRepresentationOfValue(Value);
-        public string CodeToTestValue => $"Value == {CodeToGetValue}";
+        public string CodeToTestValue(string containerName) => $"{containerName} == {CodeToGetValue}";
 
         private string GetValidCSharpRepresentationOfValue(object? value)
         {
@@ -75,14 +75,21 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         private void SetToRandom(Random r, int? inverseProbabilityOfNull)
         {
             if (inverseProbabilityOfNull == null || r.Next((int)inverseProbabilityOfNull) != 0)
-                SetToRandom(r);
+                Initialize(r);
             else
                 Value = null;
         }
 
-        public void SetToRandom(Random r)
+        public void Initialize(Random r)
         {
             Value = GetRandomNonNullableValue(r);
+        }
+
+        public string MutateAndReturnCodeForMutation(Random r, string containerName)
+        {
+            Initialize(r);
+            return $@"{containerName} = {CodeToGetValue};
+";
         }
 
         private object GetRandomNonNullableValue(Random r)

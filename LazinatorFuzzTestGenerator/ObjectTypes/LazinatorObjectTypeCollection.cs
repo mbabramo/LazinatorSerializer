@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeGenHelper;
+using LazinatorFuzzTestGenerator.ObjectValues;
 using LazinatorFuzzTestGenerator.Utility;
 using LazinatorGenerator.Generator;
 
@@ -52,6 +53,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
+                File.WriteAllText(folder + "Tests.cs", GenerateTestsFile(r));
             }
 
             bool writeEvenIfFailed = true;
@@ -150,6 +152,34 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 LazinatorObjectProperty property = new LazinatorObjectProperty(UniqueCSharpNameGenerator.GetUniqueName(r, true), instantiableObject, nullable);
                 return property;
             }
+        }
+
+        public string GenerateTestsFile(Random r)
+        {
+            StringBuilder sb = new StringBuilder();
+            int numTests = 100;
+            for (int i = 0; i < numTests; i++)
+            {
+                sb.AppendLine($"public void Test{i}()");
+                sb.AppendLine("{");
+                sb.AppendLine(GetAndTestSequenceOfMutations(r, 20, i));
+                sb.AppendLine("}");
+            }
+            return sb.ToString();
+        }
+
+        public string GetAndTestSequenceOfMutations(Random r, int numMutations, int testNumber)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("public void Test" + testNumber + "()");
+            if (InstantiableObjectTypes.Any())
+            {
+                var objectType = InstantiableObjectTypes.ElementAt(r.Next(InstantiableObjectTypes.Count()));
+                var objectContents = (LazinatorObjectContents) objectType.GetRandomObjectContents(r, 5);
+                sb.AppendLine(objectContents.GetAndTestSequenceOfMutations(r, numMutations));
+                return sb.ToString();
+            }
+            return "";
         }
     }
 }

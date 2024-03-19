@@ -47,17 +47,7 @@ namespace FuzzTests.{namespaceString}
 ";
         }
 
-        public override string ObjectDeclaration(string namespaceString, bool nullableEnabledContext)
-        {
-            return
-$@"
-namespace FuzzTests.{namespaceString}
-{{
-    public partial struct {Name} : I{Name}
-    {{
-    }}
-}}
-";
-        }
+        public override string GetObjectDeclaration_Top(bool nullableEnabledContext) => $"public partial struct {Name} : I{Name}";
+        
     }
 }

@@ -3,6 +3,7 @@ using LazinatorGenerator.Generator;
 using CodeGenHelper;
 using LazinatorFuzzTestGenerator.ObjectTypes;
 using LazinatorFuzzTestGenerator.Utility;
+using System.Text;
 
 namespace LazinatorFuzzTestGenerator
 {
