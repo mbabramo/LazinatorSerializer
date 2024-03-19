@@ -31,11 +31,10 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 
         public void Initialize(Random r)
         {
-            var properties = TheLazinatorObjectType.Properties;
-            PropertyValues = new List<IObjectContents?>(properties.Count);
-            for (int i = 0; i < properties.Count; i++)
+            PropertyValues = new List<IObjectContents?>();
+            var properties = TheLazinatorObjectType.PropertiesIncludingInherited;
+            foreach (var property in properties)
             {
-                var property = properties[i];
                 var propertyType = property.supportedType;
                 var isNullable = property.nullable;
                 var value = propertyType.GetRandomObjectContents(r, property.nullable ? 3 : null);
@@ -76,7 +75,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 if (numProperties > 0)
                 {
                     int propertyToMutate = r.Next(numProperties);
-                    var property = TheLazinatorObjectType.Properties[propertyToMutate];
+                    var property = TheLazinatorObjectType.PropertiesIncludingInherited[propertyToMutate];
                     var originalValue = PropertyValues[propertyToMutate];
                     var value = property.supportedType.GetRandomObjectContents(r, property.nullable ? 4 : null);
                     PropertyValues[propertyToMutate] = value;
@@ -96,10 +95,10 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 return "null";
             int numProperties = PropertyValues.Count;
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < numProperties; i++)
+            int i = 0;
+            foreach (var property in TheLazinatorObjectType.PropertiesIncludingInherited)
             {
-                var property = TheLazinatorObjectType.Properties[i];
-                var value = PropertyValues[i];
+                var value = PropertyValues[i++];
                 sb.Append($"{property.propertyName} = {value?.CodeToGetValue ?? "null"}");
                 if (i < numProperties - 1)
                     sb.AppendLine(",");

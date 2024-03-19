@@ -18,6 +18,9 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         public abstract bool Inheritable { get; }
         public abstract bool Instantiable { get; }
         public abstract int ObjectDepth { get; }
+
+        public virtual List<LazinatorObjectProperty> PropertiesIncludingInherited => Properties;
+
         public abstract bool UnannotatedIsNullable(bool nullableEnabledContext);
 
         public LazinatorObjectType(int uniqueID, string name, List<LazinatorObjectProperty> properties)
@@ -67,7 +70,7 @@ namespace FuzzTests.{namespaceString}
             if (obj.GetType() != GetType())
                 return false;
             var other = ({Name}) obj;
-            return {(Properties.Count == 0 ? "true" : $"{PropertiesAsTupleString("other.")}.Equals({PropertiesAsTupleString("")}")});
+            return {(PropertiesIncludingInherited.Count() == 0 ? "true" : $"{PropertiesAsTupleString("other.")}.Equals({PropertiesAsTupleString("")})")};
         }}
 
         public override int GetHashCode()
@@ -80,11 +83,12 @@ namespace FuzzTests.{namespaceString}
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("(");
-            for (int i = 0; i < Properties.Count; i++)
+            int propertyCount = PropertiesIncludingInherited.Count();
+            int i = 0;
+            foreach (var property in PropertiesIncludingInherited)
             {
-                LazinatorObjectProperty property = Properties[i];
                 sb.Append($"{prefix}{property.propertyName}");
-                if (i < Properties.Count - 1)
+                if (i++ < propertyCount)
                     sb.Append(", ");
             }
             sb.Append(")");

@@ -28,7 +28,19 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 ObjectDepth = 1;
             else
                 ObjectDepth = InheritsFrom.ObjectDepth + 1;
+            LazinatorClassType? c = this;
+            while (c != null)
+            {
+                if (Properties != null)
+                    foreach (var property in Properties)
+                        PropertiesIncludingInherited.Add(property);
+                c = c.InheritsFrom;
+            }
         }
+
+
+        private List<LazinatorObjectProperty> _PropertiesIncludingInherited = new List<LazinatorObjectProperty>();
+        public override List<LazinatorObjectProperty> PropertiesIncludingInherited => _PropertiesIncludingInherited;
 
         public override bool UnannotatedIsNullable(bool nullableEnabledContext)
         {
