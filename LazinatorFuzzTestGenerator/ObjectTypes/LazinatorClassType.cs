@@ -4,8 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LazinatorFuzzTestGenerator.Interfaces;
 
-namespace LazinatorFuzzTestGenerator
+namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
     public class LazinatorClassType : LazinatorObjectType, ISupportedType
     {

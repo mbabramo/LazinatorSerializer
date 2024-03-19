@@ -1,4 +1,6 @@
-﻿namespace LazinatorFuzzTestGenerator
+﻿using LazinatorFuzzTestGenerator.Interfaces;
+
+namespace LazinatorFuzzTestGenerator.ObjectValues
 {
     public class Variable
     {

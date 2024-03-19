@@ -1,4 +1,4 @@
-﻿namespace LazinatorFuzzTestGenerator
+﻿namespace LazinatorFuzzTestGenerator.Interfaces
 {
     public interface IObjectContents
     {

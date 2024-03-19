@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LazinatorFuzzTestGenerator.Interfaces;
 
-namespace LazinatorFuzzTestGenerator
+namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
     public abstract class LazinatorObjectType : ISupportedType
     {

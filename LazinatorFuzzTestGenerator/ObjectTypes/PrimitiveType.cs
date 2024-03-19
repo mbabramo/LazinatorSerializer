@@ -1,6 +1,7 @@
-﻿using static EnumFastToStringGenerated.PrimitiveEnumEnumExtensions;
+﻿using LazinatorFuzzTestGenerator.Interfaces;
+using static EnumFastToStringGenerated.PrimitiveEnumEnumExtensions;
 
-namespace LazinatorFuzzTestGenerator
+namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
     public class PrimitiveType : ISupportedType
     {

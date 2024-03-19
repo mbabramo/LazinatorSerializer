@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LazinatorFuzzTestGenerator.Interfaces;
 
-namespace LazinatorFuzzTestGenerator
+namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
     public class LazinatorStructType : LazinatorObjectType, ISupportedType
     {
@@ -21,7 +22,7 @@ namespace LazinatorFuzzTestGenerator
         }
 
         public LazinatorStructType(int uniqueID, string name, List<LazinatorObjectProperty> properties) : base(uniqueID, name, properties)
-        { 
+        {
         }
 
         public override string UnannotatedTypeDeclaration() => Name;

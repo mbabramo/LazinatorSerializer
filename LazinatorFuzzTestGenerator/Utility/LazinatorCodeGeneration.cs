@@ -16,13 +16,13 @@ using LazinatorGenerator.Support;
 using LazinatorCodeGen.Roslyn;
 using System.Diagnostics;
 
-namespace LazinatorFuzzTestGenerator
+namespace LazinatorFuzzTestGenerator.Utility
 {
     public static class LazinatorCodeGeneration
     {
         public static string GetCodeBasePath(string project = "")
         {
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            Assembly assembly = Assembly.GetExecutingAssembly();
             string codeBaseLocation = assembly.Location;
             string projectInOverallFolder = "LazinatorSerializer\\";
             string throughProject =
@@ -90,7 +90,7 @@ namespace LazinatorFuzzTestGenerator
 
         private static List<(INamedTypeSymbol theInterface, INamedTypeSymbol theImplementation)> FindTypesImplementingILazinator(Compilation compilation)
         {
-            var theInterfaces = LazinatorCodeGeneration.FindTypesWithLazinatorAttribute(compilation);
+            var theInterfaces = FindTypesWithLazinatorAttribute(compilation);
             List<(INamedTypeSymbol theInterface, INamedTypeSymbol theImplementation)> interfacesAndImplementations = MatchInterfacesToImplementations(compilation, theInterfaces);
             return interfacesAndImplementations;
         }

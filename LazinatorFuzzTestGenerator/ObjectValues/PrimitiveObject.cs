@@ -1,7 +1,8 @@
-﻿using LazinatorFuzzTestGenerator;
+﻿using LazinatorFuzzTestGenerator.Interfaces;
+using LazinatorFuzzTestGenerator.ObjectTypes;
 
-namespace LazinatorFuzzTestGenerator
-{ 
+namespace LazinatorFuzzTestGenerator.ObjectValues
+{
 
     public class PrimitiveObject : IObjectContents
     {
@@ -96,14 +97,14 @@ namespace LazinatorFuzzTestGenerator
                         return (ushort)r.Next(ushort.MinValue, ushort.MaxValue);
                 case PrimitiveEnum.Int:
                     if (r.Next(2) == 0)
-                        return (int)r.Next(-300, 300);
+                        return r.Next(-300, 300);
                     else
                         return r.Next(int.MinValue, int.MaxValue);
                 case PrimitiveEnum.UInt:
                     if (r.Next(2) == 0)
                         return (uint)r.Next(-0, 300);
                     else
-                        return (uint) (r.Next(0, int.MaxValue) + (uint)Int32.MaxValue);
+                        return (uint)(r.Next(0, int.MaxValue) + (uint)int.MaxValue);
                 case PrimitiveEnum.Long:
                     if (r.Next(2) == 0)
                         return (long)r.Next(-300, 300);

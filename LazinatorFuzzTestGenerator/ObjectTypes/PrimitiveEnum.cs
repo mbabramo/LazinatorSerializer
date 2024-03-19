@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using EnumFastToStringGenerated;
 using Supernova.Enum;
 
-namespace LazinatorFuzzTestGenerator
+namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
     // private static readonly string[] SupportedAsPrimitives = new string[] {"bool", "byte", "sbyte", "char", "short", "ushort", "int", "uint", "long", "ulong", "string", "DateTime", "TimeSpan", "Guid", "float", "double", "decimal"};
 

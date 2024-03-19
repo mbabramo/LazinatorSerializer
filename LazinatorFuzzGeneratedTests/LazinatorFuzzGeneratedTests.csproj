@@ -12,8 +12,4 @@
     <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="n1\" />
-  </ItemGroup>
-
 </Project>
