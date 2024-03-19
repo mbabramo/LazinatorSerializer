@@ -1573,10 +1573,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
         {
             if (isPrimitive)
             {
+                if (NameIncludingGenerics.Contains("SharpSafety"))
+                {
+                    var DEBUG = 0;
+                }
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
-                            {ProtectedIfApplicable}override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {ProtectedIfApplicableWithDerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
                             {{
                                 base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);");
                 else
@@ -1592,7 +1596,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
-                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", {TypeForPositions} startOfObjectPosition")})
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicableWithDerivationKeyword}override {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", {TypeForPositions} startOfObjectPosition")})
                             {{
                                 {MaybeAwaitWord}base.WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, options, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition")});");
                 else

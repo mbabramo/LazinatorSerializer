@@ -75,22 +75,17 @@ namespace FuzzTests.{namespaceString}
 
         public override int GetHashCode()
         {{
-            return {(Properties.Count == 0 ? "0" : $"{PropertiesAsTupleString("")}.GetHashCode();")
-        }";
-               }
+            return {(Properties.Count == 0 ? "0" : $"{PropertiesAsTupleString("")}.GetHashCode()")};
+        }}
+";
+        }
     
         public string PropertiesAsTupleString(string prefix)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("(");
-            int propertyCount = PropertiesIncludingInherited.Count();
-            int i = 0;
-            foreach (var property in PropertiesIncludingInherited)
-            {
-                sb.Append($"{prefix}{property.propertyName}");
-                if (i++ < propertyCount)
-                    sb.Append(", ");
-            }
+            string plist = String.Join(",", PropertiesIncludingInherited.Select(x => $"{prefix}{x.propertyName}"));
+            sb.Append(plist);
             sb.Append(")");
             return sb.ToString();
         }

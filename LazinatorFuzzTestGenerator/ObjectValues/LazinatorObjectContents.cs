@@ -98,12 +98,13 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             int i = 0;
             foreach (var property in TheLazinatorObjectType.PropertiesIncludingInherited)
             {
-                var value = PropertyValues[i++];
+                var value = PropertyValues[i];
                 sb.Append($"{property.propertyName} = {value?.CodeToGetValue ?? "null"}");
                 if (i < numProperties - 1)
                     sb.AppendLine(",");
                 else
                     sb.AppendLine();
+                i++;
             }
             string propertyValuesString = sb.ToString();
             return $@"new {TheLazinatorObjectType.Name}()

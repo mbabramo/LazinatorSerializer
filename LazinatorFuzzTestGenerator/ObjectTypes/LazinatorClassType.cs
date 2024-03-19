@@ -31,8 +31,8 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             LazinatorClassType? c = this;
             while (c != null)
             {
-                if (Properties != null)
-                    foreach (var property in Properties)
+                if (c.Properties != null)
+                    foreach (var property in c.Properties)
                         PropertiesIncludingInherited.Add(property);
                 c = c.InheritsFrom;
             }

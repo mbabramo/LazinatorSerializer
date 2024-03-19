@@ -113,7 +113,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                     else
                     {
                         LazinatorClassType parent = inheritable[r.Next(0, inheritable.Count())];
-                        LazinatorClassType classType = new LazinatorClassType(uniqueID, "C" + uniqueName + "Class", isAbstract, isSealed, parent, properties);
+                        LazinatorClassType classType = new LazinatorClassType(uniqueID, uniqueName + "Class", isAbstract, isSealed, parent, properties);
                         ObjectTypes.Add(classType);
                     }
                 }
