@@ -34,7 +34,7 @@ namespace LazinatorFuzzTestGenerator.Utility
                 string word;
                 do
                 {
-                    word = words[r.Next(0, numWords)];
+                    word = words[r.Next(0, numWords)].Replace("-", "");
                 }
                 while (word.Length <= 2 || IsAllUpperCase(word)); // avoid short words and acronyms
                 word = word.ToLower();
