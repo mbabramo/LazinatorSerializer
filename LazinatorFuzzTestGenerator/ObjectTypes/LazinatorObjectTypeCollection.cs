@@ -68,7 +68,8 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             {
                 foreach (var diagnostic in compilation.GetDiagnostics())
                 {
-                    Console.WriteLine(diagnostic);
+                    if (diagnostic.DefaultSeverity != Microsoft.CodeAnalysis.DiagnosticSeverity.Hidden) // suppress, e.g., diagnostics about unnecessary using statements
+                        Console.WriteLine(diagnostic);
                 }
                 foreach (var result in results)
                 {
