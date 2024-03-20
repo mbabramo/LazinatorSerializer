@@ -46,7 +46,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 success = !results.Any(x => x.Diagnostic != null) && !compilation.GetDiagnostics().Any();
             }
 
-            string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests") + "\\" + NamespaceString + "\\";
+            string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableEnabledContext ? "2" : "")) + "\\" + NamespaceString + "\\";
             void WriteMainSources()
             {
                 foreach (var source in mainSources)

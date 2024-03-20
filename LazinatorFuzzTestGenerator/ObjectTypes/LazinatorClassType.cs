@@ -33,7 +33,8 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             {
                 if (c.Properties != null)
                     foreach (var property in c.Properties)
-                        PropertiesIncludingInherited.Add(property);
+                        if (!PropertiesIncludingInherited.Any(x => x.propertyName == property.propertyName))
+                            PropertiesIncludingInherited.Add(property); 
                 c = c.InheritsFrom;
             }
         }
