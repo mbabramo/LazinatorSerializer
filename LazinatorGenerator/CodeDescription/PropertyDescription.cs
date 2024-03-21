@@ -333,6 +333,10 @@ namespace Lazinator.CodeDescription
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
             PropertyName = propertySymbol.Name;
+            if (PropertyName == "NonNullValue")
+            {
+                var DEBUG = 0;
+            }
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
@@ -497,7 +501,8 @@ namespace Lazinator.CodeDescription
                 else
                     Nullable = true;
                 PropertyType = LazinatorPropertyType.OpenGenericParameter;
-                DerivationKeyword = "virtual ";
+                if (!ContainingObjectDescription.IsSealedOrStruct)
+                    DerivationKeyword = "virtual ";
                 SizeOfLength = 4;
                 return;
             }
