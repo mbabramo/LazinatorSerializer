@@ -36,6 +36,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources); // note that this compilation will have plenty of errors, because it will be missing the generated code
             Compilation? compilationIncludingGeneratedSources = null;
             Compilation? compilationIncludingTestingCode = null;
+            string testsFileCode = GenerateTestsFile(r, numTests, numMutationSteps);
 
             List<LazinatorCodeGenerationResult> codeGenerationResults = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilationOriginalSources);
             bool success = !codeGenerationResults.Any(x => x.Diagnostic != null);
@@ -52,7 +53,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     // combine everything in compilation
                     var sourcesPlusTestCode = originalSourcesPlusGenerated.ToList();
-                    sourcesPlusTestCode.Add((NamespaceString, folder, GenerateTestsFile(r, numTests, numMutationSteps)));
+                    sourcesPlusTestCode.Add((NamespaceString, folder, testsFileCode));
                     compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode);
 
                     success = AssessCompilationSuccess(compilationIncludingTestingCode);
@@ -67,6 +68,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
+                File.WriteAllText(folder + "Tests.cs", testsFileCode);
             }
 
             bool writeIfSuccessfullyGenerated = true;
@@ -211,10 +213,10 @@ namespace FuzzTests.{NamespaceString}
 
     public static class TestRunner
     {{
-        public bool static RunAllTests()
+        public static bool RunAllTests()
         {{
             var runner = new Tests();
-            {String.Join("\n", Enumerable.Range(0, numTests).Select(x => $"            runner.Test{x}();"))}
+{String.Join("\r\n", Enumerable.Range(0, numTests).Select(x => $"                runner.Test{x}();"))}
             return true;
         }}
     }};
