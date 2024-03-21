@@ -8,6 +8,7 @@ using CodeGenHelper;
 using LazinatorFuzzTestGenerator.ObjectValues;
 using LazinatorFuzzTestGenerator.Utility;
 using LazinatorGenerator.Generator;
+using Microsoft.CodeAnalysis;
 
 namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
@@ -31,36 +32,38 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         {
             string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableEnabledContext ? "2" : "")) + "\\" + NamespaceString + "\\";
             GenerateObjectTypes(numObjectTypes, maxClassDepth, maxProperties, r);
-            List<(string folder, string filename, string code)> mainSources = GenerateSources();
-            var compilation = LazinatorCodeGeneration.CreateCompilation(mainSources);
-            List<LazinatorCodeGenerationResult> results = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilation);
-            bool success = !results.Any(x => x.Diagnostic != null);
+            List<(string folder, string filename, string code)> originalSources = GenerateSources();
+            Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources); // note that this compilation will have plenty of errors, because it will be missing the generated code
+            Compilation? compilationIncludingGeneratedSources = null;
+            Compilation? compilationIncludingTestingCode = null;
+
+            List<LazinatorCodeGenerationResult> codeGenerationResults = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilationOriginalSources);
+            bool success = !codeGenerationResults.Any(x => x.Diagnostic != null);
             if (success)
             {
-                mainSources = mainSources.ToList();
-                foreach (var result in results)
+                var originalSourcesPlusGenerated = originalSources.ToList();
+                foreach (var codeGenerationResult in codeGenerationResults)
                 {
-                    mainSources.Add((NamespaceString, result.Path, result.GeneratedCode));
+                    originalSourcesPlusGenerated.Add((NamespaceString, codeGenerationResult.Path, codeGenerationResult.GeneratedCode));
                 }
-                compilation = LazinatorCodeGeneration.CreateCompilation(mainSources);
-                results = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilation);
-                success = !results.Any(x => x.Diagnostic != null) && !compilation.GetDiagnostics().Any();
+                compilationIncludingGeneratedSources = LazinatorCodeGeneration.CreateCompilation(originalSourcesPlusGenerated);
+                success = AssessCompilationSuccess(compilationIncludingGeneratedSources);
                 if (success)
                 {
                     // combine everything in compilation
-                    var allSources = mainSources.ToList();
-                    allSources.AddRange(results.Select(x => (NamespaceString, x.Path, x.GeneratedCode)));
-                    allSources.Add((NamespaceString, folder, GenerateTestsFile(r, numTests, numMutationSteps)));
-                    compilation = LazinatorCodeGeneration.CreateCompilation(allSources);
-                    success = !results.Any(x => x.Diagnostic != null) && !compilation.GetDiagnostics().Any();
+                    var sourcesPlusTestCode = originalSourcesPlusGenerated.ToList();
+                    sourcesPlusTestCode.Add((NamespaceString, folder, GenerateTestsFile(r, numTests, numMutationSteps)));
+                    compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode);
+
+                    success = AssessCompilationSuccess(compilationIncludingTestingCode);
                     if (success)
-                        success = ExecuteCode.ExecuteTestingCode(compilation, NamespaceString, "TestRunner", "RunAllTests");
+                        success = ExecuteCode.ExecuteTestingCode(compilationIncludingTestingCode, NamespaceString, "TestRunner", "RunAllTests");
                 }
             }
 
             void WriteMainSources()
             {
-                foreach (var source in mainSources)
+                foreach (var source in originalSources)
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
@@ -77,12 +80,13 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             }
             if (!success || write)
             {
-                foreach (var diagnostic in compilation.GetDiagnostics())
+                var recentCompilation = compilationIncludingTestingCode ?? compilationIncludingGeneratedSources ?? compilationOriginalSources;
+                foreach (var diagnostic in recentCompilation.GetDiagnostics())
                 {
                     if (diagnostic.DefaultSeverity != Microsoft.CodeAnalysis.DiagnosticSeverity.Hidden) // suppress, e.g., diagnostics about unnecessary using statements
                         Console.WriteLine(diagnostic);
                 }
-                foreach (var result in results)
+                foreach (var result in codeGenerationResults)
                 {
                     File.WriteAllText(folder + "\\" + result.Path, result.GeneratedCode);
                     var diagostic = result.Diagnostic;
@@ -91,6 +95,13 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                         Console.WriteLine($"{result.Path}: {diagostic}");
                     }
                 }
+            }
+
+            static bool AssessCompilationSuccess(Compilation compilation)
+            {
+                var diagnostics = compilation.GetDiagnostics().Where(x => x.DefaultSeverity != Microsoft.CodeAnalysis.DiagnosticSeverity.Hidden).ToList();
+                bool successCompiling = !diagnostics.Any();
+                return successCompiling;
             }
         }
 
