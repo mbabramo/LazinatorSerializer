@@ -1148,12 +1148,12 @@ namespace Lazinator.CodeDescription
             // Lazinator has not previously been accessed. We need both code to create a default value (if there is no underlying memory) and 
             // to recreate the value by deserializing, if there is underlying memory.
             // Here's the create default code:
-            string createDefault = GetCreateDefaultString();
+            string createDefault = GetCreateDefaultString(sb);
             // And here's where we set the recreation code for when underlying memory exists.
-            string recreation = GetRecreationString(assignment);
+            string recreation = GetRecreationString(sb, assignment);
 
             // Now we need to worry about the set accessor. 
-            string propertyTypeDependentSet = GetPropertyTypeDependentSetString();
+            string propertyTypeDependentSet = GetPropertyTypeDependentSetString(sb);
 
             string propertyGetContents(bool async) => $@"
                 {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
@@ -1231,7 +1231,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                 AppendDirtinessTracking(sb);
         }
 
-        private string GetPropertyTypeDependentSetString()
+        private string GetPropertyTypeDependentSetString(CodeStringBuilder sb)
         {
             string propertyTypeDependentSet = "";
             if (IsClassOrInterface)
@@ -1296,33 +1296,33 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                         if (value.HasValue)
                         {{
                             var copy = value.Value;
-                            copy.LazinatorParents = new LazinatorParentsCollection(this);{CodeStringBuilder.GetNextLocationString()}
+                            copy.LazinatorParents = new LazinatorParentsCollection(this);{sb.GetNextLocationString()}
                             value = copy;
                         }}
                     ")}
                         ";
                 else
                     propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
-                        value.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}
+                        value.LazinatorParents = new LazinatorParentsCollection(this);")}{sb.GetNextLocationString()}
                         ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
                     propertyTypeDependentSet = $@"
-                        if (value != null && value.IsStruct){CodeStringBuilder.GetNextLocationString()}
+                        if (value != null && value.IsStruct){sb.GetNextLocationString()}
                         {{{IIF(ContainerIsClass, $@"
-                            value.LazinatorParents = new LazinatorParentsCollection(this, null);")}{CodeStringBuilder.GetNextLocationString()}
+                            value.LazinatorParents = new LazinatorParentsCollection(this, null);")}{sb.GetNextLocationString()}
                         }}
                         else
                         {{
                             if ({BackingFieldString} != null)
                             {{
-                                {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);{CodeStringBuilder.GetNextLocationString()}
+                                {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);{sb.GetNextLocationString()}
                             }}
                             if (value != null)
                             {{
-                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);{CodeStringBuilder.GetNextLocationString()}
+                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);{sb.GetNextLocationString()}
                             }}
                         }}
                             ";
@@ -1334,18 +1334,18 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             return propertyTypeDependentSet;
         }
 
-        private string GetCreateDefaultString()
+        private string GetCreateDefaultString(CodeStringBuilder sb)
         {
             string createDefault = $@"{BackingFieldString} = {DefaultExpression};{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         {BackingDirtyFieldString} = true; ")}";
             if (IsLazinatorStruct)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable && (!IsDefinitelyStruct || !Nullable), $@"
-                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this, null);")}{CodeStringBuilder.GetNextLocationString()}";
+                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this, null);")}{sb.GetNextLocationString()}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
                                 if ({BackingFieldString} != null)
                                 {{ // {PropertyName} is a struct
-                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this, null);{CodeStringBuilder.GetNextLocationString()}
+                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this, null);{sb.GetNextLocationString()}
                                 }}{IfInitializationRequiredAddElseThrow}")}";
             return createDefault;
         }
@@ -1386,14 +1386,14 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             return assignment;
         }
 
-        private string GetRecreationString(string assignment)
+        private string GetRecreationString(CodeStringBuilder sb, string assignment)
         {
             string recreation;
             if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable
            || ((PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface) && ContainingObjectDescription.IsSealed))
             {
                 // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
-                recreation = GetManualObjectCreation();
+                recreation = GetManualObjectCreation(sb);
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
@@ -1410,7 +1410,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             return recreation;
         }
 
-        public string GetLazinateContentsForConstructor(bool includeTracingCode) => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()), false, false, includeTracingCode);
+        public string GetLazinateContentsForConstructor(CodeStringBuilder sb, bool includeTracingCode) => GetLazinateContents(GetCreateDefaultString(sb), GetRecreationString(sb, GetAssignmentString()), false, false, includeTracingCode);
         private string GetLazinateContents(string createDefault, string recreation, bool defineChildData, bool async, bool includeTracingCode)
         {
             return $@"
@@ -1422,7 +1422,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             {BackingFieldAccessedString} = true;")}";
         }
 
-        private string GetManualObjectCreation()
+        private string GetManualObjectCreation(CodeStringBuilder sb)
         {
             // if the container object containing this property is a struct, then we can't set LazinatorParents. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
             string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct || NonNullableThatRequiresInitialization
@@ -1434,7 +1434,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct ? "" : $@"
                             {{
-                                LazinatorParents = new LazinatorParentsCollection(this, null){CodeStringBuilder.GetNextLocationString()}
+                                LazinatorParents = new LazinatorParentsCollection(this, null){sb.GetNextLocationString()}
                             }}";
 
             string doCreation = $@"{BackingFieldString} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({ConstructorInitializationWithChildData}){lazinatorParentClassSet};
@@ -1825,22 +1825,22 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             string cloneAwaitWord = AsyncWithinAsync ? ContainingObjectDescription.MaybeAwaitWord : "";
             if (IsLazinator)
             {
-                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {cloneAwaitWord}{propertyAccess}{IIF(IsDefinitelyStruct && Nullable, ".Value")}.CloneLazinator{cloneAsyncWord}(includeChildrenMode, CloneBufferOptions.NoBuffer);{CodeStringBuilder.GetNextLocationString()}";
+                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {cloneAwaitWord}{propertyAccess}{IIF(IsDefinitelyStruct && Nullable, ".Value")}.CloneLazinator{cloneAsyncWord}(includeChildrenMode, CloneBufferOptions.NoBuffer);{sb.GetNextLocationString()}";
                 if (!Nullable)
                     copyInstruction = nonNullStatement;
                 else
                     copyInstruction = GetNullCheckIfThen(propertyAccess,
-                        $"{nameOfCloneVariable}.{PropertyName} = {DefaultExpression};{CodeStringBuilder.GetNextLocationString()}{CodeStringBuilder.GetNextLocationString()}",
+                        $"{nameOfCloneVariable}.{PropertyName} = {DefaultExpression};{sb.GetNextLocationString()}{sb.GetNextLocationString()}",
                         nonNullStatement);
             }
             else if (IsPrimitive)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};{CodeStringBuilder.GetNextLocationString()}";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};{sb.GetNextLocationString()}";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
             {
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);{CodeStringBuilder.GetNextLocationString()}";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);{sb.GetNextLocationString()}";
             }
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);{CodeStringBuilder.GetNextLocationString()}";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);{sb.GetNextLocationString()}";
             sb.AppendLine(new ConditionalCodeGenerator(WriteInclusionConditional, copyInstruction).ToString());
         }
 

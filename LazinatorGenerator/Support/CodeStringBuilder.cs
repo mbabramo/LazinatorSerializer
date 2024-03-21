@@ -14,8 +14,8 @@ namespace Lazinator.CodeDescription
         public int SpacesPerTab = 4;
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
-        public static bool AddLocationIndexComments = true; // DEBUG
-        public static int StopAtLocationIndex = -1; // 9731; // 13055; // DEBUG -1; 
+        public static bool AddLocationIndexComments = false;
+        public static int StopAtLocationIndex = -1; 
         public static int LocationIndex = 0;
 
         public override string ToString()
@@ -48,14 +48,54 @@ namespace Lazinator.CodeDescription
                 sb.Append(' ');
         }
 
-        public static string GetNextLocationString()
+        public string GetNextLocationString()
         {
             if (LocationIndex == StopAtLocationIndex)
             {
                 Debugger.Break();
             }
-            return AddLocationIndexComments ? $"/*Location{LocationIndex++}*/" : "";
+            if (AddLocationIndexComments)
+            {
+                bool inPreprocessorLine = LastLineStartsWithHash(sb.ToString());
+                if (inPreprocessorLine)
+                    return $"//Location{LocationIndex++}";
+                else
+                    return $"/*Location{LocationIndex++}*/";
+            }
+            else
+                return "";
         }
+
+        static bool LastLineStartsWithHash(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return false;
+            }
+
+            // Find the last newline character in the string
+            int lastIndex = input.Length - 1;
+            while (lastIndex >= 0 && input[lastIndex] != '\n')
+            {
+                lastIndex--;
+            }
+
+            // lastIndex now points to the '\n' of the last line or -1 if no newline is found
+            int startOfLastLine = lastIndex + 1; // This will be the start of the last line or 0 if the whole input is one line
+
+            // Find the first non-whitespace character in the last line
+            for (int i = startOfLastLine; i < input.Length; i++)
+            {
+                if (!char.IsWhiteSpace(input[i]))
+                {
+                    return input[i] == '#';
+                }
+            }
+
+            // If we reach here, the last line is empty or contains only whitespace
+            return false;
+        }
+
 
         private void AppendHelper(string s)
         {
