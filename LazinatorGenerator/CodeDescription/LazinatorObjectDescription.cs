@@ -91,23 +91,22 @@ namespace Lazinator.CodeDescription
         public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealedOrStruct ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject.Namespace == Namespace ? BaseLazinatorObject.NameIncludingGenerics : BaseLazinatorObject.FullyQualifiedObjectName;
         public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct || IsSealed) ? "" : "protected ";
-        public string ProtectedIfApplicableWithDerivationKeyword
+
+        private string ProtectedIfApplicableWithSpecificDerivationKeyword(string derivationKeyword)
         {
-            get
+            if (IsSealed)
             {
-                if (IsSealed)
+                if (derivationKeyword == "override ")
                 {
-                    if (DerivationKeyword == "override ")
-                    {
-                        return "protected override ";
-                    }
-                    else
-                        return DerivationKeyword; // exclude "protected"
+                    return "protected override ";
                 }
                 else
-                    return ProtectedIfApplicable + DerivationKeyword;
+                    return derivationKeyword; // exclude "protected"
             }
+            else
+                return ProtectedIfApplicable + derivationKeyword;
         }
+        public string ProtectedIfApplicableWithObjectDerivationKeyword => ProtectedIfApplicableWithSpecificDerivationKeyword(DerivationKeyword);
 
         /* Names */
         public string Namespace { get; set; }
@@ -606,7 +605,7 @@ namespace Lazinator.CodeDescription
                         {NotAsync($@"public abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
                         public abstract void FreeInMemoryObjects();{IIF(!IsDerivedFromAbstractLazinator, $@"
                         {HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
-                        {HideILazinatorProperty}{ProtectedIfApplicableWithDerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
+                        {HideILazinatorProperty}{ProtectedIfApplicableWithObjectDerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
                         {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; }}
                         {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract {TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
@@ -710,7 +709,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}bool NonBinaryHash32 => {(NonbinaryHash ? "true" : "false")};
         
-                        {ProtectedIfApplicableWithDerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
+                        {ProtectedIfApplicableWithObjectDerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
                             LazinatorMemoryStorage = serializedBytes;
                             {TypeForLengths} length = Deserialize();
@@ -720,7 +719,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {ProtectedIfApplicableWithDerivationKeyword}{TypeForLengths} Deserialize()
+                        {ProtectedIfApplicableWithObjectDerivationKeyword}{TypeForLengths} Deserialize()
                         {{
                             FreeInMemoryObjects();
                             int bytesSoFar = 0;
@@ -792,7 +791,7 @@ namespace Lazinator.CodeDescription
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
 
-                        {MaybeAsyncAndNot($@"{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options) 
+                        {MaybeAsyncAndNot($@"{ProtectedIfApplicableWithObjectDerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options) 
                         {{
                             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;{MaybeAsyncConditional($@"
                             BufferWriterContainer writer = {SplittableCreateBufferWriter(true)}new BufferWriterContainer(bufferSize);
@@ -847,7 +846,7 @@ namespace Lazinator.CodeDescription
                             return {MaybeAsyncReturnValue($"{MaybeAsyncConditional($"({ILazinatorString})", "")}clone")};
                         }}")}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        {MaybeAsyncAndNot($@"{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} AssignCloneProperties{MaybeAsyncWord}({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
+                        {MaybeAsyncAndNot($@"{ProtectedIfApplicableWithObjectDerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} AssignCloneProperties{MaybeAsyncWord}({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"{MaybeAwaitWord}base.AssignCloneProperties{MaybeAsyncWord}(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
@@ -937,7 +936,7 @@ namespace Lazinator.CodeDescription
                     else
                     {
                         sb.AppendLine(
-                                $"{ProtectedIfApplicable}{TypeForLengths} {lastPropertyToIndex.BackingFieldByteLength} => {CastLongToTypeForLengths($"LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex}")};");
+                                $"{ProtectedIfApplicableWithSpecificDerivationKeyword(lastPropertyToIndex.DerivationKeyword)}{TypeForLengths} {lastPropertyToIndex.BackingFieldByteLength} => {CastLongToTypeForLengths($"LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex}")};");
                     }
                 }
             }
@@ -1214,7 +1213,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendConversionSectionStart(CodeStringBuilder sb)
         {
-            string containsOpenGenericParametersString = $@"{HideILazinatorProperty}{ProtectedIfApplicableWithDerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};";
+            string containsOpenGenericParametersString = $@"{HideILazinatorProperty}{ProtectedIfApplicableWithObjectDerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};";
 
             string lazinatorGenericID;
             if (ContainsOpenGenericParameters)
@@ -1398,13 +1397,13 @@ namespace Lazinator.CodeDescription
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                     $@"
-                        {NotAsync_Begin}{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
+                        {NotAsync_Begin}{ProtectedIfApplicableWithObjectDerivationKeyword}{MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
                         {{
                             {MaybeAwaitWord}base.UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, startPosition);");
             else
                 sb.AppendLine(
                     $@"
-                        {NotAsync_Begin}{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
+                        {NotAsync_Begin}{ProtectedIfApplicableWithObjectDerivationKeyword}{MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
                         {{");
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
@@ -1450,7 +1449,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             sb.AppendLine(
                         $@"
-                        {MaybeAsyncAndNot_Begin}{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType("void")} WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID)
+                        {MaybeAsyncAndNot_Begin}{ProtectedIfApplicableWithObjectDerivationKeyword}{MaybeAsyncReturnType("void")} WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID)
                         {{{positionInitialization}");
 
 
@@ -1580,14 +1579,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
-                            {ProtectedIfApplicableWithDerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {ProtectedIfApplicableWithObjectDerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
                             {{
                                 base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);");
                 else
                 {
                     sb.AppendLine(
                             $@"
-                            {ProtectedIfApplicableWithDerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {ProtectedIfApplicableWithObjectDerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
                             {{");
                 }
             }
@@ -1596,14 +1595,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
-                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", {TypeForPositions} startOfObjectPosition")})
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicableWithObjectDerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", {TypeForPositions} startOfObjectPosition")})
                             {{
                                 {MaybeAwaitWord}base.WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, options, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition")});");
                 else
                 {
                     sb.AppendLine(
                             $@"
-                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, {TypeForPositions} startOfObjectPosition)
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicableWithObjectDerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, {TypeForPositions} startOfObjectPosition)
                             {{");
                 }
                 if (propertiesToWrite.Any())
@@ -1686,7 +1685,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 return;
             }
 
-            sb.Append($@"{ProtectedIfApplicableWithDerivationKeyword}{TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicableWithObjectDerivationKeyword}{TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{{IIF(IncludeTracingCode, $@"
 TabbedText.WriteLine($"""");")}{IIF(IncludeTracingCode, $@"
 TabbedText.WriteLine($""Converting {ILazinatorTypeSymbol} at position: "" + LazinatorMemoryStorage.ToLocationString());")}
@@ -1701,7 +1700,7 @@ TabbedText.Tabs--;")}
 ");
 
 
-            sb.Append($@"{ProtectedIfApplicableWithDerivationKeyword}void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicableWithObjectDerivationKeyword}void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{
                     {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesForPrimitiveProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
                     ")}");
@@ -1717,7 +1716,7 @@ TabbedText.Tabs--;")}
         ");
 
             
-            sb.Append($@"{ProtectedIfApplicableWithDerivationKeyword}{TypeForLengths} ConvertFromBytesForChildLengths(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicableWithObjectDerivationKeyword}{TypeForLengths} ConvertFromBytesForChildLengths(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
                 {{
                     {TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"
 totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}

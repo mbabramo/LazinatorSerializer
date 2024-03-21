@@ -14,8 +14,8 @@ namespace Lazinator.CodeDescription
         public int SpacesPerTab = 4;
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
-        public static bool AddLocationIndexComments = false;
-        public static int StopAtLocationIndex = -1; 
+        public static bool AddLocationIndexComments = false; // DEBUG
+        public static int StopAtLocationIndex = -1; // 9731; // 13055; // DEBUG -1; 
         public static int LocationIndex = 0;
 
         public override string ToString()
