@@ -33,7 +33,7 @@ namespace Lazinator.CodeDescription
 
         public void Append(string s)
         {
-            if (AddLocationIndexComments)
+            if (AddLocationIndexComments && !LastLineStartsWithHash(s))
             {
                 AppendHelper(GetNextLocationString());
             }
