@@ -443,10 +443,6 @@ namespace Lazinator.CodeDescription
 
         private void AppendMiscMethods(CodeStringBuilder sb)
         {
-            if (NameIncludingGenerics.Contains("ModelPractice"))
-            {
-                var DEBUG = 0;
-            }
             if (!IsAbstract || GeneratingRefStruct)
             {
                 AppendEnumerateLazinatorDescendants(sb);
@@ -535,7 +531,7 @@ namespace Lazinator.CodeDescription
         {
             string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false);
             string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(true);
-            string constructors = GetConstructors();
+            string constructors = GetConstructors(sb);
             string cloneMethod = GetCloneMethod();
 
             if (!IsDerivedFromNonAbstractLazinator)
@@ -1516,9 +1512,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
         }}{MaybeAsyncAndNot_End}
 ");
 
-            if (primitiveProperties.Any() || !IsSealedOrStruct)
+            // We need to write properties if there are any on this level (either primitive or children properties).
+            // We also need to write properties if any other object may inherit from this object, since that object's code will call the base method. (We could improve on this by making it so that the base method is called only if defined.)
+            // But we also need to write properties if no other object may inherit from this object, because a lower-level object may be abstract. (We could improve on this by checking lower levels to figure out where this is defined and figuring out if it is abstract.)
+            // So for now, we always write properties this even though sometimes it is really unnecessary.
+
+            //if (primitiveProperties.Any() || !IsSealedOrStruct)
                 AppendWritePropertiesHelper(sb, primitiveProperties, true);
-            if (childrenProperties.Any() || !IsSealedOrStruct)
+            //if (childrenProperties.Any() || !IsSealedOrStruct)
                 AppendWritePropertiesHelper(sb, childrenProperties, false);
 
         }
@@ -1753,7 +1754,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             }
         }
 
-        private string GetConstructors()
+        private string GetConstructors(CodeStringBuilder sb)
         {
             // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types)
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
@@ -1779,7 +1780,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                         throw new ArgumentNullException(""{x.PropertyNameForConstructorParameter}"");
                     }}"));
                 lazinateInSecondConstructor = $@"LazinatorMemory childData;
-                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor(IncludeTracingCode)));
+                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor(sb, IncludeTracingCode)));
                 firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, $" : base({parametersForBaseClassString}originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"
