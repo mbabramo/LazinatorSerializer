@@ -29,6 +29,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 
         public LazinatorObjectTypeCollection(Random r, string namespaceString, bool nullableEnabledContext, int numObjectTypes, int maxClassDepth, int maxProperties, int numTests, int numMutationSteps) : this(namespaceString, nullableEnabledContext)
         {
+            string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableEnabledContext ? "2" : "")) + "\\" + NamespaceString + "\\";
             GenerateObjectTypes(numObjectTypes, maxClassDepth, maxProperties, r);
             List<(string folder, string filename, string code)> mainSources = GenerateSources();
             var compilation = LazinatorCodeGeneration.CreateCompilation(mainSources);
@@ -44,20 +45,30 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 compilation = LazinatorCodeGeneration.CreateCompilation(mainSources);
                 results = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilation);
                 success = !results.Any(x => x.Diagnostic != null) && !compilation.GetDiagnostics().Any();
+                if (success)
+                {
+                    // combine everything in compilation
+                    var allSources = mainSources.ToList();
+                    allSources.AddRange(results.Select(x => (NamespaceString, x.Path, x.GeneratedCode)));
+                    allSources.Add((NamespaceString, folder, GenerateTestsFile(r, numTests, numMutationSteps)));
+                    compilation = LazinatorCodeGeneration.CreateCompilation(allSources);
+                    success = !results.Any(x => x.Diagnostic != null) && !compilation.GetDiagnostics().Any();
+                    if (success)
+                        success = ExecuteCode.ExecuteTestingCode(compilation, NamespaceString, "TestRunner", "RunAllTests");
+                }
             }
 
-            string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableEnabledContext ? "2" : "")) + "\\" + NamespaceString + "\\";
             void WriteMainSources()
             {
                 foreach (var source in mainSources)
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
-                File.WriteAllText(folder + "Tests.cs", GenerateTestsFile(r, numTests, numMutationSteps));
             }
 
-            bool writeEvenIfFailed = true;
-            bool write = success || writeEvenIfFailed;
+            bool writeIfSuccessfullyGenerated = true;
+            bool writeIfNotSuccessfullyGenerated = true;
+            bool write = (writeIfSuccessfullyGenerated && success) || (writeIfNotSuccessfullyGenerated && !success);
             if (write)
             {
                 if (!Path.Exists(folder))
@@ -73,8 +84,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 }
                 foreach (var result in results)
                 {
-                    if (writeEvenIfFailed)
-                        File.WriteAllText(folder + "\\" + result.Path, result.GeneratedCode);
+                    File.WriteAllText(folder + "\\" + result.Path, result.GeneratedCode);
                     var diagostic = result.Diagnostic;
                     if (diagostic != null)
                     {
@@ -186,6 +196,18 @@ namespace FuzzTests.{NamespaceString}
                 sb.AppendLine(GetAndTestSequenceOfMutations(r, numMutations: numMutationSteps, true, i));
                 sb.AppendLine("}");
             }
+            sb.AppendLine($@"
+
+    public static class TestRunner
+    {{
+        public bool static RunAllTests()
+        {{
+            var runner = new Tests();
+            {String.Join("\n", Enumerable.Range(0, numTests).Select(x => $"            runner.Test{x}();"))}
+            return true;
+        }}
+    }};
+");
             sb.AppendLine(@$"
     }}
 }}
