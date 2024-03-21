@@ -443,6 +443,10 @@ namespace Lazinator.CodeDescription
 
         private void AppendMiscMethods(CodeStringBuilder sb)
         {
+            if (NameIncludingGenerics.Contains("ModelPractice"))
+            {
+                var DEBUG = 0;
+            }
             if (!IsAbstract || GeneratingRefStruct)
             {
                 AppendEnumerateLazinatorDescendants(sb);
@@ -1511,6 +1515,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             sb.Append($@"
         }}{MaybeAsyncAndNot_End}
 ");
+
             if (primitiveProperties.Any() || !IsSealedOrStruct)
                 AppendWritePropertiesHelper(sb, primitiveProperties, true);
             if (childrenProperties.Any() || !IsSealedOrStruct)
@@ -1572,10 +1577,6 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
         {
             if (isPrimitive)
             {
-                if (NameIncludingGenerics.Contains("SharpSafety"))
-                {
-                    var DEBUG = 0;
-                }
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
