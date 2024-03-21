@@ -333,10 +333,6 @@ namespace Lazinator.CodeDescription
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
             PropertyName = propertySymbol.Name;
-            if (PropertyName == "NonNullValue")
-            {
-                var DEBUG = 0;
-            }
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
