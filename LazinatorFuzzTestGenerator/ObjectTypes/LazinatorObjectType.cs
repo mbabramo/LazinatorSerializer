@@ -86,6 +86,8 @@ namespace FuzzTests.{namespaceString}
             sb.Append("(");
             string plist = String.Join(",", PropertiesIncludingInherited.Select(x => $"{prefix}{x.propertyName}"));
             sb.Append(plist);
+            if (PropertiesIncludingInherited.Count == 1)
+                sb.Append(", 0"); // to make it a tuple, we need an additional property
             sb.Append(")");
             return sb.ToString();
         }
