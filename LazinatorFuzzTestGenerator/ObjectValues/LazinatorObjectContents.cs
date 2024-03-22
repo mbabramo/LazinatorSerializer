@@ -1,4 +1,5 @@
 ﻿using LazinatorFuzzTestGenerator.Interfaces;
+using LazinatorFuzzTestGenerator.ObjectTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,25 +95,43 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         {
             if (PropertyValues is null)
                 return "null";
-            int numProperties = PropertyValues.Count;
+            string propertyValuesNonNullableReferencesString = GetPropertyValuesString(true, false, false);
+            string propertyValuesOtherString = GetPropertyValuesString(false, true, true);
+            return $@"new {TheLazinatorObjectType.Name}({propertyValuesNonNullableReferencesString})
+    {{
+{propertyValuesOtherString}
+    }}
+";
+        }
+
+        private string GetPropertyValuesString(bool nonNullableReferenceTypes, bool other, bool includePropertyNameAndEquals)
+        {
+            int numProperties = PropertyValues!.Count;
             StringBuilder sb = new StringBuilder();
             int i = 0;
+            bool isFirst = true;
             foreach (var property in TheLazinatorObjectType.PropertiesIncludingInherited)
             {
-                var value = PropertyValues[i];
-                sb.Append($"{property.propertyName} = {value?.CodeToGetValue ?? "null"}");
-                if (i < numProperties - 1)
-                    sb.AppendLine(",");
-                else
-                    sb.AppendLine();
+                bool isNonNullableReferenceType = !property.nullable && property.supportedType is LazinatorClassType;
+                bool include = (nonNullableReferenceTypes && isNonNullableReferenceType) || (!nonNullableReferenceTypes && !isNonNullableReferenceType);
+                if (include)
+                {
+                    var value = PropertyValues[i];
+                    if (!isFirst)
+                        sb.AppendLine(", ");
+                    else
+                    {
+                        sb.AppendLine("");
+                        isFirst = false;
+                    }
+                    if (includePropertyNameAndEquals) 
+                        sb.Append($"{property.propertyName} = ");
+                    sb.Append($"{value?.CodeToGetValue ?? "null"}");
+                }
                 i++;
             }
             string propertyValuesString = sb.ToString();
-            return $@"new {TheLazinatorObjectType.Name}()
-    {{
-{propertyValuesString}
-    }}
-";
+            return propertyValuesString;
         }
 
         public string CodeToTestValue(string containerName)

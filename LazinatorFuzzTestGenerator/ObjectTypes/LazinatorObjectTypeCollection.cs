@@ -75,7 +75,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             bool writeIfSuccessfullyGenerated = false;
             bool writeIfNotSuccessfullyGenerated = true;
             bool write = (writeIfSuccessfullyGenerated && success) || (writeIfNotSuccessfullyGenerated && !success);
-            if (writeIfNotSuccessfullyGenerated == false && writeIfNotSuccessfullyGenerated == true && !write)
+            if (writeIfSuccessfullyGenerated == false && writeIfNotSuccessfullyGenerated == true && !write)
             {
                 // we actually want to delete the files if they were generated a previous time when it was not successful.
                 if (Path.Exists(folder))
