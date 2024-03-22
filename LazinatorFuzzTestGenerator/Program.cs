@@ -12,7 +12,7 @@ namespace LazinatorFuzzTestGenerator
         static void Main(string[] args)
         {
             Random r = new Random(0);
-            var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n1", nullableEnabledContext: false, numObjectTypes: 100, maxClassDepth: 4, maxProperties: 3, numTests: 1000, numMutationSteps: 10);
+            var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n1", nullableEnabledContext: false, numObjectTypes: 2, maxClassDepth: 4, maxProperties: 3, numTests: 2, numMutationSteps: 2);
 
         }
 

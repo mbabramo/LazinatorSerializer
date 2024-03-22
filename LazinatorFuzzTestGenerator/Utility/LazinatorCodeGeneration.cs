@@ -15,6 +15,7 @@ using LazinatorGenerator.CodeDescription;
 using LazinatorGenerator.Support;
 using LazinatorCodeGen.Roslyn;
 using System.Diagnostics;
+using Microsoft.Build.Execution;
 
 namespace LazinatorFuzzTestGenerator.Utility
 {
@@ -32,6 +33,7 @@ namespace LazinatorFuzzTestGenerator.Utility
         }
 
         public static Compilation CreateCompilation(List<(string folder, string filename, string code)> files) => CreateCompilation(GetCodeBasePath(), files);
+
 
         public static Compilation CreateCompilation(string solutionFolder, List<(string folder, string filename, string code)> files)
         {
@@ -54,7 +56,7 @@ namespace LazinatorFuzzTestGenerator.Utility
             List<MetadataReference> references = new List<MetadataReference>();
             if (useProjectReferences)
             {
-                // DEBUG references = AdhocWorkspaceManager.GetProjectReferences();
+                //references = AdhocWorkspaceManager.GetProjectReferences();
             }
             else
                 references = new List<MetadataReference>

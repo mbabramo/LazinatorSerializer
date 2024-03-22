@@ -36,13 +36,14 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources); // note that this compilation will have plenty of errors, because it will be missing the generated code
             Compilation? compilationIncludingGeneratedSources = null;
             Compilation? compilationIncludingTestingCode = null;
-            string testsFileCode = GenerateTestsFile(r, numTests, numMutationSteps);
-
+            string testsFileCode_ForTestingProject = GenerateTestsFile(r, numTests, numMutationSteps, true);
+            string testsFileCode_ForImmediateExecution = GenerateTestsFile(r, numTests, numMutationSteps, false);
+            List<(string folder, string filename, string code)> originalSourcesPlusGenerated = new List<(string folder, string filename, string code)>();
             List<LazinatorCodeGenerationResult> codeGenerationResults = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilationOriginalSources);
             bool success = !codeGenerationResults.Any(x => x.Diagnostic != null);
             if (success)
             {
-                var originalSourcesPlusGenerated = originalSources.ToList();
+                originalSourcesPlusGenerated = originalSources.ToList();
                 foreach (var codeGenerationResult in codeGenerationResults)
                 {
                     originalSourcesPlusGenerated.Add((NamespaceString, codeGenerationResult.Path, codeGenerationResult.GeneratedCode));
@@ -53,22 +54,22 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     // combine everything in compilation
                     var sourcesPlusTestCode = originalSourcesPlusGenerated.ToList();
-                    sourcesPlusTestCode.Add((NamespaceString, folder, testsFileCode));
+                    sourcesPlusTestCode.Add((NamespaceString, folder, testsFileCode_ForImmediateExecution));
                     compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode);
 
                     success = AssessCompilationSuccess(compilationIncludingTestingCode);
                     if (success)
-                        success = ExecuteCode.ExecuteTestingCode(compilationIncludingTestingCode, NamespaceString, "TestRunner", "RunAllTests");
+                        success = ExecuteCode.ExecuteTestingCode(compilationIncludingTestingCode, "FuzzTests." + NamespaceString, "TestRunner", "RunAllTests");
                 }
             }
 
             void WriteMainSources()
             {
-                foreach (var source in originalSources)
+                foreach (var source in originalSourcesPlusGenerated)
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
-                File.WriteAllText(folder + "Tests.cs", testsFileCode);
+                File.WriteAllText(folder + "Tests.cs", testsFileCode_ForTestingProject);
             }
 
             bool writeIfSuccessfullyGenerated = true;
@@ -90,7 +91,6 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 }
                 foreach (var result in codeGenerationResults)
                 {
-                    File.WriteAllText(folder + "\\" + result.Path, result.GeneratedCode);
                     var diagostic = result.Diagnostic;
                     if (diagostic != null)
                     {
@@ -178,7 +178,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             }
         }
 
-        public string GenerateTestsFile(Random r, int numTests, int numMutationSteps)
+        public string GenerateTestsFile(Random r, int numTests, int numMutationSteps, bool forTestingProject)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(@$"
@@ -186,14 +186,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using FluentAssertions;
 using Lazinator.Core;
-using Xunit;
 using Lazinator.Wrappers;
 using Lazinator.Collections.Tuples;
 using Lazinator.Buffers;
 using System.Threading.Tasks;
 using Lazinator.Exceptions;
+{(forTestingProject ? @"using FluentAssertions;
+using Xunit;" : "")}
 
 namespace FuzzTests.{NamespaceString}
 {{
@@ -203,13 +203,16 @@ namespace FuzzTests.{NamespaceString}
 ");
             for (int i = 0; i < numTests; i++)
             {
-                sb.AppendLine("[Fact]");
+                if (forTestingProject)
+                    sb.AppendLine("[Fact]");
                 sb.AppendLine($"public void Test{i}()");
                 sb.AppendLine("{");
                 sb.AppendLine(GetAndTestSequenceOfMutations(r, numMutations: numMutationSteps, true, i));
                 sb.AppendLine("}");
             }
-            sb.AppendLine($@"
+            sb.AppendLine("}"); // end of class Tests
+            if (!forTestingProject)
+                sb.AppendLine($@"
 
     public static class TestRunner
     {{
@@ -222,7 +225,6 @@ namespace FuzzTests.{NamespaceString}
     }};
 ");
             sb.AppendLine(@$"
-    }}
 }}
 ");
             return CodeFormatter.IndentCode(sb.ToString());
