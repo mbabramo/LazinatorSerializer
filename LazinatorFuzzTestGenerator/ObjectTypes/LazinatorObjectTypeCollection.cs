@@ -33,7 +33,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableEnabledContext ? "2" : "")) + "\\" + NamespaceString + "\\";
             GenerateObjectTypes(numObjectTypes, maxClassDepth, maxProperties, r);
             List<(string folder, string filename, string code)> originalSources = GenerateSources();
-            Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources); // note that this compilation will have plenty of errors, because it will be missing the generated code
+            Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources, nullableEnabledContext); // note that this compilation will have plenty of errors, because it will be missing the generated code
             Compilation? compilationIncludingGeneratedSources = null;
             Compilation? compilationIncludingTestingCode = null;
             string testsFileCode_ForTestingProject = GenerateTestsFile(r, numTests, numMutationSteps, true);
@@ -48,14 +48,14 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     originalSourcesPlusGenerated.Add((NamespaceString, codeGenerationResult.Path, codeGenerationResult.GeneratedCode));
                 }
-                compilationIncludingGeneratedSources = LazinatorCodeGeneration.CreateCompilation(originalSourcesPlusGenerated);
+                compilationIncludingGeneratedSources = LazinatorCodeGeneration.CreateCompilation(originalSourcesPlusGenerated, nullableEnabledContext);
                 success = AssessCompilationSuccess(compilationIncludingGeneratedSources);
                 if (success)
                 {
                     // combine everything in compilation
                     var sourcesPlusTestCode = originalSourcesPlusGenerated.ToList();
                     sourcesPlusTestCode.Add((NamespaceString, folder, testsFileCode_ForImmediateExecution));
-                    compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode);
+                    compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode, nullableEnabledContext);
 
                     success = AssessCompilationSuccess(compilationIncludingTestingCode);
                     if (success)

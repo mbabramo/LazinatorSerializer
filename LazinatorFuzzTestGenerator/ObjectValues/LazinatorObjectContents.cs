@@ -84,6 +84,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 return "";
                 // DEBUG -- we'd like to be able to change just one field of nested objects. With structs, that will be tricky, because we have to back out of the innermost property using temporary variables. (Fields could be set directly.)
                 // DEBUG2 -- with classes, we'd like to be able to copy from one object hierarchy to another. 
+                // DEBUG3 -- we actually need to use CloneLazinatorTyped etc. to make sure that Lazinating works.
             }
         }
 
