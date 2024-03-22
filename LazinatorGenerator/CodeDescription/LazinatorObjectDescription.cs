@@ -599,7 +599,7 @@ namespace Lazinator.CodeDescription
                         ")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeIAsyncEnumerable}<{ILazinatorString}> EnumerateLazinatorNodes{MaybeAsyncWord}(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeIAsyncEnumerable}<(string propertyName, {ILazinatorString} descendant)> EnumerateLazinatorDescendants{MaybeAsyncWord}(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);")}
-                        {MaybeAsyncAndNot($@"public abstract {MaybeIAsyncEnumerable}<(string propertyName, object descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}();")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}();")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} ForEachLazinator{MaybeAsyncWord}(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);")}
 
                         {NotAsync($@"public abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
@@ -1837,9 +1837,14 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             string tense = usePastTense ? "HasChanged" : "IsDirty";
             foreach (var property in PropertiesIncludingInherited.Where(x => x.IsLazinator))
             {
-                if (property.PropertyType == LazinatorPropertyType.LazinatorStruct || property.PropertyType == LazinatorPropertyType.LazinatorStructNullable)
+                if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                 {
                     manualDescendantDirtinessChecks += $" || ({IIF(property.BackingAccessFieldIncluded, $"{property.BackingFieldAccessedString} && ")}({property.PropertyName}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}))";
+                }
+                else if (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable)
+                {
+                    string nonNullCheck = property.GetNonNullCheck(true);
+                    manualDescendantDirtinessChecks += $" || ({IIF(property.BackingAccessFieldIncluded, $"{property.BackingFieldAccessedString} && ")}({nonNullCheck} && ({property.PropertyName}{IIF(NullableModeEnabled, "!")}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{IIF(NullableModeEnabled, "!")}{property.NullableStructValueAccessor}.Descendant{tense})))";
                 }
                 else
                 {
