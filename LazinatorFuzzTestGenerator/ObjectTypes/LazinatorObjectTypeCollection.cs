@@ -54,7 +54,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     // combine everything in compilation
                     var sourcesPlusTestCode = originalSourcesPlusGenerated.ToList();
-                    sourcesPlusTestCode.Add((NamespaceString, folder, testsFileCode_ForImmediateExecution));
+                    sourcesPlusTestCode.Add((NamespaceString, "Tests.cs", testsFileCode_ForImmediateExecution));
                     compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode, nullableEnabledContext);
 
                     success = AssessCompilationSuccess(compilationIncludingTestingCode);
@@ -69,10 +69,10 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
-                File.WriteAllText(folder + "Tests.cs", testsFileCode_ForTestingProject);
+                File.WriteAllText(folder + "Tests.cs", testsFileCode_ForImmediateExecution); // DEBUG testsFileCode_ForTestingProject);
             }
 
-            bool writeIfSuccessfullyGenerated = false; 
+            bool writeIfSuccessfullyGenerated = true; // DEBUG
             bool writeIfNotSuccessfullyGenerated = true;
             bool write = (writeIfSuccessfullyGenerated && success) || (writeIfNotSuccessfullyGenerated && !success);
             if (writeIfNotSuccessfullyGenerated == false && writeIfNotSuccessfullyGenerated == true && !write)
