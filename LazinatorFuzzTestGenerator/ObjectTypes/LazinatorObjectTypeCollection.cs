@@ -21,6 +21,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         public IEnumerable<LazinatorClassType> InheritableClassTypes => ObjectTypes.Where(x => x.Inheritable).Select(x => (LazinatorClassType)x);
         public UniqueCSharpNameGenerator UniqueCSharpNameGenerator { get; set; } = new UniqueCSharpNameGenerator();
         int UniqueIDCounter = 10_000;
+        public bool Succeeded { get; set; }
 
         public LazinatorObjectTypeCollection(string namespaceString, bool nullableEnabledContext)
         {
@@ -66,6 +67,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 Console.WriteLine("Succeeded without errors.");
             else
                 Console.WriteLine("Failed.");
+            Succeeded = success;
 
             void WriteMainSources()
             {
@@ -76,7 +78,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 File.WriteAllText(folder + "Tests.cs", testsFileCode_ForTestingProject);
             }
 
-            bool writeIfSuccessfullyGenerated = true; // DEBUG
+            bool writeIfSuccessfullyGenerated = false;
             bool writeIfNotSuccessfullyGenerated = true;
             bool write = (writeIfSuccessfullyGenerated && success) || (writeIfNotSuccessfullyGenerated && !success);
             if (writeIfSuccessfullyGenerated == false && writeIfNotSuccessfullyGenerated == true && !write)
