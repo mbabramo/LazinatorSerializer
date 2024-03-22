@@ -29,13 +29,25 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             else
                 ObjectDepth = InheritsFrom.ObjectDepth + 1;
             LazinatorClassType? c = this;
+
+            var classes = new Stack<LazinatorClassType>(); 
             while (c != null)
             {
-                if (c.Properties != null)
-                    foreach (var property in c.Properties)
-                        if (!PropertiesIncludingInherited.Any(x => x.propertyName == property.propertyName))
-                            PropertiesIncludingInherited.Add(property); 
+                classes.Push(c);
                 c = c.InheritsFrom;
+            }
+
+            while (classes.Count > 0)
+            {
+                c = classes.Pop();
+                if (c.Properties != null)
+                {
+                    foreach (var property in c.Properties)
+                    {
+                        if (!PropertiesIncludingInherited.Any(x => x.propertyName == property.propertyName))
+                            PropertiesIncludingInherited.Add(property);
+                    }
+                }
             }
         }
 

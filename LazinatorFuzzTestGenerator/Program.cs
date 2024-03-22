@@ -11,11 +11,12 @@ namespace LazinatorFuzzTestGenerator
     {
         static void Main(string[] args)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Console.WriteLine($"iteration {i}");
                 Random r = new Random(0);
-                var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: true, numObjectTypes: 10, maxClassDepth: 4, maxProperties: 4, numTests: 20, numMutationSteps: 2);
+                bool nullableEnabledContext = r.Next(2) == 0;
+                var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 25, maxClassDepth: 4, maxProperties: 4, numTests: 100, numMutationSteps: 10);
             }
 
         }
