@@ -15,7 +15,7 @@ namespace LazinatorFuzzTestGenerator
             {
                 Console.WriteLine($"iteration {i}");
                 Random r = new Random(0);
-                var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: true, numObjectTypes: 10, maxClassDepth: 4, maxProperties: 4, numTests: 2, numMutationSteps: 2);
+                var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: true, numObjectTypes: 10, maxClassDepth: 4, maxProperties: 4, numTests: 20, numMutationSteps: 2);
             }
 
         }

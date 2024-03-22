@@ -69,10 +69,10 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     File.WriteAllText(folder + source.filename, source.code);
                 }
-                File.WriteAllText(folder + "Tests.cs", testsFileCode_ForImmediateExecution); // DEBUG testsFileCode_ForTestingProject);
+                File.WriteAllText(folder + "Tests.cs", testsFileCode_ForTestingProject);
             }
 
-            bool writeIfSuccessfullyGenerated = true; // DEBUG
+            bool writeIfSuccessfullyGenerated = false;
             bool writeIfNotSuccessfullyGenerated = true;
             bool write = (writeIfSuccessfullyGenerated && success) || (writeIfNotSuccessfullyGenerated && !success);
             if (writeIfNotSuccessfullyGenerated == false && writeIfNotSuccessfullyGenerated == true && !write)
