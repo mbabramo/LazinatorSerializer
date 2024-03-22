@@ -910,7 +910,7 @@ namespace Lazinator.CodeDescription
                 PropertyDescription propertyDescription = withRecordedIndices[i];
                 string propertyDerivationKeyword = GetDerivationKeywordForLengthProperty(propertyDescription);
                 sb.AppendLine(
-                        $"{ProtectedIfApplicable}{propertyDerivationKeyword}{TypeForLengths} {propertyDescription.BackingFieldByteLength} => {withRecordedIndices[i + 1].BackingFieldByteIndex} - {propertyDescription.BackingFieldByteIndex};");
+                        $"{ProtectedIfApplicableWithSpecificDerivationKeyword(propertyDerivationKeyword)}{TypeForLengths} {propertyDescription.BackingFieldByteLength} => {withRecordedIndices[i + 1].BackingFieldByteIndex} - {propertyDescription.BackingFieldByteIndex};");
             }
             if (lastPropertyToIndex != null)
             {
