@@ -818,6 +818,13 @@ namespace Lazinator.CodeDescription
                         /* Properties */
 ");
             }
+            else if (IsAbstract && NullableModeEnabled)
+            {
+                sb.Append($@"        /* Construction */
+
+                        {constructors}
+");
+            }
         }
 
         private string GetCloneMethod()
@@ -1156,7 +1163,7 @@ namespace Lazinator.CodeDescription
                 string loadProperty = MaybeAsyncPropertyName(property);
                 sb.AppendLine(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {loadProperty};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);").ToString());
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true){IIF(NullableModeEnabled, "!")};").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
             {
@@ -1756,6 +1763,8 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
 
         private string GetConstructors(CodeStringBuilder sb)
         {
+            sb.AppendLine("// DEBUG5");
+
             // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types)
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
             var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
