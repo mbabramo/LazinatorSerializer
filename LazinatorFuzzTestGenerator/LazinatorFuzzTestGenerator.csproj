@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CodeGenHelper\CodeGenHelper.csproj" />
+	  <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
     <ProjectReference Include="..\LazinatorGenerator\LazinatorGenerator.csproj" />
   </ItemGroup>
 
