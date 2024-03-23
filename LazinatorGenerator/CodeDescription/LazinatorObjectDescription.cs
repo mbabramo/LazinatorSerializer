@@ -1766,6 +1766,8 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
 
         private string GetConstructors(CodeStringBuilder sb)
         {
+            sb.AppendLocationStringIfEnabled("CONSTRUCTORS START");
+
             // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types)
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
             var allPropertiesRequiringInitialization = NonNullablePropertiesRequiringInitialization.ToList();
@@ -1803,8 +1805,9 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                     {{
                         throw new ArgumentNullException(""{x.PropertyNameForConstructorParameter}"");
                     }}"));
-                lazinateInSecondConstructor = $@"LazinatorMemory childData;
-                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor(sb, IncludeTracingCode)));
+                lazinateInSecondConstructor = $@"
+                            {IIF(propertiesRequiringInitializationHere.Any(), @"LazinatorMemory childData;
+                            ")}" + String.Join("", propertiesRequiringInitializationHere.Select(x => x.GetLazinateContentsForConstructor(sb, IncludeTracingCode)));
                 firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, $" : base({parametersForBaseClassString}originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"

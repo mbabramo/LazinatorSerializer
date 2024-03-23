@@ -14,8 +14,8 @@ namespace Lazinator.CodeDescription
         public int SpacesPerTab = 4;
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
-        public static bool AddLocationIndexComments = true; // DEBUG
-        public static int StopAtLocationIndex = 4627; // DEBUG -1;
+        public static bool AddLocationIndexComments = false;
+        public static int StopAtLocationIndex = -1;
         public static int LocationIndex = 0;
 
         public override string ToString()
@@ -48,6 +48,20 @@ namespace Lazinator.CodeDescription
                 sb.Append(' ');
         }
 
+        public void AppendLocationStringIfEnabled(string supplementalString = "")
+        {
+            if (AddLocationIndexComments)
+            {
+                sb.Append(GetNextLocationString());
+                if (supplementalString != "")
+                {
+                    sb.Append("/* <== ");
+                    sb.Append(supplementalString);
+                    sb.Append(" */");
+                }
+            }
+        }
+
         public string GetNextLocationString()
         {
             if (LocationIndex == StopAtLocationIndex)
@@ -58,9 +72,9 @@ namespace Lazinator.CodeDescription
             {
                 bool inPreprocessorLine = LastLineStartsWithHash(sb.ToString());
                 if (inPreprocessorLine)
-                    return $"//Location{LocationIndex++}";
+                    return $"// Location {LocationIndex++}";
                 else
-                    return $"/*Location{LocationIndex++}*/";
+                    return $"/* Location {LocationIndex++} */";
             }
             else
                 return "";
