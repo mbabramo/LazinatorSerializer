@@ -831,7 +831,7 @@ namespace Lazinator.CodeDescription
                         /* Properties */
 ");
             }
-            else if (IsAbstract && NullableModeEnabled)
+            else if (IsAbstract)
             {
                 sb.Append($@"        /* Construction */
 
