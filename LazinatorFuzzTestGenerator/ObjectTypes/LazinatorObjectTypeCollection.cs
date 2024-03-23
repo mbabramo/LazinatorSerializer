@@ -63,10 +63,6 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                         success = ExecuteCode.ExecuteTestingCode(compilationIncludingTestingCode, "FuzzTests." + NamespaceString, "TestRunner", "RunAllTests");
                 }
             }
-            if (success)
-                Console.WriteLine("Succeeded without errors.");
-            else
-                Console.WriteLine("Failed.");
             Succeeded = success;
 
             void WriteMainSources()
