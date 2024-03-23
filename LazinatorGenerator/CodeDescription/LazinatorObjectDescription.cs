@@ -1768,7 +1768,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
         {
             sb.AppendLocationStringIfEnabled("CONSTRUCTORS START");
 
-            // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types)
+            // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types), except in an abstract class.
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
             var allPropertiesRequiringInitialization = NonNullablePropertiesRequiringInitialization.ToList();
 
@@ -1776,7 +1776,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             string lazinateInSecondConstructor = "";
             if (allPropertiesRequiringInitialization.Any())
             {
-                // Of the properties requiring initialization, we include all in the parameters string.
+                // Of the properties requiring initialization, we include in the parameter string all of the ones that are inherited, rather than to be defined this level. Note that a property from abstract classes will be listed as to be defined this level.
                 var propertiesToPassToBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
                 // But which should we then initialize in the body?
                 // If this is an abstract class, then none. 
@@ -1792,7 +1792,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                         objectDescription = objectDescription.BaseLazinatorObject;
                     }
                 }
-                var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
+                var parametersString = IsAbstract ? "" : String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter)) + ", ";
                 string parametersForBaseClassString;
                 if (propertiesToPassToBaseClass.Any())
                     parametersForBaseClassString = String.Join(", ", propertiesToPassToBaseClass.Select(x => x.PropertyNameForConstructorParameter)) + ", ";
@@ -1808,7 +1808,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                 lazinateInSecondConstructor = $@"
                             {IIF(propertiesRequiringInitializationHere.Any(), @"LazinatorMemory childData;
                             ")}" + String.Join("", propertiesRequiringInitializationHere.Select(x => x.GetLazinateContentsForConstructor(sb, IncludeTracingCode)));
-                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, $" : base({parametersForBaseClassString}originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
+                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, $" : base({parametersForBaseClassString}originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
