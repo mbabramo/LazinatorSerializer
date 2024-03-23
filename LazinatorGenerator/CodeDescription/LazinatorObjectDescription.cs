@@ -541,11 +541,21 @@ namespace Lazinator.CodeDescription
             {
                 string generalDefinitions;
                 if (IsAbstract && BaseLazinatorObject?.IsAbstract == true) // abstract class inheriting from abstract class
-                    generalDefinitions = $@""; // everything is inherited from parent abstract class
+                    generalDefinitions = $@"
+                        /* Constructors */
+
+                        {constructors}
+                    "; // everything else is inherited from parent abstract class
                 else if (IsAbstract && !GeneratingRefStruct)
                 {
-                    generalDefinitions = $@"        /* Abstract declarations */
-			            public abstract LazinatorParentsCollection LazinatorParents {{ get; set; }}
+                    generalDefinitions = $@"
+                        /* Constructors */
+
+                        {constructors}
+                    
+                        /* Abstract declarations */
+
+                        public abstract LazinatorParentsCollection LazinatorParents {{ get; set; }}
 
                         {HideILazinatorProperty}public abstract LazinatorMemory LazinatorMemoryStorage
                         {{
@@ -1774,7 +1784,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
 
             string firstConstructor;
             string lazinateInSecondConstructor = "";
-            if (allPropertiesRequiringInitialization.Any())
+            if (allPropertiesRequiringInitialization.Any() || IsAbstract)
             {
                 // Of the properties requiring initialization, we include in the parameter string all of the ones that are inherited, rather than to be defined this level. Note that a property from abstract classes will be listed as to be defined this level.
                 List<PropertyDescription> propertiesToPassToBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization && allPropertiesRequiringInitialization.Contains(x)).ToList();

@@ -12,7 +12,7 @@ namespace LazinatorFuzzTestGenerator
     {
         static void Main(string[] args)
         {
-            for (int i = 34 /* DEBUG */; i < 100; i++)
+            for (int i = 0; i < 100; i++)
             {
                 Console.WriteLine($"iteration {i}");
                 CodeStringBuilder.LocationIndex = 100_000 * i; // generate unique but predictable location indices in code files, so that if there is a problem with the code, we can easily stop at that location by changing CodeStringBuilder.StopAtLocationIndex
