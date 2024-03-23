@@ -19,7 +19,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         public abstract bool Instantiable { get; }
         public abstract int ObjectDepth { get; }
 
-        public virtual List<LazinatorObjectProperty> PropertiesIncludingInherited => Properties;
+        public virtual List<LazinatorObjectProperty> PropertiesIncludingInherited => Properties.OrderBy(x => x.propertyName).ToList();
 
         public abstract bool UnannotatedIsNullable(bool nullableEnabledContext);
 
