@@ -131,6 +131,7 @@ namespace Lazinator.CodeDescription
         public bool IsClass => ObjectType == LazinatorObjectType.Class && !GeneratingRefStruct;
         public bool IsStruct => !IsClass;
         public bool IsSealedOrStruct => IsSealed || ObjectType != LazinatorObjectType.Class || GeneratingRefStruct;
+        public bool AllInheritedClassesAreAbstract => IsDerived && GetBaseLazinatorObjects().All(x => x.IsAbstract);
 
         /* Interfaces */
         public ExclusiveInterfaceDescription ExclusiveInterface { get; set; }
@@ -1786,8 +1787,8 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             string lazinateInSecondConstructor = "";
             if (allPropertiesRequiringInitialization.Any() || IsAbstract)
             {
-                // Of the properties requiring initialization, we include in the parameter string all of the ones that are inherited, rather than to be defined this level. Note that a property from abstract classes will be listed as to be defined this level.
-                List<PropertyDescription> propertiesToPassToBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization && allPropertiesRequiringInitialization.Contains(x)).ToList();
+                // Of the properties requiring initialization, we include in the parameter string all of the ones that are inherited, rather than to be defined this level. Note that a property from abstract classes will be listed as to be defined this level. However, if all lower classes are abstract, then we will not pass any properties to the base class.
+                List<PropertyDescription> propertiesToPassToBaseClass = AllInheritedClassesAreAbstract ? new List<PropertyDescription>() : ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization && allPropertiesRequiringInitialization.Contains(x)).ToList();
                 // But which should we then initialize in the body?
                 // If this is an abstract class, then none. 
                 // We will then want to initialize once this property becomes concrete. 
@@ -1803,6 +1804,8 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                     }
                 }
                 string parametersString;
+
+                // DEBUG // if we have an abstract class at the bottom of the hierarchy, then it has no properties to pass to the base class. 
 
                 if (IsAbstract)
                 {
