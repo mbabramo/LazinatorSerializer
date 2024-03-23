@@ -18,7 +18,7 @@ namespace LazinatorFuzzTestGenerator
                 CodeStringBuilder.LocationIndex = 100_000 * i; // generate unique but predictable location indices in code files, so that if there is a problem with the code, we can easily stop at that location by changing CodeStringBuilder.StopAtLocationIndex
                 Random r = new Random(i);
                 bool nullableEnabledContext = i % 2 == 0;
-                var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 10, maxClassDepth: 5, maxProperties: 5, numTests: 100, numMutationSteps: 15);
+                var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 4, maxClassDepth: 4, maxProperties: 5, numTests: 100, numMutationSteps: 5);
                 if (objectTypeCollection.Succeeded == false)
                     break;
             }

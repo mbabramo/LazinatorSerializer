@@ -110,7 +110,8 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             StringBuilder sb = new StringBuilder();
             int i = 0;
             bool isFirst = true;
-            foreach (var property in TheLazinatorObjectType.PropertiesIncludingInherited)
+            var properties = TheLazinatorObjectType.PropertiesIncludingInherited;
+            foreach (var property in properties)
             {
                 bool isNonNullableReferenceType = !property.nullable && property.supportedType is LazinatorClassType;
                 bool include = (nonNullableReferenceTypes && isNonNullableReferenceType) || (!nonNullableReferenceTypes && !isNonNullableReferenceType);

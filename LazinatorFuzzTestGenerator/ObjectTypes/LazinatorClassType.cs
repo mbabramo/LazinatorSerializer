@@ -42,7 +42,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 c = classes.Pop();
                 if (c.Properties != null)
                 {
-                    foreach (var property in c.Properties)
+                    foreach (var property in c.Properties.OrderBy(x => x.propertyName))
                     {
                         if (!PropertiesIncludingInherited.Any(x => x.propertyName == property.propertyName))
                             PropertiesIncludingInherited.Add(property);
