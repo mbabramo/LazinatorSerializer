@@ -20,7 +20,7 @@ namespace Lazinator.CodeDescription
     /// </summary>
     public class LazinatorObjectDescription
     {
-        /* Main properties */
+        /* Main */
         public INamedTypeSymbol ILazinatorTypeSymbol { get; set; }
         public INamedTypeSymbol InterfaceTypeSymbol { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
@@ -39,6 +39,7 @@ namespace Lazinator.CodeDescription
             #nullable restore";
 
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
+        public string ExclamationMarkIfNullableModeEnabled => IIF(NullableModeEnabled, "!");
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
         public string ILazinatorStringNonNullableIfPropertyNonNullable(bool nonnullable) => nonnullable ? "ILazinator" : ILazinatorString;
@@ -107,6 +108,8 @@ namespace Lazinator.CodeDescription
                 return ProtectedIfApplicable + derivationKeyword;
         }
         public string ProtectedIfApplicableWithObjectDerivationKeyword => ProtectedIfApplicableWithSpecificDerivationKeyword(DerivationKeyword);
+
+        public IEnumerable<PropertyDescription> NonNullablePropertiesRequiringInitialization => ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization);
 
         /* Names */
         public string Namespace { get; set; }
@@ -842,7 +845,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 clone = new {NameIncludingGenerics}({parametersToFirstConstructor}includeChildrenMode);{IIF(Version != -1, $@"
                                 clone.LazinatorObjectVersion = LazinatorObjectVersion;")}
-                                clone = ({NameIncludingGenerics}){MaybeAwaitWord}AssignCloneProperties{MaybeAsyncWord}(clone, includeChildrenMode){IIF(NullableModeEnabled, "!")};
+                                clone = ({NameIncludingGenerics}){MaybeAwaitWord}AssignCloneProperties{MaybeAsyncWord}(clone, includeChildrenMode){ExclamationMarkIfNullableModeEnabled};
                             }}
                             else
                             {{
@@ -1163,7 +1166,7 @@ namespace Lazinator.CodeDescription
                 string loadProperty = MaybeAsyncPropertyName(property);
                 sb.AppendLine(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {loadProperty};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true){IIF(NullableModeEnabled, "!")};").ToString());
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true){ExclamationMarkIfNullableModeEnabled};").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
             {
@@ -1763,22 +1766,34 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
 
         private string GetConstructors(CodeStringBuilder sb)
         {
-            sb.AppendLine("// DEBUG5");
-
             // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types)
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
-            var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+            var allPropertiesRequiringInitialization = NonNullablePropertiesRequiringInitialization.ToList();
 
             string firstConstructor;
             string lazinateInSecondConstructor = "";
             if (allPropertiesRequiringInitialization.Any())
             {
-                var propertiesRequiringInitializationInBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
-                var propertiesRequiringInitializationHere = ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+                // Of the properties requiring initialization, we include all in the parameters string.
+                var propertiesToPassToBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+                // But which should we then initialize in the body?
+                // If this is an abstract class, then none. 
+                // We will then want to initialize once this property becomes concrete. 
+                // So if not abstract, we look to lower levels to see which properties should be initialized here.
+                List<PropertyDescription> propertiesRequiringInitializationHere = new List<PropertyDescription>();
+                if (!IsAbstract)
+                {
+                    var objectDescription = this;
+                    while (objectDescription is not null && (objectDescription == this || objectDescription.IsAbstract))
+                    {
+                        propertiesRequiringInitializationHere.AddRange(objectDescription.ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => x.NonNullableThatRequiresInitialization));
+                        objectDescription = objectDescription.BaseLazinatorObject;
+                    }
+                }
                 var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
                 string parametersForBaseClassString;
-                if (propertiesRequiringInitializationInBaseClass.Any())
-                    parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.PropertyNameForConstructorParameter)) + ", ";
+                if (propertiesToPassToBaseClass.Any())
+                    parametersForBaseClassString = String.Join(", ", propertiesToPassToBaseClass.Select(x => x.PropertyNameForConstructorParameter)) + ", ";
                 else
                     parametersForBaseClassString = "";
 
@@ -1844,12 +1859,12 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                 else if (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable)
                 {
                     string nonNullCheck = property.GetNonNullCheck(true);
-                    manualDescendantDirtinessChecks += $" || ({IIF(property.BackingAccessFieldIncluded, $"{property.BackingFieldAccessedString} && ")}({nonNullCheck} && ({property.PropertyName}{IIF(NullableModeEnabled, "!")}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{IIF(NullableModeEnabled, "!")}{property.NullableStructValueAccessor}.Descendant{tense})))";
+                    manualDescendantDirtinessChecks += $" || ({IIF(property.BackingAccessFieldIncluded, $"{property.BackingFieldAccessedString} && ")}({nonNullCheck} && ({property.PropertyName}{ExclamationMarkIfNullableModeEnabled}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{ExclamationMarkIfNullableModeEnabled}{property.NullableStructValueAccessor}.Descendant{tense})))";
                 }
                 else
                 {
                     string nonNullCheck = property.GetNonNullCheck(true);
-                    manualDescendantDirtinessChecks += $" || ({nonNullCheck} && ({property.PropertyName}.{tense} || {property.PropertyName}.Descendant{tense}))";
+                    manualDescendantDirtinessChecks += $" || ({nonNullCheck} && ({property.PropertyName}{ExclamationMarkIfNullableModeEnabled}.{tense} || {property.PropertyName}{ExclamationMarkIfNullableModeEnabled}.Descendant{tense}))";
                 }
             }
             // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.

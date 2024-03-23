@@ -132,7 +132,7 @@ namespace Lazinator.CodeDescription
                     GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
         internal string PossibleUnsetException => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}{NullableForgivenessIfNeeded}";
         internal string NullableForgivenessIfNeeded => $"{IIF(NullForgivenessInsteadOfPossibleUnsetException, "!")}";
-        internal string NullableForgivenessIfPossiblyNeeded => $"{IIF(NullableModeEnabled, "!")}";
+        internal string ExclamationMarkIfNullableModeEnabled => $"{IIF(NullableModeEnabled, "!")}";
         internal string PossibleUnsetExceptionWithForgivenessWithinNotNull => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}{IIF(NullableModeEnabled && !AddQuestionMarkInBackingFieldForNonNullable, "!")}";
         internal string DefaultInitializationIfPossible(string defaultType) => $"{IIF(!AddQuestionMarkInBackingFieldForNonNullable, $" = default{IIF(defaultType != null, $"({defaultType})")}")}";
         string elseThrowString = $@"
@@ -1791,11 +1791,11 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             else
             {
                 // for structs, we can't pass local struct variables in the lambda, so we have to copy them over. We'll assume we have to do this with open generics too.
-                string mainWriteString = $@"var serializedBytesCopy = LazinatorMemoryStorage;
-                            var byteIndexCopy = {BackingFieldByteIndex};
-                            var byteLengthCopy = {BackingFieldByteLength};
+                string mainWriteString = $@"var serializedBytesCopy{BackingFieldString} = LazinatorMemoryStorage;
+                            var byteIndexCopy{BackingFieldString} = {BackingFieldByteIndex};
+                            var byteLengthCopy{BackingFieldString} = {BackingFieldByteLength};
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
-                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, options, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceLastParametersString}), null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, options, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy{BackingFieldString}, byteIndexCopy{BackingFieldString}, byteLengthCopy{BackingFieldString}{ChildSliceLastParametersString}), null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}
                                 {lengthString}";
                 withInclusionConditional =
@@ -1826,7 +1826,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             string cloneAwaitWord = AsyncWithinAsync ? ContainingObjectDescription.MaybeAwaitWord : "";
             if (IsLazinator)
             {
-                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {cloneAwaitWord}{propertyAccess}{IIF(IsDefinitelyStruct && Nullable, ".Value")}.CloneLazinator{cloneAsyncWord}(includeChildrenMode, CloneBufferOptions.NoBuffer){NullableForgivenessIfPossiblyNeeded};{sb.GetNextLocationString()}";
+                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {cloneAwaitWord}{propertyAccess}{IIF(IsDefinitelyStruct && Nullable, ".Value")}.CloneLazinator{cloneAsyncWord}(includeChildrenMode, CloneBufferOptions.NoBuffer){ExclamationMarkIfNullableModeEnabled};{sb.GetNextLocationString()}";
                 if (!Nullable)
                     copyInstruction = nonNullStatement;
                 else
@@ -1838,10 +1838,10 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};{sb.GetNextLocationString()}";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
             {
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false){NullableForgivenessIfPossiblyNeeded};{sb.GetNextLocationString()}";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false){ExclamationMarkIfNullableModeEnabled};{sb.GetNextLocationString()}";
             }
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false){NullableForgivenessIfPossiblyNeeded};{sb.GetNextLocationString()}";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({propertyAccess}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false){ExclamationMarkIfNullableModeEnabled};{sb.GetNextLocationString()}";
             sb.AppendLine(new ConditionalCodeGenerator(WriteInclusionConditional, copyInstruction).ToString());
         }
 
@@ -2029,7 +2029,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                             {{
                                 if ({innerProperty.GetNonNullCheck(false, "itemToClone[itemIndex]")})
                                 {{
-                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) ((cloneOrChangeFunc(itemToClone[itemIndex]){NullableForgivenessIfPossiblyNeeded}));
+                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) ((cloneOrChangeFunc(itemToClone[itemIndex]){ExclamationMarkIfNullableModeEnabled}));
                                 }}
                                 continue;
                             }}
@@ -2168,7 +2168,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             string cloneString;
             if (IsLazinator)
             {
-                cloneString = $"(cloneOrChangeFunc({itemString}){NullableForgivenessIfPossiblyNeeded})";
+                cloneString = $"(cloneOrChangeFunc({itemString}){ExclamationMarkIfNullableModeEnabled})";
                 //if (IsLazinatorStruct)
                 //    cloneString = $"cloneOrChangeFunc({itemString}).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
                 //else
