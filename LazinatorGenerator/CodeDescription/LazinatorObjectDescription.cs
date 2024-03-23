@@ -1769,7 +1769,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             sb.AppendLocationStringIfEnabled("CONSTRUCTORS START");
 
             // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types), except in an abstract class.
-            bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
+            bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && IsDerived /* DEBUG && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator */;
             var allPropertiesRequiringInitialization = NonNullablePropertiesRequiringInitialization.ToList();
 
             string firstConstructor;
@@ -1777,7 +1777,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             if (allPropertiesRequiringInitialization.Any())
             {
                 // Of the properties requiring initialization, we include in the parameter string all of the ones that are inherited, rather than to be defined this level. Note that a property from abstract classes will be listed as to be defined this level.
-                var propertiesToPassToBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+                List<PropertyDescription> propertiesToPassToBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization && allPropertiesRequiringInitialization.Contains(x)).ToList();
                 // But which should we then initialize in the body?
                 // If this is an abstract class, then none. 
                 // We will then want to initialize once this property becomes concrete. 
@@ -1792,7 +1792,17 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                         objectDescription = objectDescription.BaseLazinatorObject;
                     }
                 }
-                var parametersString = IsAbstract ? "" : String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter)) + ", ";
+                string parametersString;
+
+                if (IsAbstract)
+                {
+                    if (propertiesToPassToBaseClass.Any())
+                        parametersString = String.Join(", ", propertiesToPassToBaseClass.Select(x => x.PropertyNameWithTypeNameForConstructorParameter)) + ", ";
+                    else
+                        parametersString = "";
+                }
+                else
+                    parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter)) + ", ";
                 string parametersForBaseClassString;
                 if (propertiesToPassToBaseClass.Any())
                     parametersForBaseClassString = String.Join(", ", propertiesToPassToBaseClass.Select(x => x.PropertyNameForConstructorParameter)) + ", ";
