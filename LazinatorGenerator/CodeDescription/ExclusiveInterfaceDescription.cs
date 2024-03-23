@@ -115,7 +115,7 @@ namespace Lazinator.CodeDescription
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
                 .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
                 .ThenBy(x => x.description.RelativeOrder)
-                .ThenBy(x => x.description.PropertyName).ToList();
+                .ThenBy(x => x.description.PropertyName).ToList(); /* note that ordering is alphabetical across levels, except that this level is last -- alternative would be to do closest levels first and then stick with order within level */
             var last = orderedPropertiesWithLevel.LastOrDefault();
             if (last != null)
                 last.description.IsLast = true;

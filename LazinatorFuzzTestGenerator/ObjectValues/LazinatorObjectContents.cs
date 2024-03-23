@@ -127,7 +127,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     }
                     if (includePropertyNameAndEquals) 
                         sb.Append($"{property.propertyName} = ");
-                    sb.Append($"{value?.CodeToGetValue ?? "null"}");
+                    sb.Append($"/* {property.propertyName} */ {value?.CodeToGetValue ?? "null"}");
                 }
                 i++;
             }

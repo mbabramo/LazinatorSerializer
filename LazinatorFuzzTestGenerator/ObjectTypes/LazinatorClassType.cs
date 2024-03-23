@@ -28,27 +28,18 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 ObjectDepth = 1;
             else
                 ObjectDepth = InheritsFrom.ObjectDepth + 1;
-            LazinatorClassType? c = this;
-
-            var classes = new Stack<LazinatorClassType>(); 
+            // the order of properties is defined by ExclusiveInterfaceDescription.
+            // all lower-level properties are ordered by name (regardless of level), followed by the top level's properties (ordered by name).
+            List<LazinatorObjectProperty> thisLevelProperties = Properties.OrderBy(x => x.propertyName).ToList();
+            List<LazinatorObjectProperty> lowerLevelProperties = new List<LazinatorObjectProperty>();
+            LazinatorClassType? c = this.InheritsFrom;
             while (c != null)
             {
-                classes.Push(c);
+                lowerLevelProperties.AddRange(c.Properties);
                 c = c.InheritsFrom;
             }
-
-            while (classes.Count > 0)
-            {
-                c = classes.Pop();
-                if (c.Properties != null)
-                {
-                    foreach (var property in c.Properties.OrderBy(x => x.propertyName))
-                    {
-                        if (!PropertiesIncludingInherited.Any(x => x.propertyName == property.propertyName))
-                            PropertiesIncludingInherited.Add(property);
-                    }
-                }
-            }
+            _PropertiesIncludingInherited = lowerLevelProperties.OrderBy(x => x.propertyName).ToList();
+            _PropertiesIncludingInherited.AddRange(thisLevelProperties);
         }
 
 
