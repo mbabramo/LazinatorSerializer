@@ -187,19 +187,19 @@ namespace LazinatorGenerator.CodeDescription
                     .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
                     .ToDictionary(x => (INamedTypeSymbol)x.Key, x => x.Value, new NamedTypeSymbolEqualityComparer());
             }
-            namedTypeSymbol.GetPropertiesForType(includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
-            foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
-                yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
-            foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
+            namedTypeSymbol.GetPropertiesForType(includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<(IPropertySymbol property, int levelsFromTop)> propertiesThisLevel, out ImmutableList<(IPropertySymbol property, int levelsFromTop)> propertiesLowerLevels);
+            foreach (var p in propertiesThisLevel.OrderBy(x => x.property.Name).Where(x => !x.property.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
+                yield return new PropertyWithDefinitionInfo(p.property, PropertyWithDefinitionInfo.RelativeLevel.IsDefinedThisLevel, 0);
+            foreach (var p in propertiesLowerLevels.OrderBy(x => x.property.Name).Where(x => !x.property.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
             {
-                if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Name == p.Name)))
+                if (lowerLevelInterfaces != null && lowerLevelInterfaces.Any(x => x.Value.Any(y => y.Name == p.property.Name)))
                     yield return
-                        new PropertyWithDefinitionInfo(p,
-                            PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface);
+                        new PropertyWithDefinitionInfo(p.property,
+                            PropertyWithDefinitionInfo.RelativeLevel.IsDefinedInLowerLevelInterface, p.levelsFromTop);
                 else
                     yield return
-                        new PropertyWithDefinitionInfo(p,
-                            PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface);
+                        new PropertyWithDefinitionInfo(p.property,
+                            PropertyWithDefinitionInfo.RelativeLevel.IsDefinedLowerLevelButNotInInterface, p.levelsFromTop);
             }
         }
 

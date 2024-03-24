@@ -13,8 +13,8 @@ namespace LazinatorFuzzTestGenerator
         static void Main(string[] args)
         {
             bool failureHasOccurred = false;
-            Parallel.For(0, 5000, i =>
-            //for (int i = 0; i < 5000; i++)
+            //Parallel.For(0, 5000, i =>
+            for (int i = 2198; i < 5000; i++)
             {
                 if (!failureHasOccurred)
                 {
@@ -33,7 +33,7 @@ namespace LazinatorFuzzTestGenerator
 
                 }
             }
-            );
+            //);
 
         }
 

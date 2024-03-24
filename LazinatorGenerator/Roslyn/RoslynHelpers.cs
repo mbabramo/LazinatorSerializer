@@ -302,23 +302,27 @@ namespace LazinatorCodeGen.Roslyn
             return properties;
         }
 
-        public static ImmutableList<IPropertySymbol> GetPropertySymbolsBaseLevels(this INamedTypeSymbol namedTypeSymbol, bool includeOnlyLowerLevelPropertiesFromInterfaces)
+        public static ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> GetPropertySymbolsBaseLevels(this INamedTypeSymbol namedTypeSymbol, bool includeOnlyLowerLevelPropertiesFromInterfaces)
         {
+            HashSet<IPropertySymbol> allInterfacesSymbols = new HashSet<IPropertySymbol>(SymbolEqualityComparer.Default);
             if (includeOnlyLowerLevelPropertiesFromInterfaces)
-                return namedTypeSymbol.AllInterfaces.SelectMany(x => x.GetPropertySymbols()).ToImmutableList();
+                foreach (var symbol in namedTypeSymbol.AllInterfaces.SelectMany(x => x.GetPropertySymbols()))
+                    allInterfacesSymbols.Add(symbol);
             var baseType = namedTypeSymbol.BaseType;
-            ImmutableList<IPropertySymbol> result = ImmutableList.Create<IPropertySymbol>();
+            ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> result = ImmutableList.Create<(IPropertySymbol propertySymbol, int levelsFromTop)>();
+            int levelsFromTop = 0;
             while (baseType != null && baseType.Name != "Object")
             {
-                result = result.AddRange(baseType.GetPropertySymbols());
+                result = result.AddRange(baseType.GetPropertySymbols().Where(x => !includeOnlyLowerLevelPropertiesFromInterfaces || allInterfacesSymbols.Contains(x)).Select(x => (x, levelsFromTop)));
                 baseType = baseType.BaseType;
+                levelsFromTop++;
             }
             return result;
         }
 
-        public static void GetPropertiesForType(this INamedTypeSymbol namedSymbolType, bool includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels)
+        public static void GetPropertiesForType(this INamedTypeSymbol namedSymbolType, bool includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> propertiesThisLevel, out ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> propertiesLowerLevels)
         {
-            propertiesThisLevel = namedSymbolType.GetPropertySymbols();
+            propertiesThisLevel = ImmutableList.CreateRange<(IPropertySymbol propertySymbol, int levelsFromTop)>(namedSymbolType.GetPropertySymbols().Select(x => (x, 0)));
             propertiesLowerLevels = namedSymbolType.GetPropertySymbolsBaseLevels(includeOnlyLowerLevelPropertiesFromInterfaces);
         }
 

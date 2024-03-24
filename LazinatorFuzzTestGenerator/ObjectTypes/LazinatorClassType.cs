@@ -40,6 +40,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             }
             _PropertiesIncludingInherited = lowerLevelProperties.OrderBy(x => x.propertyName).ToList();
             _PropertiesIncludingInherited.AddRange(thisLevelProperties);
+            _PropertiesIncludingInherited = _PropertiesIncludingInherited.OrderBy(x => x.propertyName).ToList(); // just make all of them alphabetical (consistent with ExclusiveInterfaceDescription)
         }
 
 

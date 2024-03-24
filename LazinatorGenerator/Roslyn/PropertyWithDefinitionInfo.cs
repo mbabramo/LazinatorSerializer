@@ -4,7 +4,7 @@ namespace LazinatorGenerator.Roslyn
 {
     public class PropertyWithDefinitionInfo
     {
-        public enum Level
+        public enum RelativeLevel
         {
             IsDefinedThisLevel,
             IsDefinedLowerLevelButNotInInterface,
@@ -12,19 +12,21 @@ namespace LazinatorGenerator.Roslyn
         }
 
         public IPropertySymbol Property;
-        public Level LevelInfo;
+        public RelativeLevel WhereDefined;
+        public int LevelsFromTop;
         public string PropertyAccessibility;
         public string DerivationKeyword;
 
         public override string ToString()
         {
-            return $"{DerivationKeyword}{Property} ({LevelInfo})";
+            return $"{DerivationKeyword}{Property} ({WhereDefined})";
         }
 
-        public PropertyWithDefinitionInfo(IPropertySymbol property, Level levelInfo)
+        public PropertyWithDefinitionInfo(IPropertySymbol property, RelativeLevel levelInfo, int levelsFromTop)
         {
             this.Property = property;
-            this.LevelInfo = levelInfo;
+            this.WhereDefined = levelInfo;
+            this.LevelsFromTop = levelsFromTop;
         }
 
         public void SpecifyDerivationKeyword(string derivationKeyword)
@@ -37,13 +39,13 @@ namespace LazinatorGenerator.Roslyn
             PropertyWithDefinitionInfo other = (PropertyWithDefinitionInfo) obj;
             if (other == null)
                 return false;
-            return SymbolEqualityComparer.Default.Equals(Property, other.Property) && LevelInfo == other.LevelInfo &&
+            return SymbolEqualityComparer.Default.Equals(Property, other.Property) && WhereDefined == other.WhereDefined && LevelsFromTop == other.LevelsFromTop &&
                    DerivationKeyword == other.DerivationKeyword;
         }
 
         public override int GetHashCode()
         {
-            return (Property, LevelInfo, DerivationKeyword).GetHashCode();
+            return (Property, WhereDefined, DerivationKeyword, LevelsFromTop).GetHashCode();
         }
     }
 }
