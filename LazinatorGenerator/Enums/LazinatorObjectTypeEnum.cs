@@ -2,7 +2,7 @@
 
 namespace Lazinator.CodeDescription
 {
-    public enum LazinatorObjectType
+    public enum LazinatorObjectTypeEnum
     {
         [StringValue("class")]
         Class,

@@ -1,7 +1,10 @@
 ﻿using LazinatorFuzzTestGenerator.Interfaces;
 using LazinatorFuzzTestGenerator.ObjectTypes;
+using LazinatorFuzzTestGenerator.Utility;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +15,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
     {
         public ISupportedType TheType { get; init; }
         public ILazinatorObjectType TheLazinatorObjectType => (ILazinatorObjectType)TheType;
-        private List<IObjectContents?>? PropertyValues { get; set; }
+        public List<IObjectContents?>? PropertyValues { get; set; }
 
         public bool IsNull { get; set; }
 
@@ -44,31 +47,13 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         }
 
 
-        public string GetAndTestSequenceOfMutations(Random r, int numMutations, bool checkOnlyAfterAll)
-        {
-            Initialize(r);
-            StringBuilder sb = new StringBuilder();
-            string varName = "v1";
-            sb.AppendLine($"{TheLazinatorObjectType.Name} {varName} = {CodeToGetValue};");
-            if (!checkOnlyAfterAll)
-                sb.AppendLine($"Debug.Assert({CodeToTestValue(varName)});");
-            for (int i = 0; i < numMutations; i++)
-            {
-                sb.AppendLine(MutateAndReturnCodeForMutation(r, varName));
-                if (i == numMutations - 1 || !checkOnlyAfterAll)
-                {
-                    sb.AppendLine($"Debug.Assert({CodeToTestValue(varName)});");
-                }
-            }
-            return sb.ToString();
-        }
 
-        public string MutateAndReturnCodeForMutation(Random r, string containerName)
+        public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName)
         {
             if (r.Next(3) == 0 || PropertyValues == null)
             {
                 Initialize(r);
-                return $@"{containerName} = {CodeToGetValue};";
+                return ($@"{varName} = {CodeToGetValue};", null);
             }
             else
             {
@@ -80,9 +65,9 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     var originalValue = PropertyValues[propertyToMutate];
                     var value = property.supportedType.GetRandomObjectContents(r, property.nullable ? 4 : null);
                     PropertyValues[propertyToMutate] = value;
-                    return $@"{containerName}.{property.propertyName} = {value.CodeToGetValue};";
+                    return ($@"{varName}.{property.propertyName} = {value.CodeToGetValue};", null);
                 }
-                return "";
+                return ("", null);
                 // DEBUG -- we'd like to be able to change just one field of nested objects. With structs, that will be tricky, because we have to back out of the innermost property using temporary variables. (Fields could be set directly.)
                 // DEBUG2 -- with classes, we'd like to be able to copy from one object hierarchy to another. 
                 // DEBUG3 -- we actually need to use CloneLazinatorTyped etc. to make sure that Lazinating works.

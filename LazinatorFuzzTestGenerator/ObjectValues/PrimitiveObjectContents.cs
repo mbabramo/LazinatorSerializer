@@ -1,6 +1,7 @@
 ﻿using LazinatorFuzzTestGenerator.Interfaces;
 using LazinatorFuzzTestGenerator.ObjectTypes;
 using System;
+using System.Diagnostics;
 
 namespace LazinatorFuzzTestGenerator.ObjectValues
 {
@@ -85,11 +86,10 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             Value = GetRandomNonNullableValue(r);
         }
 
-        public string MutateAndReturnCodeForMutation(Random r, string containerName)
+        public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName)
         {
             Initialize(r);
-            return $@"{containerName} = {CodeToGetValue};
-";
+            return ($@"{varName} = {CodeToGetValue};", null);
         }
 
         private object GetRandomNonNullableValue(Random r)

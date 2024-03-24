@@ -25,8 +25,8 @@ namespace Lazinator.CodeDescription
         private LazinatorObjectDescription ContainingObjectDescription { get; set; }
         public LazinatorImplementingTypeInfo LazinatorCompilation => ContainingObjectDescription.ImplementingTypeInfo;
         private Compilation Compilation => LazinatorCompilation.Compilation;
-        private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct;
-        private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct;
+        private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Class && !ContainingObjectDescription.GeneratingRefStruct;
+        private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Struct || ContainingObjectDescription.GeneratingRefStruct;
         private PropertyDescription ContainingPropertyDescription { get; set; }
         public PropertyDescription OutmostPropertyDescription => ContainingPropertyDescription?.OutmostPropertyDescription ?? this;
         private int UniqueIDForLazinatorType { get; set; }
@@ -1062,7 +1062,7 @@ namespace Lazinator.CodeDescription
                 throw new LazinatorCodeGenException($"Property {PropertyName} is in abstract class {ContainingObjectDescription.FullyQualifiedObjectName} and so cannot have a private setter.");
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"
-                    {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString}{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct && !ContainingObjectDescription.GeneratingRefStruct, " = false")};")}
+                    {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString}{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectTypeEnum.Struct && !ContainingObjectDescription.GeneratingRefStruct, " = false")};")}
                 {IIF(IncludeRefProperty, $@"{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{abstractDerivationKeyword}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get;
@@ -1078,7 +1078,7 @@ namespace Lazinator.CodeDescription
 
         private string GetModifiedDerivationKeyword()
         {
-            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct ||  ContainingObjectDescription.GeneratingRefStruct)
+            if (ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Struct ||  ContainingObjectDescription.GeneratingRefStruct)
                 return "";
             if (ContainingObjectDescription.IsSealed)
             {
@@ -1309,7 +1309,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
-                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Class && !ContainingObjectDescription.GeneratingRefStruct)
                     propertyTypeDependentSet = $@"
                         if (value != null && value.IsStruct){sb.GetNextLocationString()}
                         {{{IIF(ContainerIsClass, $@"
@@ -1354,7 +1354,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
         private string GetAssignmentString()
         {
             string assignment;
-            string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct, ", this");
+            string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Class && !ContainingObjectDescription.GeneratingRefStruct, ", this");
             if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable)
             {
                 if (IsInterface)
@@ -1378,7 +1378,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             }
             else
             {
-                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
+                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Class && !ContainingObjectDescription.GeneratingRefStruct; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
                 assignment = $"{BackingFieldString} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
             }
             if (CodeOnDeserialized != "")
@@ -1433,7 +1433,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                             {BackingFieldString} = default;
                         }}
                         else ";
-            string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct ? "" : $@"
+            string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Struct || ContainingObjectDescription.GeneratingRefStruct ? "" : $@"
                             {{
                                 LazinatorParents = new LazinatorParentsCollection(this, null){sb.GetNextLocationString()}
                             }}";
@@ -1696,7 +1696,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             if (PlaceholderMemoryWriteMethod == null)
             {
                 sb.Append($"{EnsureDeserialized()}");
-                if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
+                if (ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Class && !ContainingObjectDescription.GeneratingRefStruct)
                 {
                     string isBelievedDirtyString = ConditionsCodeGenerator.OrCombine(
                         TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"{BackingFieldAccessedString}",
@@ -1779,7 +1779,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             else
                 lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer);", originalString) : originalString;
             string callWriteChild = AsyncWithinAsync ? ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteChildAsync(writer,", $"WriteChild(ref writer, ref") : ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteNonAsyncChildAsync(writer,", $"WriteChild(ref writer, ref");
-            if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
+            if (ContainingObjectDescription.ObjectType == LazinatorObjectTypeEnum.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
                             ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, options, {BackingFieldAccessedString}, {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
@@ -1896,7 +1896,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
         private void AppendReadOnlySpanOrMemory_ConvertToBytes(CodeStringBuilder sb, bool isSpan)
         {
             // this method is used within classes, but not within structs
-            if (ContainingObjectDescription.ObjectType != LazinatorObjectType.Class || ContainingObjectDescription.GeneratingRefStruct)
+            if (ContainingObjectDescription.ObjectType != LazinatorObjectTypeEnum.Class || ContainingObjectDescription.GeneratingRefStruct)
                 return;
 
             string innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;

@@ -244,8 +244,8 @@ namespace FuzzTests.{NamespaceString}
             if (InstantiableObjectTypes.Any())
             {
                 var objectType = InstantiableObjectTypes.ElementAt(r.Next(InstantiableObjectTypes.Count()));
-                var objectContents = (LazinatorObjectContents) objectType.GetRandomObjectContents(r, 5);
-                string s = objectContents.GetAndTestSequenceOfMutations(r, numMutations, checkOnlyAfterAll);
+                LazinatorMutator mutator = new LazinatorMutator(r, objectType);
+                string s = mutator.GetAndTestSequenceOfMutations(numMutations, checkOnlyAfterAll);
                 return s;
             }
             return "";
