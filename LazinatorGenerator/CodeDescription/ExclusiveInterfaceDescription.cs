@@ -130,6 +130,11 @@ namespace Lazinator.CodeDescription
             PropertiesToDefineThisLevel = new List<PropertyDescription>();
             PropertiesInherited = new List<PropertyDescription>();
 
+            if (Container.NameIncludingGenerics.Contains("Bool"))
+            {
+                var DEBUG = 0;
+            }
+
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
                 if (orderedProperty.propertyWithLevel.WhereDefined ==

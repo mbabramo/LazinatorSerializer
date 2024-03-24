@@ -130,6 +130,10 @@ namespace LazinatorGenerator.CodeDescription
 
         private void RecordPropertiesForInterface(INamedTypeSymbol @interface)
         {
+            if (@interface.ToString().Contains("Bool"))
+            {
+                var DEBUG = 0;
+            }
             if (ILazinatorProperties == null)
                 RecordILazinatorProperties();
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
