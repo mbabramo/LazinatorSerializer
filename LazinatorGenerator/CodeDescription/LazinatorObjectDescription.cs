@@ -1780,17 +1780,18 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             sb.AppendLocationStringIfEnabled("CONSTRUCTORS START");
 
             // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types), including those that are inherited, regardless of whether the inherited parameters have been initialized.
-            // If it inherits from a base type, then it must pass back as parameters the subset of these that were not introduced with this class, whether or not the prior class is abstract. Note that where it is abstract, some of these parameters will be ignored by the abstract class, but it would require extra work for us to identify those. 
+            // If it inherits from a base type, then it must pass back as parameters the subset of these that were not introduced with this class, whether or not the prior class is abstract. 
+            // Exception: If the abstract class does not inherit from anything, then we do not pass any parameters to it. There will still be some other parameters that we could filter out with abstract classes that inherit from other classes, but that would require more work. 
             // All of these will be in alphabetical order.
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && IsDerived;
-            var allPropertiesRequiringInitialization = NonNullablePropertiesRequiringInitialization.ToList();
+            List<PropertyDescription> allPropertiesRequiringInitialization = (IsAbstract && !inheritFromBaseType) ? new List<PropertyDescription>() : NonNullablePropertiesRequiringInitialization.ToList();
 
             string firstConstructor;
             string lazinateInSecondConstructor = "";
             if (allPropertiesRequiringInitialization.Any() || IsAbstract)
             {
                 List<PropertyDescription> propertiesRequiringInitializationInBaseType = BaseLazinatorObject?.NonNullablePropertiesRequiringInitialization.ToList();
-                List<PropertyDescription> propertiesToPassToBaseClass = !inheritFromBaseType ? new List<PropertyDescription>() : allPropertiesRequiringInitialization.Where(x => x.NonNullableThatRequiresInitialization && propertiesRequiringInitializationInBaseType.Any(y => y.PropertyName == x.PropertyName)).ToList(); // i.e., it requires initialization and was not introduced in this class
+                List<PropertyDescription> propertiesToPassToBaseClass = !inheritFromBaseType || (BaseLazinatorObject.IsAbstract && !BaseLazinatorObject.IsDerived) ? new List<PropertyDescription>() : allPropertiesRequiringInitialization.Where(x => x.NonNullableThatRequiresInitialization && propertiesRequiringInitializationInBaseType.Any(y => y.PropertyName == x.PropertyName)).ToList(); // i.e., it requires initialization and was not introduced in this class
                 // But which should we then initialize in the body?
                 // If this is an abstract class, then none. 
                 // We will then want to initialize once this property becomes concrete. 
