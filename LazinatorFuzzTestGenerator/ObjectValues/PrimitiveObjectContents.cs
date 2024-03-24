@@ -86,7 +86,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             Value = GetRandomNonNullableValue(r);
         }
 
-        public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName)
+        public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName, bool canBeNull)
         {
             Initialize(r);
             return ($@"{varName} = {CodeToGetValue};", null);

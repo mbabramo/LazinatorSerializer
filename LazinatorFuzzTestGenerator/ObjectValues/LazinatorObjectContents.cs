@@ -48,21 +48,21 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 
 
 
-        public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName)
+        public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName, bool canBeNull)
         {
-            if (r.Next(3) == 0 || PropertyValues == null)
+            if (canBeNull && (r.Next(3) == 0 || PropertyValues == null))
             {
                 Initialize(r);
                 return ($@"{varName} = {CodeToGetValue};", null);
             }
             else
             {
-                int numProperties = PropertyValues.Count;
+                int numProperties = PropertyValues?.Count ?? 0;
                 if (numProperties > 0)
                 {
                     int propertyToMutate = r.Next(numProperties);
                     var property = TheLazinatorObjectType.PropertiesIncludingInherited[propertyToMutate];
-                    var originalValue = PropertyValues[propertyToMutate];
+                    var originalValue = PropertyValues![propertyToMutate];
                     var value = property.supportedType.GetRandomObjectContents(r, property.nullable ? 4 : null);
                     PropertyValues[propertyToMutate] = value;
                     return ($@"{varName}.{property.propertyName} = {value.CodeToGetValue};", null);

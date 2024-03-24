@@ -23,7 +23,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         public LazinatorMutator(Random r, LazinatorObjectType objectType)
         {
             this.R = r;
-            InitialObject = (LazinatorObjectContents)objectType.GetRandomObjectContents(r, 5);
+            InitialObject = (LazinatorObjectContents)objectType.GetRandomObjectContents(r, null /* main object can't be nullable, though its properties can be */);
         }
 
         public string GetAndTestSequenceOfMutations(int numMutations, bool checkOnlyAfterAll)
@@ -38,7 +38,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             {
                 int numCurrentObjects = objectNamesAndContents.Count;
                 KeyValuePair<string, LazinatorObjectContents> randomObject = objectNamesAndContents.ElementAt(R.Next(numCurrentObjects));
-                (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) = randomObject.Value.MutateAndReturnCodeForMutation(R, randomObject.Key);
+                (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) = randomObject.Value.MutateAndReturnCodeForMutation(R, randomObject.Key, canBeNull: false);
                 sb.AppendLine();
                 if (i == numMutations - 1 || !checkOnlyAfterAll)
                 {
