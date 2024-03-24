@@ -1779,16 +1779,18 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
         {
             sb.AppendLocationStringIfEnabled("CONSTRUCTORS START");
 
-            // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types), except in an abstract class.
-            bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && IsDerived /* DEBUG && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator */;
+            // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types), including those that are inherited, regardless of whether the inherited parameters have been initialized.
+            // If it inherits from a base type, then it must pass back as parameters the subset of these that were not introduced with this class, whether or not the prior class is abstract. Note that where it is abstract, some of these parameters will be ignored by the abstract class, but it would require extra work for us to identify those. 
+            // All of these will be in alphabetical order.
+            bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && IsDerived;
             var allPropertiesRequiringInitialization = NonNullablePropertiesRequiringInitialization.ToList();
 
             string firstConstructor;
             string lazinateInSecondConstructor = "";
             if (allPropertiesRequiringInitialization.Any() || IsAbstract)
             {
-                // Of the properties requiring initialization, we include in the parameter string all of the ones that are inherited, rather than to be defined this level. Note that a property from abstract classes will be listed as to be defined this level. However, if all lower classes are abstract, then we will not pass any properties to the base class.
-                List<PropertyDescription> propertiesToPassToBaseClass = AllInheritedClassesAreAbstract ? new List<PropertyDescription>() : ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization && allPropertiesRequiringInitialization.Contains(x)).ToList();
+                List<PropertyDescription> propertiesRequiringInitializationInBaseType = BaseLazinatorObject?.NonNullablePropertiesRequiringInitialization.ToList();
+                List<PropertyDescription> propertiesToPassToBaseClass = !inheritFromBaseType ? new List<PropertyDescription>() : allPropertiesRequiringInitialization.Where(x => x.NonNullableThatRequiresInitialization && propertiesRequiringInitializationInBaseType.Any(y => y.PropertyName == x.PropertyName)).ToList(); // i.e., it requires initialization and was not introduced in this class
                 // But which should we then initialize in the body?
                 // If this is an abstract class, then none. 
                 // We will then want to initialize once this property becomes concrete. 
@@ -1803,19 +1805,13 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                         objectDescription = objectDescription.BaseLazinatorObject;
                     }
                 }
+
                 string parametersString;
-
-                // DEBUG // if we have an abstract class at the bottom of the hierarchy, then it has no properties to pass to the base class. 
-
-                if (IsAbstract)
-                {
-                    if (propertiesToPassToBaseClass.Any())
-                        parametersString = String.Join(", ", propertiesToPassToBaseClass.Select(x => x.PropertyNameWithTypeNameForConstructorParameter)) + ", ";
-                    else
-                        parametersString = "";
-                }
-                else
+                if (allPropertiesRequiringInitialization.Any())
                     parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter)) + ", ";
+                else
+                    parametersString = "";
+
                 string parametersForBaseClassString;
                 if (propertiesToPassToBaseClass.Any())
                     parametersForBaseClassString = String.Join(", ", propertiesToPassToBaseClass.Select(x => x.PropertyNameForConstructorParameter)) + ", ";

@@ -14,7 +14,7 @@ namespace LazinatorFuzzTestGenerator
         {
             bool failureHasOccurred = false;
             //Parallel.For(0, 5000, i =>
-            for (int i = 2198; i < 5000; i++)
+            for (int i = 442 /* DEBUG */; i < 5000; i++)
             {
                 if (!failureHasOccurred)
                 {
