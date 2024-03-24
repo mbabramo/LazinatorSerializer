@@ -88,7 +88,7 @@ namespace LazinatorCodeGen.Roslyn
 
             return RegularizeTypeName(t.Name);
         }
-        
+
         public static string EncodableTypeName(ITypeSymbol typeSymbol)
         {
             string name = typeSymbol.Name;
@@ -117,7 +117,7 @@ namespace LazinatorCodeGen.Roslyn
 
             return regularized;
         }
-        
+
         private static readonly Dictionary<string, string> TypeRegularization = new Dictionary<string, string>()
         {
             { "Boolean", "bool" },
@@ -210,7 +210,7 @@ namespace LazinatorCodeGen.Roslyn
             return index == -1 ? name : name.Substring(0, index);
         }
 
-        public static string GetFullMetadataName(this ISymbol s)  
+        public static string GetFullMetadataName(this ISymbol s)
         {
             if (s == null || IsRootNamespace(s))
             {
@@ -302,27 +302,23 @@ namespace LazinatorCodeGen.Roslyn
             return properties;
         }
 
-        public static ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> GetPropertySymbolsBaseLevels(this INamedTypeSymbol namedTypeSymbol, bool includeOnlyLowerLevelPropertiesFromInterfaces)
+        public static ImmutableList<IPropertySymbol> GetPropertySymbolsBaseLevels(this INamedTypeSymbol namedTypeSymbol, bool includeOnlyLowerLevelPropertiesFromInterfaces)
         {
-            HashSet<IPropertySymbol> allInterfacesSymbols = new HashSet<IPropertySymbol>(SymbolEqualityComparer.Default);
             if (includeOnlyLowerLevelPropertiesFromInterfaces)
-                foreach (var symbol in namedTypeSymbol.AllInterfaces.SelectMany(x => x.GetPropertySymbols()))
-                    allInterfacesSymbols.Add(symbol);
+                return namedTypeSymbol.AllInterfaces.SelectMany(x => x.GetPropertySymbols()).ToImmutableList();
             var baseType = namedTypeSymbol.BaseType;
-            ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> result = ImmutableList.Create<(IPropertySymbol propertySymbol, int levelsFromTop)>();
-            int levelsFromTop = 0;
+            ImmutableList<IPropertySymbol> result = ImmutableList.Create<IPropertySymbol>();
             while (baseType != null && baseType.Name != "Object")
             {
-                result = result.AddRange(baseType.GetPropertySymbols().Where(x => !includeOnlyLowerLevelPropertiesFromInterfaces || allInterfacesSymbols.Contains(x)).Select(x => (x, levelsFromTop)));
+                result = result.AddRange(baseType.GetPropertySymbols());
                 baseType = baseType.BaseType;
-                levelsFromTop++;
             }
             return result;
         }
 
-        public static void GetPropertiesForType(this INamedTypeSymbol namedSymbolType, bool includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> propertiesThisLevel, out ImmutableList<(IPropertySymbol propertySymbol, int levelsFromTop)> propertiesLowerLevels)
+        public static void GetPropertiesForType(this INamedTypeSymbol namedSymbolType, bool includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels)
         {
-            propertiesThisLevel = ImmutableList.CreateRange<(IPropertySymbol propertySymbol, int levelsFromTop)>(namedSymbolType.GetPropertySymbols().Select(x => (x, 0)));
+            propertiesThisLevel = namedSymbolType.GetPropertySymbols();
             propertiesLowerLevels = namedSymbolType.GetPropertySymbolsBaseLevels(includeOnlyLowerLevelPropertiesFromInterfaces);
         }
 
@@ -353,7 +349,7 @@ namespace LazinatorCodeGen.Roslyn
                 foreach (T t in symbol.BaseType.GetAttributesIncludingBase<T>())
                     yield return t;
         }
-        
+
         public static bool HasAttributeOfType<T>(this ISymbol symbol) where T : Attribute
         {
             return GetKnownAttributes<T>(symbol).Any();
@@ -460,7 +456,7 @@ namespace LazinatorCodeGen.Roslyn
             var correspondingInterface = allInterfaces.Single();
             return correspondingInterface;
         }
-        
+
         public static bool TypeDeclarationIncludesMethod(this TypeDeclarationSyntax typeDeclaration, string methodName)
         {
             HashSet<MethodDeclarationSyntax> methodDeclarations = GetMethodDeclarations(typeDeclaration);
@@ -474,7 +470,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public static bool TypeDeclarationIncludesAttribute(this TypeDeclarationSyntax typeDeclaration, string attributeName)
         {
-            return typeDeclaration.AttributeLists.Any(y => y.Attributes.Any(z => ((string) (z.Name as IdentifierNameSyntax)?.Identifier.Value) == attributeName));
+            return typeDeclaration.AttributeLists.Any(y => y.Attributes.Any(z => ((string)(z.Name as IdentifierNameSyntax)?.Identifier.Value) == attributeName));
         }
 
         public static HashSet<MethodDeclarationSyntax> GetMethodDeclarations(this TypeDeclarationSyntax typeDeclaration)

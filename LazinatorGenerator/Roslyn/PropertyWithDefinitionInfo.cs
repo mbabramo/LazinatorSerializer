@@ -4,7 +4,7 @@ namespace LazinatorGenerator.Roslyn
 {
     public class PropertyWithDefinitionInfo
     {
-        public enum RelativeLevel
+        public enum Level
         {
             IsDefinedThisLevel,
             IsDefinedLowerLevelButNotInInterface,
@@ -12,21 +12,19 @@ namespace LazinatorGenerator.Roslyn
         }
 
         public IPropertySymbol Property;
-        public RelativeLevel WhereDefined;
-        public int LevelsFromTop;
+        public Level LevelInfo;
         public string PropertyAccessibility;
         public string DerivationKeyword;
 
         public override string ToString()
         {
-            return $"{DerivationKeyword}{Property} ({WhereDefined})";
+            return $"{DerivationKeyword}{Property} ({LevelInfo})";
         }
 
-        public PropertyWithDefinitionInfo(IPropertySymbol property, RelativeLevel levelInfo, int levelsFromTop)
+        public PropertyWithDefinitionInfo(IPropertySymbol property, Level levelInfo)
         {
             this.Property = property;
-            this.WhereDefined = levelInfo;
-            this.LevelsFromTop = levelsFromTop;
+            this.LevelInfo = levelInfo;
         }
 
         public void SpecifyDerivationKeyword(string derivationKeyword)
@@ -36,16 +34,16 @@ namespace LazinatorGenerator.Roslyn
 
         public override bool Equals(object obj)
         {
-            PropertyWithDefinitionInfo other = (PropertyWithDefinitionInfo) obj;
+            PropertyWithDefinitionInfo other = (PropertyWithDefinitionInfo)obj;
             if (other == null)
                 return false;
-            return SymbolEqualityComparer.Default.Equals(Property, other.Property) && WhereDefined == other.WhereDefined && LevelsFromTop == other.LevelsFromTop &&
+            return SymbolEqualityComparer.Default.Equals(Property, other.Property) && LevelInfo == other.LevelInfo &&
                    DerivationKeyword == other.DerivationKeyword;
         }
 
         public override int GetHashCode()
         {
-            return (Property, WhereDefined, DerivationKeyword, LevelsFromTop).GetHashCode();
+            return (Property, LevelInfo, DerivationKeyword).GetHashCode();
         }
     }
 }

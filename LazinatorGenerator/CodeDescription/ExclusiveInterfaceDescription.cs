@@ -82,12 +82,10 @@ namespace Lazinator.CodeDescription
             foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol))
             {
                 if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
-                    propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.RelativeLevel.IsDefinedThisLevel, 0) { PropertyAccessibility = unofficialProperty.PropertyAccessibility });
+                    propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) { PropertyAccessibility = unofficialProperty.PropertyAccessibility });
             }
-            int levelFromTop = 0;
             foreach (var baseType in Container.GetBaseLazinatorObjects())
             {
-                levelFromTop++;
                 List<IPropertySymbol> additionalProperties;
                 bool baseTypeIsIndexed = Container.ImplementingTypeInfo.TypeToExclusiveInterface.ContainsKey(LazinatorImplementingTypeInfo.TypeSymbolToString(baseType.ILazinatorTypeSymbol));
                 if (baseTypeIsIndexed)
@@ -102,22 +100,22 @@ namespace Lazinator.CodeDescription
                 foreach (var baseProperty in additionalProperties)
                 {
                     if (!propertiesWithLevel.Any(x => x.Property.MetadataName == baseProperty.MetadataName))
-                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(baseProperty, PropertyWithDefinitionInfo.RelativeLevel.IsDefinedLowerLevelButNotInInterface, levelFromTop) { DerivationKeyword = "override " });
+                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(baseProperty, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override " });
                 }
                 // now, unofficial properties
                 var baseUnofficialProperties = GetUnofficialProperties(baseType.InterfaceTypeSymbol);
                 foreach (var unofficialProperty in baseUnofficialProperties)
                 {
                     if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
-                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.RelativeLevel.IsDefinedLowerLevelButNotInInterface, levelFromTop) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
+                        propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
                 }
             }
 
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, x.PropertyAccessibility, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
-                //.ThenBy(x => x.propertyWithLevel.WhereDefined == PropertyWithDefinitionInfo.RelativeLevel.IsDefinedThisLevel)
+                //.ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
                 .ThenBy(x => x.description.RelativeOrder)
-                .ThenBy(x => x.description.PropertyName).ToList(); /* note that ordering is alphabetical across levels -- alternative would be one level at a time, but we can't do alphabetical across all levels but this one, since previous level will be different  */
+                .ThenBy(x => x.description.PropertyName).ToList(); /* note that ordering is alphabetical across levels, except that this level is last -- alternative would be to do closest levels first and then stick with order within level */
             var last = orderedPropertiesWithLevel.LastOrDefault();
             if (last != null)
                 last.description.IsLast = true;
@@ -130,15 +128,10 @@ namespace Lazinator.CodeDescription
             PropertiesToDefineThisLevel = new List<PropertyDescription>();
             PropertiesInherited = new List<PropertyDescription>();
 
-            if (Container.NameIncludingGenerics.Contains("Bool"))
-            {
-                var DEBUG = 0;
-            }
-
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
-                if (orderedProperty.propertyWithLevel.WhereDefined ==
-                    PropertyWithDefinitionInfo.RelativeLevel.IsDefinedInLowerLevelInterface)
+                if (orderedProperty.propertyWithLevel.LevelInfo ==
+                    PropertyWithDefinitionInfo.Level.IsDefinedInLowerLevelInterface)
                 {
                     orderedProperty.description.IsDefinedInLowerLevelInterface = true;
                     orderedProperty.description.DerivationKeyword = "override ";
@@ -147,11 +140,11 @@ namespace Lazinator.CodeDescription
                 if (!dirtyPropertiesWithLevel.Any(x => x.Property.Name == orderedProperty.propertyWithLevel.Property.Name))
                 { // this is not itself a "_Dirty" property, though it may have a corresponding _Dirty property.
                     PropertiesIncludingInherited.Add(orderedProperty.description);
-                    if (orderedProperty.propertyWithLevel.WhereDefined == PropertyWithDefinitionInfo.RelativeLevel.IsDefinedThisLevel ||
+                    if (orderedProperty.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel ||
                             (
                              !Container.IsAbstract // if we have two consecutive abstract classes, we don't want to repeat the abstract properties
                              &&
-                            !Container.GetBaseLazinatorObjects().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName )))
+                            !Container.GetBaseLazinatorObjects().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName)))
                         )
                     {
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);
