@@ -14,9 +14,11 @@ namespace LazinatorFuzzTestGenerator.Interfaces
         string Name { get; }
         List<LazinatorObjectProperty> Properties { get; }
         List<LazinatorObjectProperty> PropertiesIncludingInherited { get; }
+
         abstract bool Inherits { get; }
         abstract bool Inheritable { get; }
         abstract bool Instantiable { get; }
         abstract int ObjectDepth { get; }
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lazinator.CodeDescription;
 using LazinatorFuzzTestGenerator.Interfaces;
 using LazinatorFuzzTestGenerator.ObjectValues;
 
@@ -95,6 +96,89 @@ namespace FuzzTests.{namespaceString}
         public IObjectContents GetRandomObjectContents(Random r, int? inverseProbabilityOfNull)
         {
             return new LazinatorObjectContents(this, r, inverseProbabilityOfNull);
+        }
+
+        public List<LazinatorObjectProperty> GetRandomPropertyPath(Random r)
+        {
+            List<LazinatorObjectProperty> l = new List<LazinatorObjectProperty>();
+            var current = this;
+            while (current != null)
+            {
+                var properties = PropertiesIncludingInherited;
+                var randomProperty = properties[r.Next(properties.Count)];
+                l.Add(randomProperty);
+                if (randomProperty.supportedType is LazinatorObjectType)
+                    current = (LazinatorObjectType)randomProperty.supportedType;
+                else
+                    current = null;
+            }
+            return l;
+        }
+
+        public string GetRandomPropertyPathString(Random r, string containingVariableName, ref int tempVarCounter)
+        {
+            var propertyPath = GetRandomPropertyPath(r);
+            if (!propertyPath.Any())
+                return "";
+            var lastProperty = propertyPath.Last();
+            string lastPropertyName = lastProperty.propertyName;
+            int lastNonStructIndex = propertyPath.FindLastIndex(p => p.supportedType is not LazinatorStructType);
+            var directAccessPath = propertyPath.Take(lastNonStructIndex + 1).Select(x => x.propertyName).ToList();
+            var structsPath = propertyPath.Skip(lastNonStructIndex + 1).Take(propertyPath.Count - (lastNonStructIndex + 1) - 1).Select(x => x.propertyName).ToList(); // skip last property, along with everything in direct access path
+            IObjectContents valueToMutateTo = lastProperty.supportedType.GetRandomObjectContents(r, lastProperty.nullable ? 3 : null);
+            string codeToGetValue = valueToMutateTo.CodeToGetValue;
+            string pathExcludingFinalStructs = containingVariableName + String.Join(".", directAccessPath);
+            if (structsPath.Any())
+            {
+                int tempVarCounterInit = tempVarCounter;
+                tempVarCounter += structsPath.Count;
+                return CodeForMutatingStructs(pathExcludingFinalStructs, structsPath, lastPropertyName, codeToGetValue, tempVarCounterInit);
+            }
+            else
+                return pathExcludingFinalStructs + lastPropertyName + " = " + codeToGetValue;
+        }
+
+        public static string CodeForMutatingStructs(string pathExcludingFinalStructs, List<string> structsPath, string lastPropertyName, string codeToGetValue, int firstTemporaryVariableIndex)
+        {
+            // Suppose our property path is A.B.C.D.E, and C.D.E are all strcturs, thus in structsPath. Further, suppose the initial counter is at 2. We want to generate code like this:
+            // tempVar2 = A.B.C;
+            // tempVar3 = A.B.C.D;
+            // tempVar4 = A.B.C.D.E;
+            // tempVar4.lastPropertyName = {codeToGetValue};
+            // tempVar3.E = tempVar4;
+            // tempVar2.D = tempVar3;
+            // A.B = tempVar2;
+            StringBuilder structCodeBuilder = new StringBuilder();
+            // define temporary variables for each struct at the end
+            string GetStructsPathThroughIndex(int i)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(pathExcludingFinalStructs);
+                for (int j = 0; j <= i; j++)
+                {
+                    sb.Append(".");
+                    sb.Append(structsPath[j]);
+                }
+                return sb.ToString();
+            }
+            Stack<(string tempVar, string path, string next)> tempVarAndPathNames = new Stack<(string tempVar, string path, string next)>();
+            for (int i = 0; i < structsPath.Count; i++)
+            {
+                string tempVarName = "temp" + (firstTemporaryVariableIndex + i);
+                string pathEquivalent = $"{GetStructsPathThroughIndex(i)}";
+                string next = i == structsPath.Count - 1 ? "" : "." + structsPath[i + 1];
+                tempVarAndPathNames.Push((tempVarName, pathEquivalent, next));
+                structCodeBuilder.AppendLine($"var {tempVarName} = {pathEquivalent};");
+            }
+            var mostRecentPop = tempVarAndPathNames.Pop();
+            structCodeBuilder.AppendLine($"{mostRecentPop.tempVar}.{lastPropertyName} = {codeToGetValue};");
+            while (tempVarAndPathNames.Any())
+            {
+                var peek = tempVarAndPathNames.Peek();
+                structCodeBuilder.AppendLine($"{peek.tempVar}{peek.next} = {mostRecentPop.tempVar};");
+                mostRecentPop = tempVarAndPathNames.Pop();
+            }
+            return structCodeBuilder.ToString() + pathExcludingFinalStructs + " = " + mostRecentPop.tempVar + ";";
         }
     }
 }
