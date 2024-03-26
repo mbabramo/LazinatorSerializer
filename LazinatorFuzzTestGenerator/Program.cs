@@ -12,7 +12,6 @@ namespace LazinatorFuzzTestGenerator
     {
         static void Main(string[] args)
         {
-            string result = LazinatorObjectType.CodeForMutatingStructs("A.B", new List<string>() { "C", "D", "E" }, "P", "1", 2);
             bool failureHasOccurred = false;
             int iterations = 20_000;
             bool useParallel = false;

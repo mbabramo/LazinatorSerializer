@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace LazinatorFuzzTestGenerator.ObjectValues
 {
+    using PropertyWithContents = (LazinatorObjectProperty property, int indexInParent, IObjectContents? contents);
     public class LazinatorObjectContents : IObjectContents
     {
         public ISupportedType TheType { get; init; }
@@ -22,55 +23,83 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         public LazinatorObjectContents(ISupportedType theType, Random r, int? inverseProbabilityOfNull)
         {
             TheType = theType;
-            SetToRandom(r, inverseProbabilityOfNull);
-        }
-
-        private void SetToRandom(Random r, int? inverseProbabilityOfNull)
-        {
-            if (inverseProbabilityOfNull == null || r.Next((int)inverseProbabilityOfNull) != 0)
-                Initialize(r);
-            else
-                PropertyValues = null;
+            Initialize(r);
         }
 
         public void Initialize(Random r)
         {
+            // Initialize all non-nullable properties. Set other property values to null.
             PropertyValues = new List<IObjectContents?>();
             var properties = TheLazinatorObjectType.PropertiesIncludingInherited;
             foreach (var property in properties)
             {
                 var propertyType = property.supportedType;
                 var isNullable = property.nullable;
-                var value = propertyType.GetRandomObjectContents(r, property.nullable ? 3 : null);
-                PropertyValues.Add(value);
+                if (isNullable)
+                    PropertyValues.Add(null);
+                else
+                    PropertyValues.Add(propertyType.GetRandomObjectContents(r, null)); 
             }
         }
 
-
-
-        public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName, bool canBeNull)
+        public string InitializationCode(string varName)
         {
-            if (canBeNull && (r.Next(3) == 0 || PropertyValues == null))
+            return $@"{varName} = {CodeToGetValue};";
+        }
+
+        private PropertyWithContents? GetRandomProperty(Random r)
+        {
+            if (PropertyValues is null || !PropertyValues!.Any())
+                return null;
+            int numNonNullProperties = PropertyValues?.Count(x => x != null) ?? 0;
+            int indexOverall = -1;
+            if (numNonNullProperties == 0 || r.NextDouble() < 0.3)
             {
-                Initialize(r);
-                return ($@"{varName} = {CodeToGetValue};", null);
+                // choose a random property, regardless of whether it's null
+                indexOverall = r.Next(PropertyValues!.Count);
             }
             else
             {
-                int numProperties = PropertyValues?.Count ?? 0;
-                if (numProperties > 0)
+                int indexAmongNonNull = r.Next(numNonNullProperties);
+                int numNonNullFound = 0;
+                for (int i = 0; i <= indexAmongNonNull; i++)
                 {
-                    int propertyToMutate = r.Next(numProperties);
-                    var property = TheLazinatorObjectType.PropertiesIncludingInherited[propertyToMutate];
-                    var originalValue = PropertyValues![propertyToMutate];
-                    var value = property.supportedType.GetRandomObjectContents(r, property.nullable ? 4 : null);
-                    PropertyValues[propertyToMutate] = value;
-                    return ($@"{varName}.{property.propertyName} = {value.CodeToGetValue};", null);
+                    if (PropertyValues![numNonNullFound] != null)
+                        numNonNullFound++;
+                    if (numNonNullFound == indexAmongNonNull + 1)
+                    {
+                        indexOverall = i;
+                        break;
+                    }
                 }
-                return ("", null);
-                // DEBUG -- we'd like to be able to change just one field of nested objects. With structs, that will be tricky, because we have to back out of the innermost property using temporary variables. (Fields could be set directly.)
-                // DEBUG2 -- with classes, we'd like to be able to copy from one object hierarchy to another. 
-                // DEBUG3 -- we actually need to use CloneLazinatorTyped etc. to make sure that Lazinating works.
+            }
+            var property = TheLazinatorObjectType.PropertiesIncludingInherited[indexOverall];
+            return (property, indexOverall, PropertyValues![indexOverall]);
+        }
+
+        public IEnumerable<PropertyWithContents> GetRandomPropertiesMovingInward(Random r)
+        {
+            const double probabilityStopBeforeEnd = 0.15;
+            if (r.NextDouble() < probabilityStopBeforeEnd)
+            {
+                yield break;
+            }
+            else
+            {
+                var propertyIndexAndContents = GetRandomProperty(r);
+                if (propertyIndexAndContents != null)
+                {
+                    yield return propertyIndexAndContents.Value;
+                    var property = propertyIndexAndContents.Value.property;
+                    if (property.supportedType is LazinatorObjectType objectType)
+                    {
+                        if (propertyIndexAndContents.Value.contents is LazinatorObjectContents objectContents)
+                        {
+                            foreach (var lowerLevelProperty in objectContents.GetRandomPropertiesMovingInward(r))
+                                yield return lowerLevelProperty;
+                        }
+                    }
+                }
             }
         }
 
