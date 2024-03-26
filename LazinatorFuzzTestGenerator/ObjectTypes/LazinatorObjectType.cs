@@ -97,7 +97,5 @@ namespace FuzzTests.{namespaceString}
         {
             return new LazinatorObjectContents(this, r, inverseProbabilityOfNull);
         }
-
-        
     }
 }

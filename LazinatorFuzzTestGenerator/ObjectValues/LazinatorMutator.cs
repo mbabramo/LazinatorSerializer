@@ -31,7 +31,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         {
             StringBuilder sb = new StringBuilder();
             objectNamesAndContents.Add(InitialVarName, InitialObject);
-            sb.AppendLine($"{InitialObject.TheLazinatorObjectType.Name} {InitialVarName} = {InitialObject.CodeToGetValue};");
+            sb.AppendLine($"{InitialObject.TheLazinatorObjectType.Name} {InitialVarName} = {InitialObject.CodeForInitialization};");
             if (!checkOnlyAfterAll)
                 AppendCodeToTestAllObjectValues(sb);
             int tempVarCounter = 0;
