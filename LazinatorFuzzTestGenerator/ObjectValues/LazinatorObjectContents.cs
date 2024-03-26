@@ -123,7 +123,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 ";
         }
 
-        private string GetPropertyValuesString(bool nonNullableReferenceTypes, bool other, bool includePropertyNameAndEquals)
+        private string GetPropertyValuesString(bool nullableEnabledContext, bool other, bool includePropertyNameAndEquals)
         {
             int numProperties = PropertyValues!.Count;
             StringBuilder sb = new StringBuilder();
@@ -133,7 +133,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             foreach (var property in properties)
             {
                 bool isNonNullableReferenceType = !property.nullable && property.supportedType is LazinatorClassType;
-                bool include = (nonNullableReferenceTypes && isNonNullableReferenceType) || (!nonNullableReferenceTypes && !isNonNullableReferenceType);
+                bool include = (nullableEnabledContext && isNonNullableReferenceType) || (!nullableEnabledContext && !isNonNullableReferenceType);
                 if (include)
                 {
                     var value = PropertyValues[i];
@@ -146,7 +146,9 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     }
                     if (includePropertyNameAndEquals) 
                         sb.Append($"{property.propertyName} = ");
-                    sb.Append($"/* {property.propertyName} */ {value?.CodeToGetValue ?? "null"}");
+                    bool includeTypeInfo = true; // not necessary but can make code more readable 
+                    string typeInfo = includeTypeInfo ? $"({property.supportedType.AnnotatedTypeDeclaration(property.nullable, nullableEnabledContext)})" : "";
+                    sb.Append($"{typeInfo} {value?.CodeToGetValue ?? "null"}");
                 }
                 i++;
             }

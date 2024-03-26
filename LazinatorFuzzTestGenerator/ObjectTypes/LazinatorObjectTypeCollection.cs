@@ -29,7 +29,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             this.NullableEnabledContext = nullableEnabledContext;
         }
 
-        public LazinatorObjectTypeCollection(Random r, string namespaceString, bool nullableEnabledContext, int numObjectTypes, int maxClassDepth, int maxProperties, int numTests, int numMutationSteps) : this(namespaceString, nullableEnabledContext)
+        public LazinatorObjectTypeCollection(Random r, string namespaceString, bool nullableEnabledContext, int numObjectTypes, int maxClassDepth, int maxProperties, int numTests, int numMutationSteps, bool writeIfSuccessfullyGenerated = false) : this(namespaceString, nullableEnabledContext)
         {
             string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableEnabledContext ? "2" : "")) + "\\" + NamespaceString + "\\";
             GenerateObjectTypes(numObjectTypes, maxClassDepth, maxProperties, r);
@@ -74,7 +74,6 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 File.WriteAllText(folder + "Tests.cs", testsFileCode_ForTestingProject);
             }
 
-            bool writeIfSuccessfullyGenerated = false;
             bool writeIfNotSuccessfullyGenerated = true;
             bool write = (writeIfSuccessfullyGenerated && success) || (writeIfNotSuccessfullyGenerated && !success);
             if (write || (writeIfSuccessfullyGenerated == false && writeIfNotSuccessfullyGenerated == true))

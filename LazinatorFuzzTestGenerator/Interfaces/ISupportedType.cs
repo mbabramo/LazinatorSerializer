@@ -8,5 +8,7 @@ namespace LazinatorFuzzTestGenerator.Interfaces
         public string UnannotatedTypeDeclaration();
         public bool UnannotatedIsNullable(bool nullableEnabledContext);
         public string NullabilityNotation(bool nullable, bool nullableEnabledContext) => nullable && !UnannotatedIsNullable(nullableEnabledContext) ? "?" : "";
+
+        public string AnnotatedTypeDeclaration(bool nullable, bool nullEnabledContext) => $"{UnannotatedTypeDeclaration()}{NullabilityNotation(nullable, nullEnabledContext)}";
     }
 }
