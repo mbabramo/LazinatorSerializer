@@ -20,6 +20,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         UniqueCSharpNameGenerator nameGenerator = new UniqueCSharpNameGenerator();
         LazinatorObjectContents InitialObject;
         public string InitializationCode;
+        const string InitialVarName = "v";
 
         public LazinatorMutator(Random r, LazinatorObjectType objectType)
         {
@@ -31,9 +32,8 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         public string GetAndTestSequenceOfMutations(int numMutations, bool checkOnlyAfterAll)
         {
             StringBuilder sb = new StringBuilder();
-            string varName = nameGenerator.GetUniqueName(R, false);
-            objectNamesAndContents.Add(varName, InitialObject);
-            sb.AppendLine($"{InitialObject.TheLazinatorObjectType.Name} {varName} = {InitialObject.CodeToGetValue};");
+            objectNamesAndContents.Add(InitialVarName, InitialObject);
+            sb.AppendLine($"{InitialObject.TheLazinatorObjectType.Name} {InitialVarName} = {InitialObject.CodeToGetValue};");
             if (!checkOnlyAfterAll)
                 AppendCodeToTestAllObjectValues(sb);
             int tempVarCounter = 0;
@@ -42,7 +42,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 int numCurrentObjects = objectNamesAndContents.Count;
                 KeyValuePair<string, LazinatorObjectContents> randomObject = objectNamesAndContents.ElementAt(R.Next(numCurrentObjects));
                 (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) = MutateAndReturnCodeForMutation(R, randomObject.Key, ref tempVarCounter);
-                sb.AppendLine();
+                sb.AppendLine(codeForMutation);
                 if (i == numMutations - 1 || !checkOnlyAfterAll)
                 {
                     AppendCodeToTestAllObjectValues(sb);
@@ -54,13 +54,14 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 
         public (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) MutateAndReturnCodeForMutation(Random r, string varName, ref int tempVarCounter)
         {
-            var properties = InitialObject.GetRandomPropertiesMovingInward(r).ToList();
+            var propertiesWithContents = InitialObject.GetPathToRandomPropertyInHierarchy(r).ToList();
             IObjectContents randomContents;
-            if (properties.Any())
+            if (propertiesWithContents.Any())
             {
-                var lastProperty = properties.Last().property;
+                var lastProperty = propertiesWithContents.Last().property;
                 randomContents = lastProperty.supportedType.GetRandomObjectContents(r, lastProperty.nullable ? 4 : null);
-                string codeForMutation = GetCodeToMutateProperty(r, varName, properties.Select(x => x.property).ToList(), randomContents.CodeToGetValue, ref tempVarCounter);
+                var properties = propertiesWithContents.Select(x => x.property).ToList();
+                string codeForMutation = GetCodeToMutateProperty(r, varName, properties, randomContents.CodeToGetValue, ref tempVarCounter);
                 return (codeForMutation, null);
             }
             else
@@ -76,7 +77,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             int lastNonStructIndex = propertyPath.FindLastIndex(p => p.supportedType is not LazinatorStructType);
             var directAccessPath = propertyPath.Take(lastNonStructIndex + 1).Select(x => x.propertyName).ToList();
             var structsPath = propertyPath.Skip(lastNonStructIndex + 1).Take(propertyPath.Count - (lastNonStructIndex + 1) - 1).Select(x => x.propertyName).ToList(); // skip last property, along with everything in direct access path
-            string pathExcludingFinalStructs = containingVariableName + String.Join(".", directAccessPath);
+            string pathExcludingFinalStructs = containingVariableName + "." + String.Join(".", directAccessPath);
             if (structsPath.Any())
             {
                 int tempVarCounterInit = tempVarCounter;
@@ -84,7 +85,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 return CodeForMutatingStructs(pathExcludingFinalStructs, structsPath, lastPropertyName, codeToSetLastProperty, tempVarCounterInit);
             }
             else
-                return pathExcludingFinalStructs + lastPropertyName + " = " + codeToSetLastProperty + ";";
+                return pathExcludingFinalStructs + " = " + codeToSetLastProperty + ";";
         }
 
         public string CodeForMutatingStructs(string pathExcludingFinalStructs, List<string> structsPath, string lastPropertyName, string codeToGetValue, int firstTemporaryVariableIndex)

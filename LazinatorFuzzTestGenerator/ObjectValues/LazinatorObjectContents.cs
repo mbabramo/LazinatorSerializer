@@ -44,40 +44,10 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 
         public string InitializationCode(string varName)
         {
-            return $@"{varName} = {CodeToGetValue};";
+            return $@"var {varName} = {CodeToGetValue};";
         }
 
-        private PropertyWithContents? GetRandomProperty(Random r)
-        {
-            if (PropertyValues is null || !PropertyValues!.Any())
-                return null;
-            int numNonNullProperties = PropertyValues?.Count(x => x != null) ?? 0;
-            int indexOverall = -1;
-            if (numNonNullProperties == 0 || r.NextDouble() < 0.3)
-            {
-                // choose a random property, regardless of whether it's null
-                indexOverall = r.Next(PropertyValues!.Count);
-            }
-            else
-            {
-                int indexAmongNonNull = r.Next(numNonNullProperties);
-                int numNonNullFound = 0;
-                for (int i = 0; i <= indexAmongNonNull; i++)
-                {
-                    if (PropertyValues![numNonNullFound] != null)
-                        numNonNullFound++;
-                    if (numNonNullFound == indexAmongNonNull + 1)
-                    {
-                        indexOverall = i;
-                        break;
-                    }
-                }
-            }
-            var property = TheLazinatorObjectType.PropertiesIncludingInherited[indexOverall];
-            return (property, indexOverall, PropertyValues![indexOverall]);
-        }
-
-        public IEnumerable<PropertyWithContents> GetRandomPropertiesMovingInward(Random r)
+        public IEnumerable<PropertyWithContents> GetPathToRandomPropertyInHierarchy(Random r)
         {
             const double probabilityStopBeforeEnd = 0.15;
             if (r.NextDouble() < probabilityStopBeforeEnd)
@@ -95,12 +65,47 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     {
                         if (propertyIndexAndContents.Value.contents is LazinatorObjectContents objectContents)
                         {
-                            foreach (var lowerLevelProperty in objectContents.GetRandomPropertiesMovingInward(r))
+                            foreach (var lowerLevelProperty in objectContents.GetPathToRandomPropertyInHierarchy(r))
                                 yield return lowerLevelProperty;
                         }
                     }
                 }
             }
+        }
+
+        private PropertyWithContents? GetRandomProperty(Random r)
+        {
+            if (PropertyValues is null || !PropertyValues!.Any())
+                return null;
+            int numPropertiesOverall = PropertyValues?.Count() ?? 0;
+            int numNonNullProperties = PropertyValues?.Count(x => x != null) ?? 0;
+            int indexOverall = -1;
+            if (numNonNullProperties == 0 || r.NextDouble() < 0.3)
+            {
+                // choose a random property, regardless of whether it's null
+                indexOverall = r.Next(PropertyValues!.Count);
+            }
+            else
+            {
+                int indexAmongNonNull = r.Next(numNonNullProperties);
+                int numNonNullFound = 0;
+                for (int i = 0; i < numPropertiesOverall; i++)
+                {
+                    if (PropertyValues![i] != null)
+                        numNonNullFound++;
+                    if (numNonNullFound == indexAmongNonNull + 1)
+                    {
+                        indexOverall = i;
+                        break;
+                    }
+                }
+            }
+            if (indexOverall == -1)
+            {
+                var DEBUG = 0;
+            }
+            var property = TheLazinatorObjectType.PropertiesIncludingInherited[indexOverall];
+            return (property, indexOverall, PropertyValues![indexOverall]);
         }
 
         public string CodeToGetValue => GetPropertyValuesAsString();
