@@ -13,18 +13,19 @@ namespace LazinatorFuzzTestGenerator
         static void Main(string[] args)
         {
             bool failureHasOccurred = false;
+            int startingIteration = 0;
             int iterations = 20_000;
             bool useParallel = false;
             if (useParallel)
             {
-                Parallel.For(0, iterations, i =>
+                Parallel.For(startingIteration, iterations, i =>
                    {
                     failureHasOccurred = ExecuteIterationAndReportOutcome(failureHasOccurred, i);
                 });
             }
             else
             {
-                for (int i = 0; i < iterations; i++)
+                for (int i = startingIteration; i < iterations; i++)
                 {
                     failureHasOccurred = ExecuteIterationAndReportOutcome(failureHasOccurred, i);
                 };

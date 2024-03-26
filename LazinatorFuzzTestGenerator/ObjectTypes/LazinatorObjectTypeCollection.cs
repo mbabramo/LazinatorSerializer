@@ -245,7 +245,7 @@ namespace FuzzTests.{NamespaceString}
             {
                 var objectType = InstantiableObjectTypes.ElementAt(r.Next(InstantiableObjectTypes.Count()));
                 LazinatorMutator mutator = new LazinatorMutator(r, objectType);
-                string s = mutator.InitializationCode + "\r\n" + mutator.GetAndTestSequenceOfMutations(numMutations, checkOnlyAfterAll);
+                string s = mutator.GetAndTestSequenceOfMutations(numMutations, checkOnlyAfterAll);
                 return s;
             }
             return "";
