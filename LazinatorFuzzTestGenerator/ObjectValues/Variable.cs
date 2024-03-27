@@ -15,7 +15,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 
         public string GetAssignmentStatement()
         {
-            return VariableName + " = " + Contents.CodeToGetValue + ";";
+            return VariableName + " = " + Contents.CodeToReplicateContents + ";";
         }
     }
 }

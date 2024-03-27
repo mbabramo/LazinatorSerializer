@@ -25,9 +25,8 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             SetToRandom(r, inverseProbabilityOfNull);
         }
 
-        public string CodeToGetValue => GetValidCSharpRepresentationOfValue(Value);
-        public string CodeToInitializeValue => (Value == null || Value == ThePrimitiveType.GetDefaultValueIfNotNullable()) ? "" : CodeToGetValue;
-        public string CodeToTestValue(string containerName) => $"{containerName} == {CodeToGetValue}";
+        public string CodeToReplicateContents => GetValidCSharpRepresentationOfValue(Value);
+        public string CodeToTestValue(string containerName) => $"{containerName} == {CodeToReplicateContents}";
 
         private string GetValidCSharpRepresentationOfValue(object? value)
         {

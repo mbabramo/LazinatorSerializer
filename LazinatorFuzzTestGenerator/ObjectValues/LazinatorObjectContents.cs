@@ -103,9 +103,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             return (property, indexOverall, PropertyValues![indexOverall]);
         }
 
-        public string CodeToGetValue => GetPropertyValuesAsString(true); // DEBUG
-
-        public string CodeToInitializeValue => GetPropertyValuesAsString(true);
+        public string CodeToReplicateContents => GetPropertyValuesAsString(true);
 
         private string GetPropertyValuesAsString(bool omitPropertiesAtDefaultValues)
         {
@@ -145,7 +143,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 if (include)
                 {
                     var value = PropertyValues[i];
-                    string getValueCode = (omitPropertiesAtDefaultValues ? value?.CodeToInitializeValue : value?.CodeToGetValue) ?? "null";
+                    string getValueCode = value?.CodeToReplicateContents ?? "null";
                     if (getValueCode != "")
                     {
                         if (!isFirst)
@@ -172,7 +170,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         {
             if (PropertyValues is null)
                 return $"{containerName} is null";
-            return $"{containerName}.Equals({CodeToGetValue})";
+            return $"{containerName}.Equals({CodeToReplicateContents})";
         }
     }
 }
