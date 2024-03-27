@@ -46,6 +46,9 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     AppendCodeToTestAllObjectValues(sb);
                 }
             }
+            if (R.Next(3) != 0)
+                sb.AppendLine($"{InitialVarName} = {InitialVarName}.CloneLazinatorTyped();");
+            sb.AppendLine($"{InitialVarName} = {InitialVarName}.CloneLazinatorTyped();");
             return sb.ToString();
         }
 
@@ -59,7 +62,10 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 var lastProperty = propertiesWithContents.Last().property;
                 randomContents = lastProperty.supportedType.GetRandomObjectContents(r, lastProperty.nullable ? 4 : null);
                 var properties = propertiesWithContents.Select(x => x.property).ToList();
-                string codeForMutation = GetCodeToMutateProperty(r, varName, properties, randomContents.CodeToReplicateContents, ref tempVarCounter);
+                string codeToReplicateContents = randomContents.CodeToReplicateContents;
+                if (lastProperty.supportedType is LazinatorObjectType && r.Next(3) == 0)
+                    codeToReplicateContents = $"({codeToReplicateContents}).CloneLazinatorTyped()";
+                string codeForMutation = GetCodeToMutateProperty(r, varName, properties, codeToReplicateContents, ref tempVarCounter);
                 return (codeForMutation, null);
             }
             else
