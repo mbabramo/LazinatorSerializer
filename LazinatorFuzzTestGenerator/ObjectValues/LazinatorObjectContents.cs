@@ -95,10 +95,6 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                     }
                 }
             }
-            if (indexOverall == -1)
-            {
-                var DEBUG = 0;
-            }
             var property = TheLazinatorObjectType.PropertiesIncludingInherited[indexOverall];
             return (property, indexOverall, PropertyValues![indexOverall]);
         }
@@ -132,10 +128,6 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 if (include && omitPropertiesAtDefaultValues)
                 {
                     var value = PropertyValues[i];
-                    if (property.propertyName == "PitchReceive")
-                    {
-                        var DEBUG = 0;
-                    }
                     // if this is already set to default value, then we shouldn't need to include it
                     if ((property.nullable && value is null) || (value is not null && !property.nullable && property.supportedType is PrimitiveType pt && ((PrimitiveObjectContents) value).Value!.Equals(pt.GetDefaultValueIfNotNullable())))
                         include = false;

@@ -37,10 +37,6 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             int tempVarCounter = 0;
             for (int i = 0; i < numMutations; i++)
             {
-                if (i == 4)
-                {
-                    var DEBUG7 = 3;
-                }
                 int numCurrentObjects = objectNamesAndContents.Count;
                 KeyValuePair<string, LazinatorObjectContents> randomObject = objectNamesAndContents.ElementAt(R.Next(numCurrentObjects));
                 (string codeForMutation, (IObjectContents objectContents, string objectName)? additionalObject) = MutateAndReturnCodeForMutation(R, randomObject.Key, ref tempVarCounter);
