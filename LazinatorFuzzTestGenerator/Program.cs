@@ -56,7 +56,7 @@ namespace LazinatorFuzzTestGenerator
             Random r = new Random(i);
             bool nullableEnabledContext = i % 2 == 0;
             //var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 3, maxClassDepth: 6, maxProperties: 3, numTests: 2 /* note: too many may cause stack overflow error on compiling */, numMutationSteps: 5); // DEBUG
-           var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 8, maxClassDepth: 6, maxProperties: 10, numTests: 20 /* note: too many may cause stack overflow error on compiling */, numMutationSteps: 15, writeIfSuccessfullyGenerated: true /* DEBUG */);
+           var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 8, maxClassDepth: 6, maxProperties: 10, numTests: 20 /* note: too many may cause stack overflow error on compiling */, numMutationSteps: 15, writeIfSuccessfullyGenerated: false /* DEBUG */);
             bool success = objectTypeCollection.Succeeded;
             return success;
         }

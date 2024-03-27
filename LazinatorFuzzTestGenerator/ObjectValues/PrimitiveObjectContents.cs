@@ -10,7 +10,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
     {
         public ISupportedType TheType => ThePrimitiveType;
         public PrimitiveType ThePrimitiveType { get; set; }
-        private object? Value { get; set; }
+        public object? Value { get; private set; }
         public bool IsNull => Value == null;
 
         public PrimitiveObjectContents(PrimitiveEnum primitiveEnum, object? value)
@@ -26,6 +26,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         }
 
         public string CodeToGetValue => GetValidCSharpRepresentationOfValue(Value);
+        public string CodeToInitializeValue => (Value == null || Value == ThePrimitiveType.GetDefaultValueIfNotNullable()) ? "" : CodeToGetValue;
         public string CodeToTestValue(string containerName) => $"{containerName} == {CodeToGetValue}";
 
         private string GetValidCSharpRepresentationOfValue(object? value)

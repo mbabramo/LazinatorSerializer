@@ -103,9 +103,9 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             return (property, indexOverall, PropertyValues![indexOverall]);
         }
 
-        public string CodeToGetValue => GetPropertyValuesAsString(false);
+        public string CodeToGetValue => GetPropertyValuesAsString(true); // DEBUG
 
-        public string CodeForInitialization => GetPropertyValuesAsString(true);
+        public string CodeToInitializeValue => GetPropertyValuesAsString(true);
 
         private string GetPropertyValuesAsString(bool omitPropertiesAtDefaultValues)
         {
@@ -134,25 +134,33 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 if (include && omitPropertiesAtDefaultValues)
                 {
                     var value = PropertyValues[i];
+                    if (property.propertyName == "PitchReceive")
+                    {
+                        var DEBUG = 0;
+                    }
                     // if this is already set to default value, then we shouldn't need to include it
-                    if ((property.nullable && value is null) || (value is not null && property.supportedType is PrimitiveType pt && value.Equals(pt.GetDefaultValueIfNotNullable())))
+                    if ((property.nullable && value is null) || (value is not null && !property.nullable && property.supportedType is PrimitiveType pt && ((PrimitiveObjectContents) value).Value!.Equals(pt.GetDefaultValueIfNotNullable())))
                         include = false;
                 }
                 if (include)
                 {
                     var value = PropertyValues[i];
-                    if (!isFirst)
-                        sb.AppendLine(", ");
-                    else
+                    string getValueCode = (omitPropertiesAtDefaultValues ? value?.CodeToInitializeValue : value?.CodeToGetValue) ?? "null";
+                    if (getValueCode != "")
                     {
-                        sb.AppendLine("");
-                        isFirst = false;
+                        if (!isFirst)
+                            sb.AppendLine(", ");
+                        else
+                        {
+                            sb.AppendLine("");
+                            isFirst = false;
+                        }
+                        if (includePropertyNameAndEquals)
+                            sb.Append($"{property.propertyName} = ");
+                        bool includeTypeInfo = true; // not necessary but can make code more readable 
+                        string typeInfo = includeTypeInfo ? $"({property.supportedType.AnnotatedTypeDeclaration(property.nullable, nullableEnabledContext)})" : "";
+                        sb.Append($"{typeInfo} {getValueCode}");
                     }
-                    if (includePropertyNameAndEquals) 
-                        sb.Append($"{property.propertyName} = ");
-                    bool includeTypeInfo = true; // not necessary but can make code more readable 
-                    string typeInfo = includeTypeInfo ? $"({property.supportedType.AnnotatedTypeDeclaration(property.nullable, nullableEnabledContext)})" : "";
-                    sb.Append($"{typeInfo} {value?.CodeToGetValue ?? "null"}");
                 }
                 i++;
             }
