@@ -98,14 +98,14 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             return new PropertyWithContents(property, this, indexOverall, PropertyValues![indexOverall]);
         }
 
-        public string CodeToReplicateContents => GetPropertyValuesAsString(true, nullableEnabledContext);
+        public string CodeToReplicateContents => GetPropertyValuesAsString(true, TheLazinatorObjectType.NullableContextEnabled);
 
-        private string GetPropertyValuesAsString(bool omitPropertiesAtDefaultValues, bool nullableEnabledContext)
+        private string GetPropertyValuesAsString(bool omitPropertiesAtDefaultValues, bool nullableContextEnabled)
         {
             if (PropertyValues is null)
                 return "null";
             string propertyValuesNonNullableReferencesString = GetPropertyValuesString(true, false, false, omitPropertiesAtDefaultValues);
-            string propertyValuesOtherString = GetPropertyValuesString(nullableEnabledContext, true, true, omitPropertiesAtDefaultValues);
+            string propertyValuesOtherString = GetPropertyValuesString(nullableContextEnabled, true, true, omitPropertiesAtDefaultValues);
             return $@"new {TheLazinatorObjectType.Name}({propertyValuesNonNullableReferencesString})
     {{
 {propertyValuesOtherString}
@@ -113,7 +113,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 ";
         }
 
-        private string GetPropertyValuesString(bool nullableEnabledContext, bool other, bool includePropertyNameAndEquals, bool omitPropertiesAtDefaultValues)
+        private string GetPropertyValuesString(bool nullableContextEnabled, bool other, bool includePropertyNameAndEquals, bool omitPropertiesAtDefaultValues)
         {
             int numProperties = PropertyValues!.Count;
             StringBuilder sb = new StringBuilder();
@@ -123,7 +123,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             foreach (var property in properties)
             {
                 bool isNonNullableReferenceType = !property.nullable && property.supportedType is LazinatorClassType;
-                bool include = (nullableEnabledContext && isNonNullableReferenceType) || (!nullableEnabledContext && !isNonNullableReferenceType);
+                bool include = (nullableContextEnabled && isNonNullableReferenceType) || (!nullableContextEnabled && !isNonNullableReferenceType);
                 if (include && omitPropertiesAtDefaultValues)
                 {
                     var value = PropertyValues[i];
@@ -150,7 +150,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                         if (includePropertyNameAndEquals)
                             sb.Append($"{property.propertyName} = ");
                         bool includeTypeInfo = true; // not necessary but can make code more readable 
-                        string typeInfo = includeTypeInfo ? $"({property.supportedType.AnnotatedTypeDeclaration(property.nullable, nullableEnabledContext)})" : "";
+                        string typeInfo = includeTypeInfo ? $"({property.supportedType.AnnotatedTypeDeclaration(property.nullable)})" : "";
                         sb.Append($"{typeInfo} {getValueCode}");
                     }
                 }

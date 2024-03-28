@@ -528,10 +528,10 @@ namespace LazinatorTests.Tests
         }
 
 
-        public static NullableEnabledContext GetNullableEnabledContext(bool setNullsWherePossible = false)
+        public static NullableContextEnabled GetNullableContextEnabled(bool setNullsWherePossible = false)
         {
             if (!setNullsWherePossible)
-            return new NullableEnabledContext(
+            return new NullableContextEnabled(
                  new Example[] { new Example(), new Example() },
                  new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>(), IncludeChildrenMode.IncludeAllChildren)
             {
@@ -574,7 +574,7 @@ namespace LazinatorTests.Tests
 
             };
             else
-                return new NullableEnabledContext(
+                return new NullableContextEnabled(
                  new Example[] { new Example(), new Example() },
                  new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>(), IncludeChildrenMode.IncludeAllChildren)
                 {
@@ -620,57 +620,57 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void CloneWithoutBuffer_NullableEnabledContext()
+        public void CloneWithoutBuffer_NullableContextEnabled()
         {
 
-            VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeAllChildren);
-            VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+            VerifyCloningEquivalence(GetNullableContextEnabled(), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(GetNullableContextEnabled(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
         }
 
         [Fact]
-        public void CloneWithoutBuffer_LazinatorList_NullableEnabledContext()
+        public void CloneWithoutBuffer_LazinatorList_NullableContextEnabled()
         {
 
-            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetNullableEnabledContext(), null, GetNullableEnabledContext() });
+            VerifyCloningEquivalence(() => new LazinatorList<NullableContextEnabled>() { GetNullableContextEnabled(), null, GetNullableContextEnabled() });
 
 #nullable enable
-            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetNullableEnabledContext(), GetNullableEnabledContext() });
-            var list = new LazinatorList<NullableEnabledContext>() { GetNullableEnabledContext(), GetNullableEnabledContext() };
-            NullableEnabledContext item = list.First(); // Note that we are guaranteed that this will produce a nonnullable item.
+            VerifyCloningEquivalence(() => new LazinatorList<NullableContextEnabled>() { GetNullableContextEnabled(), GetNullableContextEnabled() });
+            var list = new LazinatorList<NullableContextEnabled>() { GetNullableContextEnabled(), GetNullableContextEnabled() };
+            NullableContextEnabled item = list.First(); // Note that we are guaranteed that this will produce a nonnullable item.
 #nullable restore
         }
 
         [Fact]
-        public void CloneWithoutBuffer_NullableEnabledContext_ThrowsAfterExcludingThenAccessingNonNullable()
+        public void CloneWithoutBuffer_NullableContextEnabled_ThrowsAfterExcludingThenAccessingNonNullable()
         {
             if (PropertyDescription.UseNullableBackingFieldsForNonNullableReferenceTypes)
             {
-                Action a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeAllChildren); };
+                Action a = () => { VerifyCloningEquivalence(GetNullableContextEnabled(), IncludeChildrenMode.ExcludeAllChildren); };
                 a.Should().Throw<UnsetNonnullableLazinatorException>();
-                a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeOnlyIncludableChildren); };
+                a = () => { VerifyCloningEquivalence(GetNullableContextEnabled(), IncludeChildrenMode.IncludeOnlyIncludableChildren); };
                 a.Should().Throw<UnsetNonnullableLazinatorException>();
             }
             else
             {
                 // should not throw
-                VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeAllChildren); 
-                VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeOnlyIncludableChildren);
+                VerifyCloningEquivalence(GetNullableContextEnabled(), IncludeChildrenMode.ExcludeAllChildren); 
+                VerifyCloningEquivalence(GetNullableContextEnabled(), IncludeChildrenMode.IncludeOnlyIncludableChildren);
             }
         }
 
         [Fact]
-        public void CloneWithoutBuffer_NullableEnabledContext_NullablesNull()
+        public void CloneWithoutBuffer_NullableContextEnabled_NullablesNull()
         {
-            VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.IncludeAllChildren);
-            VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+            VerifyCloningEquivalence(GetNullableContextEnabled(true), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(GetNullableContextEnabled(true), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
         }
 
         [Fact]
-        public void CloneWithoutBuffer_NullableEnabledContext_SetNonNullablesToNullThrows()
+        public void CloneWithoutBuffer_NullableContextEnabled_SetNonNullablesToNullThrows()
         {
-            NullableEnabledContext GetObject()
+            NullableContextEnabled GetObject()
             {
-                return new NullableEnabledContext(
+                return new NullableContextEnabled(
                  null,
                  new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>(), IncludeChildrenMode.IncludeAllChildren);
             }
@@ -680,13 +680,13 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void CloneWithoutBuffer_DotNetListNullableEnabledContext()
+        public void CloneWithoutBuffer_DotNetListNullableContextEnabled()
         {
             DotNetList_Values GetList()
             {
                 return new DotNetList_Values()
                 {
-                    MyListNullableEnabledContext = new List<NullableEnabledContext>() { GetNullableEnabledContext(), null, GetNullableEnabledContext() }
+                    MyListNullableContextEnabled = new List<NullableContextEnabled>() { GetNullableContextEnabled(), null, GetNullableContextEnabled() }
                 };
             };
 

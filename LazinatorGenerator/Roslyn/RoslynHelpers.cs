@@ -75,11 +75,11 @@ namespace LazinatorCodeGen.Roslyn
             return b.ToString();
         }
 
-        public static string PrettyTypeName(INamedTypeSymbol t, bool nullable, bool nullableEnabledContext)
+        public static string PrettyTypeName(INamedTypeSymbol t, bool nullable, bool nullableContextEnabled)
         {
             if (t.IsGenericType)
             {
-                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx, nullable, nullableEnabledContext) : x.Name);
+                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx, nullable, nullableContextEnabled) : x.Name);
                 return string.Format(
                     "{0}<{1}>",
                     t.Name,

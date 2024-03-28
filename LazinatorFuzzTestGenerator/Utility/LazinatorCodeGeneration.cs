@@ -32,10 +32,10 @@ namespace LazinatorFuzzTestGenerator.Utility
             return throughProject;
         }
 
-        public static Compilation CreateCompilation(List<(string folder, string filename, string code)> files, bool nullableEnabledContext) => CreateCompilation(GetCodeBasePath(), files, nullableEnabledContext);
+        public static Compilation CreateCompilation(List<(string folder, string filename, string code)> files, bool nullableContextEnabled) => CreateCompilation(GetCodeBasePath(), files, nullableContextEnabled);
 
 
-        public static Compilation CreateCompilation(string solutionFolder, List<(string folder, string filename, string code)> files, bool nullableEnabledContext)
+        public static Compilation CreateCompilation(string solutionFolder, List<(string folder, string filename, string code)> files, bool nullableContextEnabled)
         {
             var syntaxTrees = new List<SyntaxTree>();
 
@@ -77,7 +77,7 @@ namespace LazinatorFuzzTestGenerator.Utility
                 "DynamicCompilation",
                 syntaxTrees: syntaxTrees,
                 references: references,
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, nullableContextOptions: nullableEnabledContext ? NullableContextOptions.Enable : NullableContextOptions.Disable));
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, nullableContextOptions: nullableContextEnabled ? NullableContextOptions.Enable : NullableContextOptions.Disable));
 
             return compilation;
         }

@@ -15,7 +15,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
     public class LazinatorObjectTypeCollection
     {
         public string NamespaceString { get; init; }
-        public bool NullableEnabledContext { get; init; }
+        public bool NullableContextEnabled { get; init; }
         public List<LazinatorObjectType> ObjectTypes { get; set; } = new List<LazinatorObjectType>();
         public IEnumerable<LazinatorObjectType> InstantiableObjectTypes => ObjectTypes.Where(x => x.Instantiable);
         public IEnumerable<LazinatorClassType> InheritableClassTypes => ObjectTypes.Where(x => x.Inheritable).Select(x => (LazinatorClassType)x);
@@ -23,18 +23,18 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         int UniqueIDCounter = 10_000;
         public bool Succeeded { get; set; }
 
-        public LazinatorObjectTypeCollection(string namespaceString, bool nullableEnabledContext)
+        public LazinatorObjectTypeCollection(string namespaceString, bool nullableContextEnabled)
         {
             this.NamespaceString = namespaceString;
-            this.NullableEnabledContext = nullableEnabledContext;
+            this.NullableContextEnabled = nullableContextEnabled;
         }
 
-        public LazinatorObjectTypeCollection(Random r, string namespaceString, bool nullableEnabledContext, int numObjectTypes, int maxClassDepth, int maxProperties, int numTests, int numMutationSteps, bool writeIfSuccessfullyGenerated = false) : this(namespaceString, nullableEnabledContext)
+        public LazinatorObjectTypeCollection(Random r, string namespaceString, bool nullableContextEnabled, int numObjectTypes, int maxClassDepth, int maxProperties, int numTests, int numMutationSteps, bool writeIfSuccessfullyGenerated = false) : this(namespaceString, nullableContextEnabled)
         {
-            string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableEnabledContext ? "2" : "")) + "\\" + NamespaceString + "\\";
+            string folder = ReadCodeFile.GetCodeBasePath("LazinatorFuzzGeneratedTests" + (nullableContextEnabled ? "2" : "")) + "\\" + NamespaceString + "\\";
             GenerateObjectTypes(numObjectTypes, maxClassDepth, maxProperties, r);
             List<(string folder, string filename, string code)> originalSources = GenerateSources();
-            Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources, nullableEnabledContext); // note that this compilation will have plenty of errors, because it will be missing the generated code
+            Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources, nullableContextEnabled); // note that this compilation will have plenty of errors, because it will be missing the generated code
             Compilation? compilationIncludingGeneratedSources = null;
             Compilation? compilationIncludingTestingCode = null;
             string testsFileCode_ForTestingProject = GenerateTestsFile(r, numTests, numMutationSteps, true);
@@ -49,14 +49,14 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 {
                     originalSourcesPlusGenerated.Add((NamespaceString, codeGenerationResult.Path, codeGenerationResult.GeneratedCode));
                 }
-                compilationIncludingGeneratedSources = LazinatorCodeGeneration.CreateCompilation(originalSourcesPlusGenerated, nullableEnabledContext);
+                compilationIncludingGeneratedSources = LazinatorCodeGeneration.CreateCompilation(originalSourcesPlusGenerated, nullableContextEnabled);
                 success = AssessCompilationSuccess(compilationIncludingGeneratedSources);
                 if (success)
                 {
                     // combine everything in compilation
                     var sourcesPlusTestCode = originalSourcesPlusGenerated.ToList();
                     sourcesPlusTestCode.Add((NamespaceString, "Tests.cs", testsFileCode_ForImmediateExecution));
-                    compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode, nullableEnabledContext);
+                    compilationIncludingTestingCode = LazinatorCodeGeneration.CreateCompilation(sourcesPlusTestCode, nullableContextEnabled);
 
                     success = AssessCompilationSuccess(compilationIncludingTestingCode);
                     if (success)
@@ -129,7 +129,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                 }
                 if (r.Next(0, 2) == 0)
                 {
-                    LazinatorStructType structType = new LazinatorStructType(uniqueID, uniqueName + "Struct", properties);
+                    LazinatorStructType structType = new LazinatorStructType(uniqueID, uniqueName + "Struct", properties, NullableContextEnabled);
                     ObjectTypes.Add(structType);
                 }
                 else
@@ -139,13 +139,13 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                     var inheritable = InheritableClassTypes.Where(x => x.ObjectDepth < maximumDepth).ToList();
                     if (r.Next(0, 2) == 0 || !inheritable.Any())
                     {
-                        LazinatorClassType classType = new LazinatorClassType(uniqueID, uniqueName + "Class", isAbstract, isSealed, null, properties);
+                        LazinatorClassType classType = new LazinatorClassType(uniqueID, uniqueName + "Class", isAbstract, isSealed, null, properties, NullableContextEnabled);
                         ObjectTypes.Add(classType);
                     }
                     else
                     {
                         LazinatorClassType parent = inheritable[r.Next(0, inheritable.Count())];
-                        LazinatorClassType classType = new LazinatorClassType(uniqueID, uniqueName + "Class", isAbstract, isSealed, parent, properties);
+                        LazinatorClassType classType = new LazinatorClassType(uniqueID, uniqueName + "Class", isAbstract, isSealed, parent, properties, NullableContextEnabled);
                         ObjectTypes.Add(classType);
                     }
                 }
@@ -157,8 +157,8 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             List<(string folder, string filename, string code)> result = new List<(string folder, string filename, string code)>();
             foreach (LazinatorObjectType objectType in ObjectTypes)
             {
-                result.Add((NamespaceString, objectType.Name + ".cs", objectType.ObjectDeclaration(NamespaceString, NullableEnabledContext)));
-                result.Add((NamespaceString, "I" + objectType.Name + ".cs", objectType.ILazinatorDeclaration(NamespaceString, NullableEnabledContext)));
+                result.Add((NamespaceString, objectType.Name + ".cs", objectType.ObjectDeclaration(NamespaceString)));
+                result.Add((NamespaceString, "I" + objectType.Name + ".cs", objectType.ILazinatorDeclaration(NamespaceString)));
             }
             return result;
         }
@@ -169,8 +169,8 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 
             if (r.Next(0, 2) == 0 || !InstantiableObjectTypes.Any())
             {
-                var primitiveType = new PrimitiveType(r);
-                if (primitiveType.UnannotatedIsNullable(NullableEnabledContext))
+                var primitiveType = new PrimitiveType(r, NullableContextEnabled);
+                if (primitiveType.UnannotatedIsNullable())
                     nullable = true; // can't have non-nullable string outside nullable enabled context
                 LazinatorObjectProperty property = new LazinatorObjectProperty(UniqueCSharpNameGenerator.GetUniqueName(r, true), primitiveType, nullable);
                 return property;
@@ -179,7 +179,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             {
                 var instantiableChoices = InstantiableObjectTypes.ToList();
                 LazinatorObjectType instantiableObject = instantiableChoices[r.Next(0, instantiableChoices.Count)];
-                if (instantiableObject.UnannotatedIsNullable(NullableEnabledContext))
+                if (instantiableObject.UnannotatedIsNullable())
                     nullable = true; // can't have non-nullable class outside nullable enabled context
                 LazinatorObjectProperty property = new LazinatorObjectProperty(UniqueCSharpNameGenerator.GetUniqueName(r, true), instantiableObject, nullable);
                 return property;

@@ -13,15 +13,15 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
         public object? Value { get; private set; }
         public bool IsNull => Value == null;
 
-        public PrimitiveObjectContents(PrimitiveEnum primitiveEnum, object? value)
+        public PrimitiveObjectContents(PrimitiveEnum primitiveEnum, object? value, bool nullableContextEnabled)
         {
-            ThePrimitiveType = new PrimitiveType(primitiveEnum);
+            ThePrimitiveType = new PrimitiveType(primitiveEnum, nullableContextEnabled);
             Value = value;
         }
 
-        public PrimitiveObjectContents(PrimitiveEnum primitiveEnum, Random r, int? inverseProbabilityOfNull)
+        public PrimitiveObjectContents(PrimitiveEnum primitiveEnum, Random r, int? inverseProbabilityOfNull, bool nullableContextEnabled)
         {
-            ThePrimitiveType = new PrimitiveType(primitiveEnum);
+            ThePrimitiveType = new PrimitiveType(primitiveEnum, nullableContextEnabled);
             SetToRandom(r, inverseProbabilityOfNull);
         }
 

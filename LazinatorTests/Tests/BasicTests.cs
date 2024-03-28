@@ -67,11 +67,11 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void ManualDeserializationWorks_NullableEnabledContext()
+        public void ManualDeserializationWorks_NullableContextEnabled()
         {
-            NullableEnabledContext original = CloneNoBufferTests.GetNullableEnabledContext();
+            NullableContextEnabled original = CloneNoBufferTests.GetNullableContextEnabled();
             LazinatorMemory serializedBytes = GetLazinatorMemoryCopy(original);
-            NullableEnabledContext copy = new NullableEnabledContext(serializedBytes);
+            NullableContextEnabled copy = new NullableContextEnabled(serializedBytes);
             LazinatorMemory serializedBytesCopy = GetLazinatorMemoryCopy(original);
             serializedBytes.Matches(serializedBytesCopy.InitialReadOnlyMemory.Span).Should().BeTrue();
         }
@@ -339,26 +339,26 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void CloneLazinatorTyped_NullableEnabledContext()
+        public void CloneLazinatorTyped_NullableContextEnabled()
         {
-            var nec = CloneNoBufferTests.GetNullableEnabledContext();
+            var nec = CloneNoBufferTests.GetNullableContextEnabled();
             var result = nec.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren);
         }
 
 
         [Fact]
-        public void CloneLazinatorTyped_NullableEnabledContextParameterless()
+        public void CloneLazinatorTyped_NullableContextEnabledParameterless()
         {
-            NullableEnabledContextWithParameterlessConstructor original = new NullableEnabledContextWithParameterlessConstructor();
+            NullableContextEnabledWithParameterlessConstructor original = new NullableContextEnabledWithParameterlessConstructor();
             original.MyList = new List<int>();
             var clone = original.CloneLazinatorTyped();
             clone.MyString.Should().Be("");
         }
 
         [Fact]
-        public void NullableEnabledContextParameterless_SerializationOfNullThrows()
+        public void NullableContextEnabledParameterless_SerializationOfNullThrows()
         {
-            NullableEnabledContextWithParameterlessConstructor original = new NullableEnabledContextWithParameterlessConstructor();
+            NullableContextEnabledWithParameterlessConstructor original = new NullableContextEnabledWithParameterlessConstructor();
 
             Action a = () => { var x = original.CloneLazinatorTyped(); }; // note that error occurs only when looking at underlying memory
             a.Should().Throw<LazinatorSerializationException>();

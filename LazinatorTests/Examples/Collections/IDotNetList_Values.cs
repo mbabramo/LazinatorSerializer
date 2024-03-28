@@ -14,6 +14,6 @@ namespace LazinatorTests.Examples.Collections
         SortedSet<int> MySortedSetInt { get; set; }
         bool MySortedSetInt_Dirty { get; set; }
         List<int> MyListInt2 { get; set; }
-        List<NullableEnabledContext> MyListNullableEnabledContext { get; set; }
+        List<NullableContextEnabled> MyListNullableContextEnabled { get; set; }
     }
 }

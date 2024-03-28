@@ -16,18 +16,19 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 
         public override bool Inheritable => false;
 
-        public override bool UnannotatedIsNullable(bool nullableEnabledContext)
+        public override bool UnannotatedIsNullable()
         {
             return false;
         }
 
-        public LazinatorStructType(int uniqueID, string name, List<LazinatorObjectProperty> properties) : base(uniqueID, name, properties)
+        public LazinatorStructType(int uniqueID, string name, List<LazinatorObjectProperty> properties, bool nullableContextEnabled) : base(uniqueID, name, properties)
         {
+            NullableContextEnabled = nullableContextEnabled;
         }
 
         public override string UnannotatedTypeDeclaration() => Name;
 
-        public override string ILazinatorDeclaration(string namespaceString, bool nullableEnabledContext)
+        public override string ILazinatorDeclaration(string namespaceString)
         {
             return
 $@"
@@ -41,13 +42,13 @@ namespace FuzzTests.{namespaceString}
     [Lazinator((int){UniqueID})]
     public interface I{Name}
     {{
-{PropertyDeclarations(nullableEnabledContext)}
+{PropertyDeclarations()}
     }}
 }}
 ";
         }
 
-        public override string GetObjectDeclaration_Top(bool nullableEnabledContext) => $"public partial struct {Name} : I{Name}";
+        public override string GetObjectDeclaration_Top() => $"public partial struct {Name} : I{Name}";
         
     }
 }

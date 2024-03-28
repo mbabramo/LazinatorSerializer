@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace LazinatorTests.Examples.ExampleHierarchy
 {
-    [Lazinator((int)ExampleUniqueIDs.NullableEnabledContext)]
+    [Lazinator((int)ExampleUniqueIDs.NullableContextEnabled)]
     [NullableContextSetting(true)]
-    public interface INullableEnabledContext
+    public interface INullableContextEnabled
     {
         Example? ExplicitlyNullable { get; set; }
         Example NonNullableClass { get; set; }

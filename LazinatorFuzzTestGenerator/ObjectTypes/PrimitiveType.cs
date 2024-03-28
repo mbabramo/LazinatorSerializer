@@ -6,22 +6,25 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
     public class PrimitiveType : ISupportedType
     {
+        public bool NullableContextEnabled { get; init; }
         public PrimitiveEnum PrimitiveEnum { get; set; }
 
-        public PrimitiveType(PrimitiveEnum primitiveEnum)
+        public PrimitiveType(PrimitiveEnum primitiveEnum, bool nullableContextEnabled)
         {
+            NullableContextEnabled = nullableContextEnabled;
             PrimitiveEnum = primitiveEnum;
         }
 
-        public PrimitiveType(Random r)
+        public PrimitiveType(Random r, bool nullableContextEnabled)
         {
+            NullableContextEnabled = nullableContextEnabled;
             PrimitiveEnum = GetRandomPrimitiveEnumType(r);
         }
 
 
-        public bool UnannotatedIsNullable(bool nullableEnabledContext)
+        public bool UnannotatedIsNullable()
         {
-            if (nullableEnabledContext)
+            if (NullableContextEnabled)
                 return false;
             if (PrimitiveEnum == PrimitiveEnum.String)
                 return true;
@@ -37,7 +40,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 
         public IObjectContents GetRandomObjectContents(Random r, int? inverseProbabilityOfNull)
         {
-            return new PrimitiveObjectContents(PrimitiveEnum, r, inverseProbabilityOfNull);
+            return new PrimitiveObjectContents(PrimitiveEnum, r, inverseProbabilityOfNull, NullableContextEnabled);
         }
 
         public object? GetDefaultValueIfNotNullable()

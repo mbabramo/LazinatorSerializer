@@ -1820,7 +1820,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                     parametersForBaseClassString = "";
 
                 var initializationString = String.Join("", propertiesRequiringInitializationHere.Select(x => x.AssignParameterToBackingField));
-                var throwIfNullString = String.Join("", propertiesRequiringInitializationHere.Where(x => !x.IsNonNullableRecordLikeTypeInNullableEnabledContext).Select(x => $@"
+                var throwIfNullString = String.Join("", propertiesRequiringInitializationHere.Where(x => !x.IsNonNullableRecordLikeTypeInNullableContextEnabled).Select(x => $@"
                     if ({x.PropertyNameForConstructorParameter} == null)
                     {{
                         throw new ArgumentNullException(""{x.PropertyNameForConstructorParameter}"");

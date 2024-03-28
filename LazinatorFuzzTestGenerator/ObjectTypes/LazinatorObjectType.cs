@@ -11,6 +11,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 {
     public abstract class LazinatorObjectType : ILazinatorObjectType, ISupportedType
     {
+        public bool NullableContextEnabled { get; init; }
         public int UniqueID { get; init; }
         public abstract string DefinitionWord { get; }
         public string Name { get; init; }
@@ -22,7 +23,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 
         public virtual List<LazinatorObjectProperty> PropertiesIncludingInherited => Properties.OrderBy(x => x.propertyName).ToList();
 
-        public abstract bool UnannotatedIsNullable(bool nullableEnabledContext);
+        public abstract bool UnannotatedIsNullable();
 
         public LazinatorObjectType(int uniqueID, string name, List<LazinatorObjectProperty> properties)
         {
@@ -31,40 +32,40 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             Properties = properties;
         }
 
-        public string PropertyDeclarations(bool nullableEnabledContext)
+        public string PropertyDeclarations()
         {
             StringBuilder sb = new StringBuilder();
             foreach (var property in Properties)
             {
                 sb.Append("        ");
-                sb.AppendLine(property.Declaration(nullableEnabledContext));
+                sb.AppendLine(property.Declaration());
             }
             return sb.ToString();
         }
 
-        public abstract string ILazinatorDeclaration(string namespaceString, bool nullableEnabledContext);
+        public abstract string ILazinatorDeclaration(string namespaceString);
 
         public abstract string UnannotatedTypeDeclaration();
-        public virtual string ObjectDeclaration(string namespaceString, bool nullableEnabledContext)
+        public virtual string ObjectDeclaration(string namespaceString)
         {
             return
-$@"{(nullableEnabledContext ? "using System.Diagnostics.CodeAnalysis;" : "")}
+$@"{(NullableContextEnabled ? "using System.Diagnostics.CodeAnalysis;" : "")}
 namespace FuzzTests.{namespaceString}
 {{
-    {GetObjectDeclaration_Top(nullableEnabledContext)}
+    {GetObjectDeclaration_Top()}
     {{
-{EqualsAndGetHashCodeString(nullableEnabledContext)}
+{EqualsAndGetHashCodeString()}
     }}
 }}
 ";
         }
 
-        public abstract string GetObjectDeclaration_Top(bool nullableEnabledContext);
+        public abstract string GetObjectDeclaration_Top();
 
-        public string EqualsAndGetHashCodeString(bool nullableContextEnabled)
+        public string EqualsAndGetHashCodeString()
         {
             return $@"
-       public override bool Equals({(nullableContextEnabled ? "[NotNullWhen(true)] " : "")}object{(nullableContextEnabled ? "?" : "")} obj)
+       public override bool Equals({(NullableContextEnabled ? "[NotNullWhen(true)] " : "")}object{(NullableContextEnabled ? "?" : "")} obj)
         {{
             if (obj == null)
                 return false;

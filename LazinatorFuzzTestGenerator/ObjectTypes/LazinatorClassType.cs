@@ -19,8 +19,9 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         public override bool Instantiable => !IsAbstract;
         public override bool Inheritable => !IsSealed;
 
-        public LazinatorClassType(int uniqueID, string name, bool isAbstract, bool isSealed, LazinatorClassType? inheritsFrom, List<LazinatorObjectProperty> properties) : base(uniqueID, name, properties)
+        public LazinatorClassType(int uniqueID, string name, bool isAbstract, bool isSealed, LazinatorClassType? inheritsFrom, List<LazinatorObjectProperty> properties, bool nullableContextEnabled) : base(uniqueID, name, properties)
         {
+            NullableContextEnabled = nullableContextEnabled;
             IsAbstract = isAbstract;
             IsSealed = isSealed;
             InheritsFrom = inheritsFrom;
@@ -47,9 +48,9 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
         private List<LazinatorObjectProperty> _PropertiesIncludingInherited = new List<LazinatorObjectProperty>();
         public override List<LazinatorObjectProperty> PropertiesIncludingInherited => _PropertiesIncludingInherited;
 
-        public override bool UnannotatedIsNullable(bool nullableEnabledContext)
+        public override bool UnannotatedIsNullable()
         {
-            if (nullableEnabledContext)
+            if (NullableContextEnabled)
                 return false;
             else
                 return true;
@@ -57,7 +58,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
 
         public override string UnannotatedTypeDeclaration() => Name;
 
-        public override string ILazinatorDeclaration(string namespaceString, bool nullableEnabledContext)
+        public override string ILazinatorDeclaration(string namespaceString)
         {
             string inheritString = InheritsFrom == null ? "" : $" : I{InheritsFrom.Name}";
             return
@@ -72,14 +73,14 @@ namespace FuzzTests.{namespaceString}
     [Lazinator((int){UniqueID})]
     public interface I{Name}{(InheritsFrom == null ? "" : $" : I{InheritsFrom.Name}")}
     {{
-{PropertyDeclarations(nullableEnabledContext)}
+{PropertyDeclarations()}
     }}
 }}
 ";
         }
 
 
-        public override string GetObjectDeclaration_Top(bool nullableEnabledContext) => $"public {(IsSealed ? "sealed " : "")}{(IsAbstract ? "abstract " : "")}partial class {Name} : {(InheritsFrom != null ? InheritsFrom.Name + "," : "")} I{Name}";
+        public override string GetObjectDeclaration_Top() => $"public {(IsSealed ? "sealed " : "")}{(IsAbstract ? "abstract " : "")}partial class {Name} : {(InheritsFrom != null ? InheritsFrom.Name + "," : "")} I{Name}";
 
     }
 }

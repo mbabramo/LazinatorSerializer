@@ -39,12 +39,12 @@ namespace LazinatorTests.Examples.Collections
         protected int _MyLinkedListInt_ByteIndex;
         protected int _MyListInt_ByteIndex;
         protected int _MyListInt2_ByteIndex;
-        protected int _MyListNullableEnabledContext_ByteIndex;
+        protected int _MyListNullableContextEnabled_ByteIndex;
         protected int _MySortedSetInt_ByteIndex;
         protected virtual int _MyLinkedListInt_ByteLength => _MyListInt_ByteIndex - _MyLinkedListInt_ByteIndex;
         protected virtual int _MyListInt_ByteLength => _MyListInt2_ByteIndex - _MyListInt_ByteIndex;
-        protected virtual int _MyListInt2_ByteLength => _MyListNullableEnabledContext_ByteIndex - _MyListInt2_ByteIndex;
-        protected virtual int _MyListNullableEnabledContext_ByteLength => _MySortedSetInt_ByteIndex - _MyListNullableEnabledContext_ByteIndex;
+        protected virtual int _MyListInt2_ByteLength => _MyListNullableContextEnabled_ByteIndex - _MyListInt2_ByteIndex;
+        protected virtual int _MyListNullableContextEnabled_ByteLength => _MySortedSetInt_ByteIndex - _MyListNullableContextEnabled_ByteIndex;
         private int _DotNetList_Values_EndByteIndex;
         protected virtual  int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DotNetList_Values_EndByteIndex;
@@ -196,39 +196,39 @@ namespace LazinatorTests.Examples.Collections
         }
         
         
-        protected List<NullableEnabledContext> _MyListNullableEnabledContext;
+        protected List<NullableContextEnabled> _MyListNullableContextEnabled;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public List<NullableEnabledContext> MyListNullableEnabledContext
+        public List<NullableContextEnabled> MyListNullableContextEnabled
         {
             get
             {
-                if (!_MyListNullableEnabledContext_Accessed)
+                if (!_MyListNullableContextEnabled_Accessed)
                 {
-                    LazinateMyListNullableEnabledContext();
+                    LazinateMyListNullableContextEnabled();
                 }
                 IsDirty = true; 
-                return _MyListNullableEnabledContext;
+                return _MyListNullableContextEnabled;
             }
             set
             {
                 IsDirty = true;
                 DescendantIsDirty = true;
-                _MyListNullableEnabledContext = value;
-                _MyListNullableEnabledContext_Accessed = true;
+                _MyListNullableContextEnabled = value;
+                _MyListNullableContextEnabled_Accessed = true;
             }
         }
-        protected bool _MyListNullableEnabledContext_Accessed;
-        private void LazinateMyListNullableEnabledContext()
+        protected bool _MyListNullableContextEnabled_Accessed;
+        private void LazinateMyListNullableContextEnabled()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
-                _MyListNullableEnabledContext = default(List<NullableEnabledContext>);
+                _MyListNullableContextEnabled = default(List<NullableContextEnabled>);
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableEnabledContext_ByteIndex, _MyListNullableEnabledContext_ByteLength, null);_MyListNullableEnabledContext = ConvertFromBytes_List_GNullableEnabledContext_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableContextEnabled_ByteIndex, _MyListNullableContextEnabled_ByteLength, null);_MyListNullableContextEnabled = ConvertFromBytes_List_GNullableContextEnabled_g(childData);
             }
-            _MyListNullableEnabledContext_Accessed = true;
+            _MyListNullableContextEnabled_Accessed = true;
         }
         
         
@@ -473,7 +473,7 @@ namespace LazinatorTests.Examples.Collections
             typedClone.MyLinkedListInt = CloneOrChange_LinkedList_Gint_g(MyLinkedListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListInt = CloneOrChange_List_Gint_g(MyListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListInt2 = CloneOrChange_List_Gint_g(MyListInt2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListNullableEnabledContext = CloneOrChange_List_GNullableEnabledContext_g(MyListNullableEnabledContext, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListNullableContextEnabled = CloneOrChange_List_GNullableContextEnabled_g(MyListNullableContextEnabled, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MySortedSetInt = CloneOrChange_SortedSet_Gint_g(MySortedSetInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
@@ -508,7 +508,7 @@ namespace LazinatorTests.Examples.Collections
             yield return ("MyLinkedListInt", (object)MyLinkedListInt);
             yield return ("MyListInt", (object)MyListInt);
             yield return ("MyListInt2", (object)MyListInt2);
-            yield return ("MyListNullableEnabledContext", (object)MyListNullableEnabledContext);
+            yield return ("MyListNullableContextEnabled", (object)MyListNullableContextEnabled);
             yield return ("MySortedSetInt", (object)MySortedSetInt);
             yield break;
         }
@@ -527,9 +527,9 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListInt2 = (List<Int32>) CloneOrChange_List_Gint_g(_MyListInt2, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyListNullableEnabledContext != null) || (_MyListNullableEnabledContext_Accessed && _MyListNullableEnabledContext != null))
+            if ((!exploreOnlyDeserializedChildren && MyListNullableContextEnabled != null) || (_MyListNullableContextEnabled_Accessed && _MyListNullableContextEnabled != null))
             {
-                _MyListNullableEnabledContext = (List<NullableEnabledContext>) CloneOrChange_List_GNullableEnabledContext_g(_MyListNullableEnabledContext, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _MyListNullableContextEnabled = (List<NullableContextEnabled>) CloneOrChange_List_GNullableContextEnabled_g(_MyListNullableContextEnabled, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && MySortedSetInt != null) || (_MySortedSetInt_Accessed && _MySortedSetInt != null))
             {
@@ -547,9 +547,9 @@ namespace LazinatorTests.Examples.Collections
             _MyLinkedListInt = default;
             _MyListInt = default;
             _MyListInt2 = default;
-            _MyListNullableEnabledContext = default;
+            _MyListNullableContextEnabled = default;
             _MySortedSetInt = default;
-            _MyLinkedListInt_Accessed = _MyListInt_Accessed = _MyListInt2_Accessed = _MyListNullableEnabledContext_Accessed = _MySortedSetInt_Accessed = false;
+            _MyLinkedListInt_Accessed = _MyListInt_Accessed = _MyListInt2_Accessed = _MyListNullableContextEnabled_Accessed = _MySortedSetInt_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;
@@ -589,7 +589,7 @@ namespace LazinatorTests.Examples.Collections
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _MyListInt2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MyListNullableEnabledContext_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            _MyListNullableContextEnabled_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _MySortedSetInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
@@ -642,9 +642,9 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListInt2 = (List<Int32>) CloneOrChange_List_Gint_g(_MyListInt2, l => l.RemoveBufferInHierarchy(), true);
             }
-            if (_MyListNullableEnabledContext_Accessed && _MyListNullableEnabledContext != null)
+            if (_MyListNullableContextEnabled_Accessed && _MyListNullableContextEnabled != null)
             {
-                _MyListNullableEnabledContext = (List<NullableEnabledContext>) CloneOrChange_List_GNullableEnabledContext_g(_MyListNullableEnabledContext, l => l.RemoveBufferInHierarchy(), true);
+                _MyListNullableContextEnabled = (List<NullableContextEnabled>) CloneOrChange_List_GNullableContextEnabled_g(_MyListNullableContextEnabled, l => l.RemoveBufferInHierarchy(), true);
             }
             if (_MySortedSetInt_Accessed && _MySortedSetInt != null)
             {
@@ -747,21 +747,21 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNullableEnabledContext_Accessed)
+            if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNullableContextEnabled_Accessed)
             {
-                var deserialized = MyListNullableEnabledContext;
+                var deserialized = MyListNullableContextEnabled;
             }
             WriteNonLazinatorObject(
-            nonLazinatorObject: _MyListNullableEnabledContext, isBelievedDirty: _MyListNullableEnabledContext_Accessed || (options.IncludeChildrenMode != OriginalIncludeChildrenMode),
-            isAccessed: _MyListNullableEnabledContext_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableEnabledContext_ByteIndex, _MyListNullableEnabledContext_ByteLength, null),
+            nonLazinatorObject: _MyListNullableContextEnabled, isBelievedDirty: _MyListNullableContextEnabled_Accessed || (options.IncludeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyListNullableContextEnabled_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableContextEnabled_ByteIndex, _MyListNullableContextEnabled_ByteLength, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BufferWriter w, bool v) =>
-            ConvertToBytes_List_GNullableEnabledContext_g(ref w, _MyListNullableEnabledContext,
+            ConvertToBytes_List_GNullableContextEnabled_g(ref w, _MyListNullableContextEnabled,
             options));
             if (options.UpdateStoredBuffer)
             {
-                _MyListNullableEnabledContext_ByteIndex = startOfChildPosition - startOfObjectPosition;
+                _MyListNullableContextEnabled_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
@@ -892,17 +892,17 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static List<NullableEnabledContext> ConvertFromBytes_List_GNullableEnabledContext_g(LazinatorMemory storage)
+        private static List<NullableContextEnabled> ConvertFromBytes_List_GNullableContextEnabled_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
-                return default(List<NullableEnabledContext>);
+                return default(List<NullableContextEnabled>);
             }
             ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
-            List<NullableEnabledContext> collection = new List<NullableEnabledContext>(collectionLength);
+            List<NullableContextEnabled> collection = new List<NullableContextEnabled>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -913,7 +913,7 @@ namespace LazinatorTests.Examples.Collections
                 else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.Instance.CreateBasedOnType<NullableEnabledContext>(childData);
+                    var item = DeserializationFactory.Instance.CreateBasedOnType<NullableContextEnabled>(childData);
                     collection.Add(item);
                 }bytesSoFar += lengthCollectionMember;
             }
@@ -921,9 +921,9 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GNullableEnabledContext_g(ref BufferWriter writer, List<NullableEnabledContext> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GNullableContextEnabled_g(ref BufferWriter writer, List<NullableContextEnabled> itemToConvert, LazinatorSerializationOptions options)
         {
-            if (itemToConvert == default(List<NullableEnabledContext>))
+            if (itemToConvert == default(List<NullableContextEnabled>))
             {
                 return;
             }
@@ -945,14 +945,14 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        private static List<NullableEnabledContext> CloneOrChange_List_GNullableEnabledContext_g(List<NullableEnabledContext> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<NullableContextEnabled> CloneOrChange_List_GNullableContextEnabled_g(List<NullableContextEnabled> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
                 return default;
             }
             int collectionLength = itemToClone.Count;
-            List<NullableEnabledContext> collection = avoidCloningIfPossible ? itemToClone : new List<NullableEnabledContext>(collectionLength);
+            List<NullableContextEnabled> collection = avoidCloningIfPossible ? itemToClone : new List<NullableContextEnabled>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
@@ -960,7 +960,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     if (itemToClone[itemIndex] != null)
                     {
-                        itemToClone[itemIndex] = (NullableEnabledContext) ((cloneOrChangeFunc(itemToClone[itemIndex])));
+                        itemToClone[itemIndex] = (NullableContextEnabled) ((cloneOrChangeFunc(itemToClone[itemIndex])));
                     }
                     continue;
                 }
@@ -970,7 +970,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 else
                 {
-                    var itemCopied = (NullableEnabledContext) (cloneOrChangeFunc(itemToClone[itemIndex]));
+                    var itemCopied = (NullableContextEnabled) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);
                 }
             }
