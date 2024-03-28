@@ -59,8 +59,12 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             IObjectContents randomContents;
             if (propertiesWithContents.Any())
             {
-                var lastProperty = propertiesWithContents.Last().property;
+                var lastPropertiesWithContents = propertiesWithContents.Last();
+                // mutate the last property with random contents
+                var lastProperty = lastPropertiesWithContents.property;
                 randomContents = lastProperty.supportedType.GetRandomObjectContents(r, lastProperty.nullable ? 4 : null);
+                lastPropertiesWithContents.parent.PropertyValues![lastPropertiesWithContents.indexInParent] = randomContents;
+                // now we need to generate code that also accomplishes the mutation
                 var properties = propertiesWithContents.Select(x => x.property).ToList();
                 string codeToReplicateContents = randomContents.CodeToReplicateContents;
                 if (lastProperty.supportedType is LazinatorObjectType && r.Next(3) == 0)

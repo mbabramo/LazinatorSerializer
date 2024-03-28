@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace LazinatorFuzzTestGenerator.ObjectValues
 {
-    using PropertyWithContents = (LazinatorObjectProperty property, int indexInParent, IObjectContents? contents);
     public class LazinatorObjectContents : IObjectContents
     {
         public ISupportedType TheType { get; init; }
@@ -96,7 +95,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 }
             }
             var property = TheLazinatorObjectType.PropertiesIncludingInherited[indexOverall];
-            return (property, indexOverall, PropertyValues![indexOverall]);
+            return new PropertyWithContents(property, this, indexOverall, PropertyValues![indexOverall]);
         }
 
         public string CodeToReplicateContents => GetPropertyValuesAsString(true);
