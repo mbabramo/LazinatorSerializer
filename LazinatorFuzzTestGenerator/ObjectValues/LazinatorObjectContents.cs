@@ -98,14 +98,14 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             return new PropertyWithContents(property, this, indexOverall, PropertyValues![indexOverall]);
         }
 
-        public string CodeToReplicateContents => GetPropertyValuesAsString(true);
+        public string CodeToReplicateContents => GetPropertyValuesAsString(true, nullableEnabledContext);
 
-        private string GetPropertyValuesAsString(bool omitPropertiesAtDefaultValues)
+        private string GetPropertyValuesAsString(bool omitPropertiesAtDefaultValues, bool nullableEnabledContext)
         {
             if (PropertyValues is null)
                 return "null";
             string propertyValuesNonNullableReferencesString = GetPropertyValuesString(true, false, false, omitPropertiesAtDefaultValues);
-            string propertyValuesOtherString = GetPropertyValuesString(false, true, true, omitPropertiesAtDefaultValues);
+            string propertyValuesOtherString = GetPropertyValuesString(nullableEnabledContext, true, true, omitPropertiesAtDefaultValues);
             return $@"new {TheLazinatorObjectType.Name}({propertyValuesNonNullableReferencesString})
     {{
 {propertyValuesOtherString}
@@ -142,6 +142,10 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                         else
                         {
                             isFirst = false;
+                        }
+                        if (property.propertyName == "TransferRepresentative")
+                        {
+                            var DEBUG = 0;
                         }
                         if (includePropertyNameAndEquals)
                             sb.Append($"{property.propertyName} = ");

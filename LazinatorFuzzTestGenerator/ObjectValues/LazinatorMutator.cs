@@ -85,7 +85,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             propertyPath = propertyPath.Take(propertyPath.Count - 1).ToList();
             int lastNonStructIndex = propertyPath.FindLastIndex(p => p.supportedType is not LazinatorStructType);
             var directAccessPath = propertyPath.Take(lastNonStructIndex + 1).Select(x => x.propertyName).ToList();
-            var structsPath = propertyPath.Skip(lastNonStructIndex + 1).Take(propertyPath.Count - (lastNonStructIndex + 1)).Select(x => x.propertyName).ToList(); // skip last property, along with everything in direct access path
+            var structsPath = propertyPath.Skip(lastNonStructIndex + 1).Take(propertyPath.Count - (lastNonStructIndex + 1)).Select(x => (x.propertyName, x.nullable)).ToList(); // skip last property, along with everything in direct access path
             string pathWithContainingVariableAndDirectAccess = containingVariableName + (directAccessPath.Any() ? "." : "") + String.Join(".", directAccessPath);
             if (structsPath.Any())
             {
@@ -97,7 +97,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 return pathWithContainingVariableAndDirectAccess + "." + lastPropertyName + " = " + codeToSetLastProperty + ";";
         }
 
-        public string CodeForMutatingStructs(string pathExcludingFinalStructs, List<string> structsPath, string lastPropertyName, string codeToGetValue, int firstTemporaryVariableIndex)
+        public string CodeForMutatingStructs(string pathExcludingFinalStructs, List<(string name, bool nullable)> structsPath, string lastPropertyName, string codeToGetValue, int firstTemporaryVariableIndex)
         {
             // Suppose our property path is A.B.C.D.E, and C.D.E are all strcturs, thus in structsPath. Further, suppose the initial counter is at 2. We want to generate code like this:
             // tempVar2 = A.B.C;
@@ -116,7 +116,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 for (int j = 0; j <= i; j++)
                 {
                     sb.Append(".");
-                    sb.Append(structsPath[j]);
+                    sb.Append(structsPath[j].name);
                 }
                 return sb.ToString();
             }
@@ -125,9 +125,9 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             {
                 string tempVarName = "temp" + (firstTemporaryVariableIndex + i);
                 string pathEquivalent = $"{GetStructsPathThroughIndex(i)}";
-                string next = i == structsPath.Count - 1 ? "" : "." + structsPath[i + 1];
+                string next = i == structsPath.Count - 1 ? "" : "." + structsPath[i + 1].name;
                 tempVarAndPathNames.Push((tempVarName, pathEquivalent, next));
-                structCodeBuilder.AppendLine($"var {tempVarName} = {pathEquivalent};");
+                structCodeBuilder.AppendLine($"var {tempVarName} = {pathEquivalent}{(structsPath[i].nullable ? ".Value" : "")};");
             }
             var mostRecentPop = tempVarAndPathNames.Pop();
             structCodeBuilder.AppendLine($"{mostRecentPop.tempVar}.{lastPropertyName} = {codeToGetValue};");
@@ -137,7 +137,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 structCodeBuilder.AppendLine($"{peek.tempVar}{peek.next} = {mostRecentPop.tempVar};");
                 mostRecentPop = tempVarAndPathNames.Pop();
             }
-            return structCodeBuilder.ToString() + pathExcludingFinalStructs + "." + structsPath[0] + " = " + mostRecentPop.tempVar + ";";
+            return structCodeBuilder.ToString() + pathExcludingFinalStructs + "." + structsPath[0].name + " = " + mostRecentPop.tempVar + ";";
         }
 
         public void AppendCodeToTestAllObjectValues(StringBuilder sb, ref int tempVarCounter)
