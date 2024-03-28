@@ -105,7 +105,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             if (PropertyValues is null)
                 return "null";
             string propertyValuesNonNullableReferencesString = GetPropertyValuesString(true, false, false, omitPropertiesAtDefaultValues);
-            string propertyValuesOtherString = GetPropertyValuesString(nullableContextEnabled, true, true, omitPropertiesAtDefaultValues);
+            string propertyValuesOtherString = GetPropertyValuesString(false, true, true, omitPropertiesAtDefaultValues);
             return $@"new {TheLazinatorObjectType.Name}({propertyValuesNonNullableReferencesString})
     {{
 {propertyValuesOtherString}
@@ -113,7 +113,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
 ";
         }
 
-        private string GetPropertyValuesString(bool nullableContextEnabled, bool other, bool includePropertyNameAndEquals, bool omitPropertiesAtDefaultValues)
+        private string GetPropertyValuesString(bool restrictToNonNullableReferenceType, bool other, bool includePropertyNameAndEquals, bool omitPropertiesAtDefaultValues)
         {
             int numProperties = PropertyValues!.Count;
             StringBuilder sb = new StringBuilder();
@@ -123,7 +123,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             foreach (var property in properties)
             {
                 bool isNonNullableReferenceType = !property.nullable && property.supportedType is LazinatorClassType;
-                bool include = (nullableContextEnabled && isNonNullableReferenceType) || (!nullableContextEnabled && !isNonNullableReferenceType);
+                bool include = (restrictToNonNullableReferenceType && isNonNullableReferenceType) || (!restrictToNonNullableReferenceType && !isNonNullableReferenceType);
                 if (include && omitPropertiesAtDefaultValues)
                 {
                     var value = PropertyValues[i];
@@ -142,10 +142,6 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                         else
                         {
                             isFirst = false;
-                        }
-                        if (property.propertyName == "TransferRepresentative")
-                        {
-                            var DEBUG = 0;
                         }
                         if (includePropertyNameAndEquals)
                             sb.Append($"{property.propertyName} = ");
