@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +27,8 @@ namespace CodeGenHelper
                         ms.Seek(0, SeekOrigin.Begin);
 
                         // Load the compiled assembly
-                        var assembly = Assembly.Load(ms.ToArray());
+                        var loadContext = new AssemblyLoadContext(null, isCollectible: true);
+                        var assembly = loadContext.LoadFromStream(ms);
 
                         // Use reflection to invoke the static method
                         var type = assembly.GetType($"{namespaceOfClass}.{staticClassName}");
