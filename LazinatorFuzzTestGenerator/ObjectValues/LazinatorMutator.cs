@@ -32,9 +32,9 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             StringBuilder sb = new StringBuilder();
             objectNamesAndContents.Add(InitialVarName, InitialObject);
             sb.AppendLine($"{InitialObject.TheLazinatorObjectType.Name} {InitialVarName} = {InitialObject.CodeToReplicateContents};");
-            if (!checkOnlyAfterAll)
-                AppendCodeToTestAllObjectValues(sb);
             int tempVarCounter = 0;
+            if (!checkOnlyAfterAll)
+                AppendCodeToTestAllObjectValues(sb, ref tempVarCounter);
             for (int i = 0; i < numMutations; i++)
             {
                 int numCurrentObjects = objectNamesAndContents.Count;
@@ -43,7 +43,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 sb.AppendLine(codeForMutation);
                 if (i == numMutations - 1 || !checkOnlyAfterAll)
                 {
-                    AppendCodeToTestAllObjectValues(sb);
+                    AppendCodeToTestAllObjectValues(sb, ref tempVarCounter);
                 }
             }
             if (R.Next(3) != 0)
@@ -136,13 +136,14 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
             return structCodeBuilder.ToString() + pathExcludingFinalStructs + "." + structsPath[0] + " = " + mostRecentPop.tempVar + ";";
         }
 
-        public void AppendCodeToTestAllObjectValues(StringBuilder sb)
+        public void AppendCodeToTestAllObjectValues(StringBuilder sb, ref int tempVarCounter)
         {
             foreach (var keyValuePair in objectNamesAndContents)
             {
                 string varName = keyValuePair.Key;
                 LazinatorObjectContents objectContents = keyValuePair.Value;
-                sb.AppendLine($"Debug.Assert({objectContents.CodeToTestValue(varName)});");
+                sb.AppendLine($"bool verify{tempVarCounter} = {objectContents.CodeToTestValue(varName)};");
+                sb.AppendLine($@"if (!verify{tempVarCounter++}) throw new Exception();");
             }
         }
 

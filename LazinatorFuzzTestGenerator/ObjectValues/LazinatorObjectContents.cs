@@ -142,7 +142,6 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                             sb.AppendLine(", ");
                         else
                         {
-                            sb.AppendLine("");
                             isFirst = false;
                         }
                         if (includePropertyNameAndEquals)

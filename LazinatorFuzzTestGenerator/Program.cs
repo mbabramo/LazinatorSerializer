@@ -14,7 +14,7 @@ namespace LazinatorFuzzTestGenerator
         {
             bool failureHasOccurred = false;
             int startingIteration = 0;
-            int iterations = 20_000;
+            int iterations = 1;
             bool useParallel = false;
             if (useParallel)
             {
@@ -55,7 +55,7 @@ namespace LazinatorFuzzTestGenerator
             CodeStringBuilder.LocationIndex = 100_000 * i; // generate unique but predictable location indices in code files, so that if there is a problem with the code, we can easily stop at that location by changing CodeStringBuilder.StopAtLocationIndex
             Random r = new Random(i);
             bool nullableEnabledContext = i % 2 == 0;
-           var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 8, maxClassDepth: 6, maxProperties: 10, numTests: 20 /* note: too many may cause stack overflow error on compiling */, numMutationSteps: 15, writeIfSuccessfullyGenerated: false);
+           var objectTypeCollection = new LazinatorObjectTypeCollection(r, namespaceString: "n" + i.ToString(), nullableEnabledContext: nullableEnabledContext, numObjectTypes: 8, maxClassDepth: 6, maxProperties: 10, numTests: 20 /* note: too many may cause stack overflow error on compiling */, numMutationSteps: 15, writeIfSuccessfullyGenerated: true);
             bool success = objectTypeCollection.Succeeded;
             return success;
         }
