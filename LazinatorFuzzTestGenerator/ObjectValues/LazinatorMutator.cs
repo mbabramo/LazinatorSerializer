@@ -147,7 +147,7 @@ namespace LazinatorFuzzTestGenerator.ObjectValues
                 string varName = keyValuePair.Key;
                 LazinatorObjectContents objectContents = keyValuePair.Value;
                 sb.AppendLine($"bool verify{tempVarCounter} = {objectContents.CodeToTestValue(varName)};");
-                sb.AppendLine($@"if (!verify{tempVarCounter++}) throw new Exception();");
+                sb.AppendLine($@"if (!verify{tempVarCounter++}) throw new Exception(""Value does not equal expectation."");");
             }
         }
 

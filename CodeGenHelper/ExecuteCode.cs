@@ -48,7 +48,7 @@ namespace CodeGenHelper
                     }
                 }
             }
-            catch 
+            catch (Exception ex)
             {
                 return false;
             }
