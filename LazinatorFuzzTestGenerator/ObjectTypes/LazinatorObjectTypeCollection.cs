@@ -37,8 +37,9 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             Compilation compilationOriginalSources = LazinatorCodeGeneration.CreateCompilation(originalSources, nullableContextEnabled); // note that this compilation will have plenty of errors, because it will be missing the generated code
             Compilation? compilationIncludingGeneratedSources = null;
             Compilation? compilationIncludingTestingCode = null;
-            string testsFileCode_ForTestingProject = GenerateTestsFile(r, numTests, numMutationSteps, true);
-            string testsFileCode_ForImmediateExecution = GenerateTestsFile(r, numTests, numMutationSteps, false);
+            List<string> codeForTests = GenerateCodeForIndividualTests(r, numTests, numMutationSteps);
+            string testsFileCode_ForTestingProject = GenerateTestsFile(codeForTests, true);
+            string testsFileCode_ForImmediateExecution = GenerateTestsFile(codeForTests, false);
             List<(string folder, string filename, string code)> originalSourcesPlusGenerated = new List<(string folder, string filename, string code)>();
             List<LazinatorCodeGenerationResult> codeGenerationResults = LazinatorCodeGeneration.GenerateLazinatorCodeBehindFiles(compilationOriginalSources);
             bool success = !codeGenerationResults.Any(x => x.Diagnostic != null);
@@ -72,6 +73,7 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
                     File.WriteAllText(folder + source.filename, source.code);
                 }
                 File.WriteAllText(folder + "Tests.cs", testsFileCode_ForTestingProject);
+                //File.WriteAllText(folder + "TestsAlt.cs", testsFileCode_ForImmediateExecution);
             }
 
             bool writeIfNotSuccessfullyGenerated = true;
@@ -186,7 +188,22 @@ namespace LazinatorFuzzTestGenerator.ObjectTypes
             }
         }
 
-        public string GenerateTestsFile(Random r, int numTests, int numMutationSteps, bool forTestingProject)
+        private List<string> GenerateCodeForIndividualTests(Random r, int numTests, int numMutationSteps)
+        {
+            List<string> results = new List<string>();
+            for (int i = 0; i < numTests; i++)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine($"public void Test{i}()");
+                sb.AppendLine("{");
+                sb.AppendLine(GetAndTestSequenceOfMutations(r, numMutations: numMutationSteps, true, i));
+                sb.AppendLine("}");
+                results.Add(sb.ToString());
+            }
+            return results;
+        }
+
+        private string GenerateTestsFile(List<string> codeForIndividualTests, bool forTestingProject)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(@$"
@@ -205,18 +222,15 @@ using Xunit;" : "")}
 
 namespace FuzzTests.{NamespaceString}
 {{
-    public partial class Tests
+    public partial class Tests{(forTestingProject? "" : "Alt")}
     {{
 
 ");
-            for (int i = 0; i < numTests; i++)
+            for (int i = 0; i < codeForIndividualTests.Count; i++)
             {
                 if (forTestingProject)
                     sb.AppendLine("[Fact]");
-                sb.AppendLine($"public void Test{i}()");
-                sb.AppendLine("{");
-                sb.AppendLine(GetAndTestSequenceOfMutations(r, numMutations: numMutationSteps, true, i));
-                sb.AppendLine("}");
+                sb.AppendLine(codeForIndividualTests[i]);
             }
             sb.AppendLine("}"); // end of class Tests
             if (!forTestingProject)
@@ -226,8 +240,8 @@ namespace FuzzTests.{NamespaceString}
     {{
         public static bool RunAllTests()
         {{
-            var runner = new Tests();
-{String.Join("\r\n", Enumerable.Range(0, numTests).Select(x => $"                runner.Test{x}();"))}
+            var runner = new TestsAlt();
+{String.Join("\r\n", Enumerable.Range(0, codeForIndividualTests.Count).Select(x => $"                runner.Test{x}();"))}
             return true;
         }}
     }};

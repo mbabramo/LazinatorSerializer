@@ -13,7 +13,7 @@ namespace LazinatorFuzzTestGenerator
         static void Main(string[] args)
         {
             bool failureHasOccurred = false;
-            int startingIteration = 14;
+            int startingIteration = 18;
             int iterations = 100;
             bool useParallel = false;
             if (useParallel)
